@@ -239,6 +239,21 @@ gui_hooks.browser_will_show.append(lambda browser: windows.register(browser, "br
 gui_hooks.add_cards_did_init.append(lambda addcards: windows.register(addcards, "addcards", load_config()))
 gui_hooks.addons_dialog_will_show.append(lambda dialog: windows.register(dialog, "addons", load_config()))
 gui_hooks.theme_did_change.append(_on_theme_change)
+
+
+def _hook_preferences():
+    """Ankis Einstellungsfenster hat keinen eigenen Hook; deshalb nach seinem __init__ einhängen.
+    Gezielt statt globalem Event-Filter, der bei jedem Mausereignis mitliefe."""
+    try:
+        from anki.hooks import wrap
+        from aqt.preferences import Preferences
+        Preferences.__init__ = wrap(Preferences.__init__,
+                                    lambda dialog, *a, **k: windows.register(dialog, "preferences", load_config()))
+    except Exception as e:
+        log.record("preferences", e)
+
+
+_hook_preferences()
 gui_hooks.webview_did_inject_style_into_page.append(_on_page_styled)
 # Der Editor löst den Hook oben (Anki 26.09) nicht zuverlässig aus; er meldet sich aber,
 # sobald eine Notiz geladen ist. Das CSS-Einfügen ist idempotent, mehrfach schadet nicht.

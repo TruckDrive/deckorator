@@ -37,8 +37,8 @@ STRINGS = {
                      "Currently: {name}. Re-synced every time Anki starts. Live and video wallpapers "
                      "show up as a still image."),
     "windows": ("Andere Fenster", "Other windows"),
-    "windows_hint": ("Kartenverwaltung, Hinzufügen, Statistik, Stapeloptionen und Add-on-Liste.",
-                     "Card browser, add, statistics, deck options and add-ons window."),
+    "windows_hint": ("Kartenverwaltung, Hinzufügen, Statistik, Stapeloptionen, Anki-Einstellungen und Add-on-Liste.",
+                     "Card browser, add, statistics, deck options, Anki preferences and add-ons window."),
     "window_style": ("Stil", "Style"),
     "ws_bold": ("Kräftig: Spotlight, Glaskarten, Akzente", "Bold: spotlight, glass cards, accents"),
     "ws_subtle": ("Dezent: nur Farben und Rundungen", "Subtle: colors and corners only"),
@@ -99,6 +99,7 @@ STRINGS = {
     "area_review_bar": ("Untere Leiste beim Lernen", "Bottom bar while studying"),
     "area_browser": ("Kartenverwaltung (Browse)", "Card browser"),
     "area_addons": ("Add-on-Liste", "Add-ons window"),
+    "area_preferences": ("Anki-Einstellungen", "Anki preferences"),
     "area_editor": ("Editor (Hinzufügen, Bearbeiten, Kartenverwaltung)", "Editor (add, edit, card browser)"),
     "area_stats": ("Statistik", "Statistics"),
     "area_deck_options": ("Stapeloptionen", "Deck options"),
@@ -502,7 +503,7 @@ class ThemeDialog(QDialog):
     def _page_advanced(self):
         areas = Section(t("areas"))
         self.area_checks = {}
-        for key in ("main", "review_bar", "browser", "editor", "stats", "deck_options", "addons", "other"):
+        for key in ("main", "review_bar", "browser", "editor", "stats", "deck_options", "preferences", "addons", "other"):
             c = self._toggle(t("area_" + key))
             areas.row(c)
             self.area_checks[key] = c

@@ -11,7 +11,7 @@
 - **"Studied today" highlighted** on the home screen
 - **Review Heatmap support:** fully restyled, colors only, or left untouched
 - **Performance mode:** blur is switched off automatically on weak laptops
-- **Card browser, editor, statistics, deck options and add-ons window** in the same style
+- **Card browser, editor, statistics, deck options, preferences and add-ons window** in the same style
 - **Settings window with a live preview of your own decks and cards**
 
 ![Study screen](https://raw.githubusercontent.com/TruckDrive/deckorator/main/screenshots/study-answer.png)

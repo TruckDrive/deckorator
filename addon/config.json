@@ -35,7 +35,8 @@
         "stats": true,
         "deck_options": true,
         "addons": true,
-        "other": false
+        "other": false,
+        "preferences": true
     },
     "custom_css": ""
 }

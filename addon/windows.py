@@ -74,6 +74,37 @@ ADDON_LIST = """
 """
 
 
+# Standard-Bedienelemente für Dialoge wie Ankis Einstellungen: Reiter, Gruppen, Häkchen, Zahlenfelder
+CONTROLS = """
+{root} QTabWidget::pane {{ background: {panel}; border: 1px solid {edge}; border-radius: 14px; top: -1px; padding: 6px; }}
+{root} QTabBar::tab {{ background: transparent; color: {sub}; padding: 6px 11px; margin: 0 2px 8px 0;
+  border-radius: 9px; border: none; }}
+{root} QTabBar::tab:hover:!selected {{ background: {hover}; color: {text}; }}
+{root} QTabBar::tab:selected {{ background: {accent_soft}; color: {accent_text}; font-weight: 600; }}
+{root} QGroupBox {{ background: {panel}; border: 1px solid {edge}; border-radius: 12px; margin-top: 16px;
+  padding: 14px 10px 8px; }}
+{root} QGroupBox::title {{ subcontrol-origin: margin; subcontrol-position: top left; left: 12px; padding: 0 4px;
+  color: {accent_text}; font-weight: 600; }}
+{root} QCheckBox, {root} QRadioButton {{ spacing: 8px; }}
+{root} QCheckBox::indicator {{ width: 16px; height: 16px; border-radius: 5px; border: 1.5px solid {track};
+  background: {input}; }}
+{root} QCheckBox::indicator:hover {{ border-color: {accent}; }}
+{root} QCheckBox::indicator:checked {{ background: {accent}; border-color: {accent}; image: url({check}); }}
+{root} QRadioButton::indicator {{ width: 14px; height: 14px; border-radius: 8px; border: 1.5px solid {track};
+  background: {input}; }}
+{root} QRadioButton::indicator:checked {{ border: 5px solid {accent}; background: #ffffff; }}
+{root} QSpinBox, {root} QDoubleSpinBox, {root} QLineEdit {{ background: {input}; border: 1px solid {border};
+  border-radius: 8px; padding: 4px 8px; }}
+{root} QSpinBox:focus, {root} QDoubleSpinBox:focus, {root} QLineEdit:focus {{ border-color: {accent}; }}
+{root} QSpinBox::up-button, {root} QSpinBox::down-button, {root} QDoubleSpinBox::up-button,
+{root} QDoubleSpinBox::down-button {{ subcontrol-origin: border; width: 18px; border: none; background: transparent; }}
+{root} QSpinBox::up-button, {root} QDoubleSpinBox::up-button {{ subcontrol-position: top right; }}
+{root} QSpinBox::down-button, {root} QDoubleSpinBox::down-button {{ subcontrol-position: bottom right; }}
+{root} QSpinBox::up-arrow, {root} QDoubleSpinBox::up-arrow {{ image: url({chevron_up}); width: 9px; height: 9px; }}
+{root} QSpinBox::down-arrow, {root} QDoubleSpinBox::down-arrow {{ image: url({chevron}); width: 9px; height: 9px; }}
+"""
+
+
 def _colors(cfg):
     """Fensterfarben aus der Deckorator-Hintergrundfarbe, damit Browse & Co. zum Hauptfenster passen."""
     from . import theme
@@ -95,6 +126,8 @@ def _colors(cfg):
     c["panel_alt"] = "rgba(255,255,255,.075)" if night else "rgba(250,250,252,.88)"
     c["edge"] = "rgba(255,255,255,.09)" if night else "rgba(0,0,0,.08)"
     c["accent_mid"] = theme._rgba(cfg["accent"], .55)
+    c["check"] = f"{ui.ASSETS}/check.svg"
+    c["chevron_up"] = f"{ui.ASSETS}/chevron-up-{'dark' if night else 'light'}.svg"
     return c
 
 
@@ -142,6 +175,14 @@ def _style_addcards(window, cfg):
     window.setStyleSheet(ui.stylesheet(c, root, font_size=None) + (BOLD.format(root=root, **c) if _bold(cfg) else ""))
 
 
+def _style_preferences(dialog, cfg):
+    c = _colors(cfg)
+    root = "QDialog#ctPrefs"
+    dialog.setObjectName("ctPrefs")
+    dialog.setStyleSheet(ui.stylesheet(c, root, font_size=None) + CONTROLS.format(root=root, **c)
+                         + (BOLD.format(root=root, **c) if _bold(cfg) else ""))
+
+
 def _style_addons(dialog, cfg):
     c = _colors(cfg)
     root = "QDialog#ctAddons"
@@ -155,6 +196,8 @@ def _apply(window, kind, cfg):
         enabled = cfg["areas"].get("editor" if kind == "addcards" else kind, True)
         if kind == "addcards":
             _style_addcards(window, cfg) if enabled else window.setStyleSheet("")
+        elif kind == "preferences":
+            _style_preferences(window, cfg) if enabled else window.setStyleSheet("")
         elif kind == "browser":
             _style_browser(window, cfg) if enabled else _unstyle_browser(window)
         else:
