@@ -1,51 +1,71 @@
 # Deckorator
 
-**Decorate your Anki decks.** A modern, customizable theme for Anki's deck list, overview and study screen. It stays quiet while you study.
+**Decorate your Anki decks.** A modern, customizable theme for Anki's deck list, overview, study screen and windows. It stays quiet while you study.
 
-![Deck list with spotlight background](screenshots/home-dark.png)
+![Lofi city theme pack](screenshots/home-lofi.png)
 
 **Install:** in Anki go to *Tools → Add-ons → Get Add-ons…* and enter **`1326296861`**
 ([AnkiWeb page](https://ankiweb.net/shared/info/1326296861))
 
 ## Features
 
-- **46 theme packs**, including the Omarchy color themes for a complete look in one click: illustrated (Fuji, lofi city, sakura, mountains, planet, flow lines, topography, Bauhaus) and photo wallpapers
-- **Illustrated wallpapers** drawn for Deckorator: they take on your accent color and have light and dark versions
-- **Banner in the top bar** behind Decks, Add, Browse …
-- **My designs**: save your look, or turn any wallpaper into a complete theme (accent and tones adapt), share as a .deckorator file
+**Looks**
+- **46 theme packs** for a complete look in one click: illustrations, photos, the Omarchy color themes (Catppuccin, Gruvbox, Nord, Tokyo Night …) and minimal patterns
+- **Illustrated wallpapers** drawn for Deckorator that take on your accent color, with light and dark versions
+- **My designs**: save your look or turn any wallpaper into a complete theme (accent and tones adapt), share as `.deckorator` files
+- **Online gallery**: browse wallpapers from Omarchy and ML4W on GitHub and use them as designs
+- **21 color presets**, a quick color pick, or take the accent from your **system** or **desktop wallpaper**
+- **Backgrounds**: spotlight, dot grid, line grid, grain, waves, illustration, your own image (also a separate one for dark mode) or your **desktop wallpaper**
+- **Banner** behind the top bar, or only inside the tab capsule
+
+**Studying**
+- **Calm study mode**: the background stays quiet so the card comes first
+- **Card designs**: six styles for any note type, previewed on your own cards and fully reversible
+- Readable review counters, answer buttons tinted by rating, "studied today" highlighted
+
+**Windows & add-ons**
+- **Card browser, editor, statistics, deck options, preferences and add-ons window** in the same style, bold or subtle
+- **Every area adjustable**: Deckorator look or Anki's original, per window
 - **Add-on center**: your add-ons as cards with a switch, settings and page link
-- **Plays well with other add-ons**: their content below the deck list gets a matching card; other theme add-ons are detected
-- **Online gallery**: browse wallpapers from Omarchy and ML4W on GitHub and turn them into designs
-- **Card designs**: six styles for any note type (clean, index card, minimal, focus, study notes, like my theme), previewed on your own cards and fully reversible
-- **Every area adjustable**: bold, subtle or Anki's original look, per window
-- **8 color presets** or your own accent color. The accent can also come from your **system accent color** or your **desktop wallpaper**.
-- **Backgrounds:** spotlight, dot grid, line grid, grain, waves, your own image, or your **desktop wallpaper**. The wallpaper is re-synced on every start, and live/video wallpapers become a still image.
-- **Calm study mode:** while you review, the background stays quiet so the card comes first.
-- **Readable review counters** (new / learning / review) and tinted answer buttons
-- **"Studied today" highlighted** on the home screen
-- **[Review Heatmap](https://ankiweb.net/shared/info/1771074083) support:** fully restyled, colors only, or left untouched
-- **Performance mode:** on weak laptops (4 CPU threads or less, software rendering, on battery) blur is switched off automatically
-- **Card browser, editor, statistics, deck options, preferences and add-ons window** in the same style (flag, marked and suspended colors stay as in Anki), each can be switched off
-- **Settings window with a live preview of your own decks and cards**, light and dark mode, theme export and import
+- Content other add-ons place below the deck list gets a matching card; other theme add-ons are detected
+- **[Review Heatmap](https://ankiweb.net/shared/info/1771074083) support**: fully restyled, colors only, or left untouched
+
+**Comfort**
+- **Performance mode**: blur is switched off automatically on weak laptops; glow effects can be turned off
+- **Settings window with a live preview** of your own decks, cards and windows, light and dark
 - English and German interface, follows Anki's language
 
-| Waves, dark | Dot grid, light |
+## Screenshots
+
+| Fuji with banner in the tab bar | Catppuccin (Omarchy color theme) |
 |---|---|
-| ![Waves background](screenshots/home-waves-dark.png) | ![Dot grid background, light mode](screenshots/home-light.png) |
+| ![Fuji](screenshots/home-fuji.png) | ![Catppuccin](screenshots/home-catppuccin.png) |
 
-| Studying: question | Studying: answer |
+| Winter, dark mode (aurora photo) | Clouds, light mode |
 |---|---|
-| ![Calm study screen with counters](screenshots/study-question.png) | ![Answer buttons tinted by rating](screenshots/study-answer.png) |
+| ![Winter dark](screenshots/home-winter-dark.png) | ![Clouds light](screenshots/home-clouds-light.png) |
 
-![Card browser](screenshots/browser.png)
+| Calm study screen | Answer buttons tinted by rating |
+|---|---|
+| ![Study question](screenshots/study-question.png) | ![Study answer](screenshots/study-answer.png) |
 
-![Settings window with live preview](screenshots/settings.png)
+| Card browser | Statistics |
+|---|---|
+| ![Card browser](screenshots/browser.png) | ![Statistics](screenshots/stats.png) |
+
+**Settings**: designs, card designs and areas, all with a live preview
+
+![Designs page](screenshots/settings-designs.png)
+
+| Card designs | Areas & window preview |
+|---|---|
+| ![Card designs](screenshots/settings-cards.png) | ![Areas](screenshots/settings-areas.png) |
 
 ## Settings
 
 *Tools → Deckorator – Theme settings…* or the **Config** button in the add-on manager.
 
-Deckorator only changes how Anki looks. Your cards and note types are never modified. During reviews, card backgrounds come from your note type unless you choose otherwise.
+Deckorator only changes how Anki looks. It never touches your cards. The one exception you control yourself: **card designs** add a clearly marked CSS block to the note types you choose, and "Remove style" restores the original.
 
 ## Reporting a problem
 

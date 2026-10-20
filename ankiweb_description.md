@@ -1,6 +1,6 @@
 **Decorate your Anki decks.** Deckorator gives the deck list, overview and study screen a clean, modern look, and it stays quiet while you study.
 
-![Deck list](https://raw.githubusercontent.com/TruckDrive/deckorator/main/screenshots/home-dark.png)
+![Deck list](https://raw.githubusercontent.com/TruckDrive/deckorator/main/screenshots/home-lofi.png)
 
 ### Features
 
@@ -22,9 +22,9 @@
 - **Card browser, editor, statistics, deck options, preferences and add-ons window** in the same style
 - **Settings window with a live preview of your own decks and cards**
 
-![Study screen](https://raw.githubusercontent.com/TruckDrive/deckorator/main/screenshots/study-answer.png)
+![Study screen](https://raw.githubusercontent.com/TruckDrive/deckorator/main/screenshots/home-fuji.png)
 
-![Settings](https://raw.githubusercontent.com/TruckDrive/deckorator/main/screenshots/settings.png)
+![Settings](https://raw.githubusercontent.com/TruckDrive/deckorator/main/screenshots/settings-designs.png)
 
 ### How to use
 
@@ -32,6 +32,6 @@
 
 ### Good to know
 
-- Only changes how Anki looks. Your cards and note types are never modified.
+- Only changes how Anki looks and never touches your cards. Card designs add a marked, removable CSS block to the note types you choose.
 - Nothing is ever sent anywhere.
 - Found a problem? Open **Settings → Advanced → Copy diagnostic report** and post it on [GitHub](https://github.com/TruckDrive/deckorator/issues). That helps me fix it quickly.
