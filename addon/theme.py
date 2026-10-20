@@ -14,7 +14,48 @@ PRESETS = {
     "coral":    {"accent": "#f43f5e", "bg_light": "#faf6f6", "bg_dark": "#171414", "background": "grid"},
     "teal":     {"accent": "#14b8a6", "bg_light": "#f4f8f7", "bg_dark": "#121615", "background": "waves"},
     "graphite": {"accent": "#71717a", "bg_light": "#f5f5f5", "bg_dark": "#121212", "background": "dots"},
+    "crimson":  {"accent": "#dc2626", "bg_light": "#faf6f6", "bg_dark": "#161212", "background": "spotlight"},
+    "tangerine": {"accent": "#ea580c", "bg_light": "#faf7f4", "bg_dark": "#16130f", "background": "spotlight"},
+    "gold":     {"accent": "#ca8a04", "bg_light": "#faf8f2", "bg_dark": "#15140e", "background": "grain"},
+    "lime":     {"accent": "#65a30d", "bg_light": "#f6f8f2", "bg_dark": "#121510", "background": "dots"},
+    "emerald":  {"accent": "#10b981", "bg_light": "#f3f8f6", "bg_dark": "#0f1513", "background": "spotlight"},
+    "cyan":     {"accent": "#06b6d4", "bg_light": "#f3f8f9", "bg_dark": "#0f1416", "background": "waves"},
+    "indigo":   {"accent": "#6366f1", "bg_light": "#f5f5fb", "bg_dark": "#111119", "background": "spotlight"},
+    "violet":   {"accent": "#7c3aed", "bg_light": "#f7f5fb", "bg_dark": "#131018", "background": "grid"},
+    "fuchsia":  {"accent": "#c026d3", "bg_light": "#faf5fa", "bg_dark": "#161017", "background": "spotlight"},
+    "pink":     {"accent": "#ec4899", "bg_light": "#fbf5f8", "bg_dark": "#171014", "background": "dots"},
+    "mint":     {"accent": "#34d399", "bg_light": "#f3f9f6", "bg_dark": "#0f1512", "background": "grain"},
+    "slate":    {"accent": "#64748b", "bg_light": "#f4f5f7", "bg_dark": "#111317", "background": "solid"},
 }
+
+def _omarchy_packs():
+    """Farbthemen nach den Paletten der Omarchy-Themes (Farben, keine Bilder; Omarchy ist MIT-lizenziert)."""
+    import json
+    import os
+    path = os.path.join(os.path.dirname(__file__), "omarchy_palettes.json")
+    try:
+        with open(path, encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return {}
+    packs = {}
+    for name, p in data.items():
+        accent, bg = p["accent"], p["bg"]
+        packs["om_" + name] = {
+            "omarchy": True, "om_light": p["light"], "title": name.replace("-", " ").title(), "palette": p.get("palette", []),
+            "accent": accent, "background": "spotlight", "bg_intensity": 60, "banner": "",
+            "bg_light": bg if p["light"] else _mix("#f7f7f8", accent, .05),
+            "bg_dark": _mix("#121214", accent, .06) if p["light"] else bg,
+            "glass": True, "blur": 18, "glass_opacity": 55, "radius": 14, "button_shape": "rounded",
+            "shadow": 2, "toolbar_style": "floating", "window_style": "bold", "review_background": "calm",
+        }
+    return packs
+
+
+# Schnellwahl-Farben für den Akzent (eine Reihe Kreise im Einstellungsfenster)
+SWATCHES = ("#ef4444", "#f97316", "#f59e0b", "#eab308", "#84cc16", "#22c55e", "#10b981", "#14b8a6",
+            "#06b6d4", "#0ea5e9", "#3b82f6", "#6366f1", "#8b5cf6", "#a855f7", "#d946ef", "#ec4899",
+            "#f43f5e", "#e11d48", "#b45309", "#78716c", "#64748b", "#71717a", "#a3a3a3", "#e5e7eb")
 
 IMAGE_EXTS = ("png", "jpg", "jpeg", "webp", "gif")
 
@@ -571,6 +612,13 @@ html body center > :not(table):not(br):not(#studiedToday):not(.rh-container):not
   max-width: 900px; box-sizing: border-box; }
 """
 
+# Leuchteffekte aus: keine farbigen Schatten um Buttons, Kacheln und die obere Leiste
+NO_GLOW = """
+html body #study, html body #ansbut, html body button.primary,
+html body #study:hover, html body #ansbut:hover, html body button[data-ease]:hover,
+html body #studiedToday, html body .toolbar, html body .rh-container { box-shadow: none !important; }
+"""
+
 SCOPES = ("main", "bar", "topbar", "card", "colors", "pages", "editor")
 
 COMPACT = """
@@ -668,6 +716,8 @@ def build_css_text(cfg, scope="main", base_px=None, bg_url=None):
     parts.append(ANIMATIONS if cfg["animations"] else NO_ANIMATIONS)
     if cfg.get("_light"):
         parts.append(LIGHT_MODE)
+    if not cfg.get("glow", True):
+        parts.append(NO_GLOW)
     parts.append(REDUCED_MOTION)
     if cfg["compact"]:
         parts.append(COMPACT)
@@ -694,3 +744,7 @@ def build_css(cfg, scope="main", base_px=None, bg_url=None):
 
 class PreviewContext:
     """Webansichten der Vorschau; der Hook lässt sie aus, die Vorschau setzt ihr CSS selbst."""
+
+
+# Omarchy-Farbthemen erst hier: braucht PACKS und die Farbfunktionen weiter oben
+PACKS.update(_omarchy_packs())

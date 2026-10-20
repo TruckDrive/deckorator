@@ -72,7 +72,7 @@ def save_design(name, cfg):
     return did
 
 
-def design_from_image(path, name, cfg):
+def design_from_image(path, name, cfg, overrides=None):
     """Wallpaper hochladen -> kompletter Look: Akzent aus der kräftigsten Farbe, Hintergrund-
     farben leicht in der Grundstimmung des Bildes getönt, Bild als Hintergrund."""
     name_img = desktop.prepare_image(path, USER_DIR, "background")
@@ -85,6 +85,7 @@ def design_from_image(path, name, cfg):
     look.update(accent=accent, bg_image=name_img, background="image", bg_intensity=60,
                 bg_dark=theme._mix("#121214", mood, .10), bg_light=theme._mix("#f7f7f8", mood, .06),
                 bg_image_dark="", accent_source="manual", preset="", pack="")
+    look.update(overrides or {})
     did = save_design(name, look)
     look["design"] = did
     return look

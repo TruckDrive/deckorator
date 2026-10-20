@@ -1,0 +1,321 @@
+{
+ "catppuccin-latte": {
+  "accent": "#1e66f5",
+  "bg": "#eff1f5",
+  "light": true,
+  "palette": [
+   "#d20f39",
+   "#d84e2b",
+   "#df8e1d",
+   "#40a02b",
+   "#179299",
+   "#1e66f5",
+   "#ea76cb"
+  ]
+ },
+ "catppuccin": {
+  "accent": "#89b4fa",
+  "bg": "#1e1e2e",
+  "light": false,
+  "palette": [
+   "#f38ba8",
+   "#f6b6ab",
+   "#f9e2af",
+   "#a6e3a1",
+   "#94e2d5",
+   "#89b4fa",
+   "#f5c2e7"
+  ]
+ },
+ "ethereal": {
+  "accent": "#7d82d9",
+  "bg": "#060b1e",
+  "light": false,
+  "palette": [
+   "#ed5b5a",
+   "#eb8b54",
+   "#e9bb4f",
+   "#92a593",
+   "#a3bfd1",
+   "#7d82d9",
+   "#c89dc1"
+  ]
+ },
+ "everforest": {
+  "accent": "#e09d7f",
+  "bg": "#2d353b",
+  "light": false,
+  "palette": [
+   "#e67e80",
+   "#e09d7f",
+   "#dbbc7f",
+   "#a7c080",
+   "#83c092",
+   "#7fbbb3",
+   "#d699b6"
+  ]
+ },
+ "flexoki-light": {
+  "accent": "#205ea6",
+  "bg": "#fffcf0",
+  "light": true,
+  "palette": [
+   "#d14d41",
+   "#d0772b",
+   "#d0a215",
+   "#879a39",
+   "#3aa99f",
+   "#205ea6",
+   "#ce5d97"
+  ]
+ },
+ "gruvbox": {
+  "accent": "#d3869b",
+  "bg": "#282828",
+  "light": false,
+  "palette": [
+   "#ea6962",
+   "#e1875c",
+   "#d8a657",
+   "#a9b665",
+   "#89b482",
+   "#7daea3",
+   "#d3869b"
+  ]
+ },
+ "hackerman": {
+  "accent": "#82fb9c",
+  "bg": "#0b0c16",
+  "light": false,
+  "palette": [
+   "#50f872",
+   "#50f7a3",
+   "#50f7d4",
+   "#4fe88f",
+   "#7cf8f7",
+   "#829dd4",
+   "#86a7df"
+  ]
+ },
+ "kanagawa": {
+  "accent": "#7e9cd8",
+  "bg": "#1f1f28",
+  "light": false,
+  "palette": [
+   "#c34043",
+   "#c17158",
+   "#c0a36e",
+   "#76946a",
+   "#6a9589",
+   "#7e9cd8",
+   "#957fb8"
+  ]
+ },
+ "last-horizon": {
+  "accent": "#c38b7b",
+  "bg": "#0c0b0c",
+  "light": false,
+  "palette": [
+   "#c38b7b",
+   "#6b5e73",
+   "#87a9b0",
+   "#a5a0b6",
+   "#b59790",
+   "#c4d8e2"
+  ]
+ },
+ "lumon": {
+  "accent": "#8bc9eb",
+  "bg": "#16242d",
+  "light": false,
+  "palette": [
+   "#4d86b0",
+   "#8bc9eb",
+   "#6fa4c9",
+   "#5e95bc",
+   "#b4e4f6",
+   "#6fb8e3",
+   "#8bc9eb"
+  ]
+ },
+ "lupine": {
+  "accent": "#3264eb",
+  "bg": "#fafafa",
+  "light": true,
+  "palette": [
+   "#c900c4",
+   "#026fde",
+   "#026fde",
+   "#4a2fd0",
+   "#0c67de",
+   "#3264eb",
+   "#8a4ad7"
+  ]
+ },
+ "matte-black": {
+  "accent": "#e68e0d",
+  "bg": "#121212",
+  "light": false,
+  "palette": [
+   "#d35f5f",
+   "#c63d3d",
+   "#b91c1c",
+   "#ffc107",
+   "#bebebe",
+   "#e68e0d",
+   "#d35f5f"
+  ]
+ },
+ "miasma": {
+  "accent": "#78824b",
+  "bg": "#222222",
+  "light": false,
+  "palette": [
+   "#685742",
+   "#8d6242",
+   "#b36d43",
+   "#5f875f",
+   "#c9a554",
+   "#78824b",
+   "#bb7744"
+  ]
+ },
+ "nord": {
+  "accent": "#d5967a",
+  "bg": "#2e3440",
+  "light": false,
+  "palette": [
+   "#bf616a",
+   "#d5967a",
+   "#ebcb8b",
+   "#a3be8c",
+   "#88c0d0",
+   "#81a1c1",
+   "#b48ead"
+  ]
+ },
+ "osaka-jade": {
+  "accent": "#509475",
+  "bg": "#111c18",
+  "light": false,
+  "palette": [
+   "#ff5345",
+   "#a2734b",
+   "#459451",
+   "#549e6a",
+   "#2dd5b7",
+   "#509475",
+   "#d2689c"
+  ]
+ },
+ "retro-82": {
+  "accent": "#faa968",
+  "bg": "#05182e",
+  "light": false,
+  "palette": [
+   "#f85525",
+   "#faa968",
+   "#e97b3c",
+   "#028391",
+   "#8cbfb8",
+   "#3f8f8a",
+   "#3f8f8a"
+  ]
+ },
+ "ristretto": {
+  "accent": "#f38d70",
+  "bg": "#2c2525",
+  "light": false,
+  "palette": [
+   "#fd6883",
+   "#fb9a77",
+   "#f9cc6c",
+   "#adda78",
+   "#85dacc",
+   "#f38d70",
+   "#a8a9eb"
+  ]
+ },
+ "rose-pine": {
+  "accent": "#56949f",
+  "bg": "#faf4ed",
+  "light": true,
+  "palette": [
+   "#b4637a",
+   "#cf8057",
+   "#ea9d34",
+   "#286983",
+   "#d7827e",
+   "#56949f",
+   "#907aa9"
+  ]
+ },
+ "solitude": {
+  "accent": "#798186",
+  "bg": "#101315",
+  "light": false,
+  "palette": [
+   "#565d60",
+   "#d9dbdc",
+   "#9fa5a9",
+   "#707070",
+   "#798186",
+   "#aeaeae"
+  ]
+ },
+ "starship": {
+  "accent": "#ff9f0a",
+  "bg": "#1c1c1e",
+  "light": false,
+  "palette": [
+   "#ff5f4a",
+   "#ff6a3d",
+   "#ffc27a",
+   "#ff9f0a",
+   "#a6dcef",
+   "#8fb8de",
+   "#ff8fa3"
+  ]
+ },
+ "tokyo-night": {
+  "accent": "#7aa2f7",
+  "bg": "#1a1b26",
+  "light": false,
+  "palette": [
+   "#f7768e",
+   "#eb927b",
+   "#e0af68",
+   "#9ece6a",
+   "#449dab",
+   "#7aa2f7",
+   "#ad8ee6"
+  ]
+ },
+ "vantablack": {
+  "accent": "#8d8d8d",
+  "bg": "#000000",
+  "light": false,
+  "palette": [
+   "#a4a4a4",
+   "#b9b9b9",
+   "#cecece",
+   "#b6b6b6",
+   "#b0b0b0",
+   "#8d8d8d",
+   "#9b9b9b"
+  ]
+ },
+ "white": {
+  "accent": "#6e6e6e",
+  "bg": "#ffffff",
+  "light": true,
+  "palette": [
+   "#2a2a2a",
+   "#4a4a4a",
+   "#3a3a3a",
+   "#3e3e3e",
+   "#1a1a1a",
+   "#2e2e2e"
+  ]
+ }
+}

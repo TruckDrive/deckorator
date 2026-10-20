@@ -12,6 +12,12 @@ Vor jedem Upload: `VERSION` in `__init__.py` erhöhen, hier eintragen, `./build.
 - Inhalte anderer Add-ons unter der Deckliste bekommen automatisch eine Glaskarte
 - Konflikt-Check für andere Theme-Add-ons
 - Behoben: Stylesheet-Fehler der Farbfelder
+- Behoben: Farbvorlagen wirkten nicht, solange die Akzentfarbe automatisch (System/Wallpaper) kam
+- 13 weitere Farbvorlagen und eine Schnellwahl mit 24 Farben neben dem Farbwähler
+- 23 Omarchy-Farbthemen (Catppuccin, Gruvbox, Nord, Tokyo Night, Kanagawa …)
+- Online-Galerie: Wallpaper aus Omarchy und ML4W direkt von GitHub durchsehen und als Design übernehmen (bei Omarchy mit den Farben des passenden Themes)
+- Karten-Designs: 6 Stile (Klar, Karteikarte, Minimal, Fokus, Lernzettel, Wie mein Theme) für beliebige Notiztypen, mit Vorschau an echten Karten; umkehrbar
+- Leuchteffekte um Buttons, Kacheln und obere Leiste abschaltbar
 - Illustrierte Wallpaper (selbst gezeichnet, färben sich in der Akzentfarbe, Hell/Dunkel): Fuji, Lofi-Stadt, Sakura, Gebirge, Planet, Linienfluss, Topografie, Bauhaus
 - Banner in der oberen Leiste: Illustration, Foto oder eigenes Bild, drei Höhen; beim Lernen bleibt die Leiste ruhig
 - Neue Seite „Bereiche“: für jeden Teil von Anki einzeln Kräftig, Dezent oder Anki-Original; „Alles auf Anki-Original“ mit einem Klick

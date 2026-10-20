@@ -8,7 +8,7 @@ from anki.lang import current_lang
 from aqt import mw
 from aqt.qt import *
 from aqt.theme import theme_manager
-from aqt.utils import getFile, getSaveFile, showWarning, tooltip
+from aqt.utils import askUser, getFile, getSaveFile, showWarning, tooltip
 
 from . import desktop, theme, ui
 from .preview import ThemePreview
@@ -22,9 +22,36 @@ STRINGS = {
     "page_look": ("Aussehen", "Appearance"), "page_shape": ("Form", "Shape"),
     "page_text": ("Schrift", "Text"), "page_study": ("Lernen", "Studying"),
     "page_addons": ("Add-ons", "Add-ons"), "page_advanced": ("Erweitert", "Advanced"),
-    "page_areas": ("Bereiche", "Areas"), "page_designs": ("Designs", "Designs"),
+    "page_areas": ("Bereiche", "Areas"), "page_designs": ("Designs", "Designs"), "page_cards": ("Karten", "Cards"),
+    "card_styles": ("Karten-Designs", "Card designs"),
+    "card_styles_hint": ("Fertige Stile für deine Karten, wie bei der Muskeltabelle, für beliebige Decks. Klick auf einen "
+                         "Stil zeigt ihn in der Vorschau an einer deiner Karten. Die Farben kommen aus deinem Theme.",
+                         "Ready-made styles for your cards, like the muscle table, for any deck. Clicking a style shows "
+                         "it in the preview on one of your cards. Colors come from your theme."),
+    "card_style_names": ({"clean": "Klar", "index": "Karteikarte", "minimal": "Minimal",
+                          "focus": "Fokus", "notes": "Lernzettel", "theme": "Wie mein Theme"},
+                         {"clean": "Clean", "index": "Index card", "minimal": "Minimal",
+                          "focus": "Focus", "notes": "Study notes", "theme": "Like my theme"}),
+    "card_target": ("Für welche Karten?", "Which cards?"),
+    "card_target_hint": ("Der Stil wird im Notiztyp gespeichert und gilt für alle Karten dieses Typs, auch auf dem Handy "
+                         "nach dem Synchronisieren. Dein eigenes CSS bleibt erhalten; „Stil entfernen“ stellt das Original wieder her.",
+                         "The style is stored in the note type and applies to all its cards, also on your phone after "
+                         "syncing. Your own CSS stays; “Remove style” restores the original."),
+    "card_by_deck": ("Aus Stapel", "From deck"), "card_pick_deck": ("Notiztypen eines Stapels auswählen…", "Select note types of a deck…"),
+    "card_type_row": ("{name} ({count} Karten)", "{name} ({count} cards)"),
+    "card_apply": ("Auf ausgewählte anwenden", "Apply to selected"), "card_remove": ("Stil entfernen", "Remove style"),
+    "card_need_choice": ("Wähle einen Stil und mindestens einen Notiztyp.", "Pick a style and at least one note type."),
+    "card_need_types": ("Wähle mindestens einen Notiztyp.", "Pick at least one note type."),
+    "card_confirm": ("Den Stil auf {n} Notiztyp(en) anwenden? Das ändert deren CSS (umkehrbar mit „Stil entfernen“).",
+                     "Apply the style to {n} note type(s)? This changes their CSS (reversible with “Remove style”)."),
+    "card_applied": ("Kartenstil angewendet", "Card style applied"), "card_removed": ("Kartenstil entfernt", "Card style removed"),
     "packs_art": ("Illustrationen", "Illustrations"), "packs_photo": ("Fotos", "Photos"),
     "packs_pattern": ("Minimal & Muster", "Minimal & patterns"),
+    "packs_omarchy": ("Omarchy-Farbthemen", "Omarchy color themes"),
+    "packs_omarchy_hint": ("Die Farbpaletten der Omarchy-Themes (Catppuccin, Gruvbox, Nord, Tokyo Night …) als Deckorator-Looks. "
+                           "Die passenden Wallpaper findest du in der Online-Galerie oben.",
+                           "The color palettes of the Omarchy themes (Catppuccin, Gruvbox, Nord, Tokyo Night …) as Deckorator "
+                           "looks. Matching wallpapers are in the online gallery above."),
     "my_designs": ("Meine Designs", "My designs"),
     "my_designs_hint": ("Deine eigenen Looks, getrennt von den eingebauten Paketen. „Design aus Bild“ macht aus einem "
                         "Wallpaper einen kompletten Look: Akzentfarbe, Hintergrundtöne und Bild passen sich an. "
@@ -33,6 +60,17 @@ STRINGS = {
                         "a complete look: accent color, background tones and image adapt. Right-click a design to "
                         "export or delete it."),
     "save_design": ("Aktuellen Look speichern…", "Save current look…"),
+    "gallery_open": ("Online-Galerie…", "Online gallery…"), "gallery": ("Online-Galerie", "Online gallery"),
+    "gallery_note": ("Wallpaper aus öffentlichen Sammlungen auf GitHub (Omarchy, ML4W). Liste und Bilder werden erst jetzt "
+                     "direkt von GitHub geladen. Die Bilder gehören ihren Urhebern und sind für deinen eigenen Gebrauch; "
+                     "teile Designs mit diesen Bildern nicht weiter.",
+                     "Wallpapers from public collections on GitHub (Omarchy, ML4W). The list and images are loaded "
+                     "directly from GitHub only now. The images belong to their creators and are for your own use; "
+                     "don't share designs containing them."),
+    "gallery_repo": ("Auf GitHub ansehen", "View on GitHub"), "gallery_filter": ("Suchen…", "Search…"),
+    "gallery_pick": ("Wähle links ein Bild für die Vorschau.", "Pick an image on the left to preview it."),
+    "gallery_loading": ("Wird geladen…", "Loading…"), "gallery_error": ("Konnte nicht laden: {err}", "Couldn't load: {err}"),
+    "gallery_use": ("Als Design übernehmen", "Use as design"),
     "design_from_image": ("Design aus Bild…", "Design from image…"),
     "import_design": ("Importieren…", "Import…"), "export_design": ("Exportieren…", "Export…"),
     "apply_design": ("Anwenden", "Apply"), "delete_design": ("Löschen", "Delete"),
@@ -255,13 +293,19 @@ STRINGS = {
     "demo_q": ("Wie heißt die Hauptstadt von Österreich?", "What is the capital of Austria?"),
     "demo_a": ("Wien", "Vienna"),
     "saved": ("Theme gespeichert", "Theme saved"), "import_err": ("Datei konnte nicht gelesen werden:", "Could not read file:"),
-    "preset_names": ({"rose": "Rosé", "ocean": "Ozean", "forest": "Wald", "lavender": "Lavendel", "amber": "Bernstein",
+    "quick_colors": ("Schnellwahl", "Quick pick"),
+    "glow": ("Leuchteffekte (farbiger Schein um Buttons, Kacheln und obere Leiste)", "Glow effects (colored halo around buttons, tiles and top bar)"),
+    "preset_names": ({"rose": "Rosé", "crimson": "Karmin", "tangerine": "Mandarine", "gold": "Gold", "lime": "Limette",
+                      "emerald": "Smaragd", "cyan": "Cyan", "indigo": "Indigo", "violet": "Violett", "fuchsia": "Fuchsia",
+                      "pink": "Pink", "mint": "Minze", "slate": "Schiefer", "ocean": "Ozean", "forest": "Wald", "lavender": "Lavendel", "amber": "Bernstein",
                       "coral": "Koralle", "teal": "Petrol", "graphite": "Graphit"},
-                     {"rose": "Rosé", "ocean": "Ocean", "forest": "Forest", "lavender": "Lavender", "amber": "Amber",
+                     {"rose": "Rosé", "crimson": "Crimson", "tangerine": "Tangerine", "gold": "Gold", "lime": "Lime",
+                      "emerald": "Emerald", "cyan": "Cyan", "indigo": "Indigo", "violet": "Violet", "fuchsia": "Fuchsia",
+                      "pink": "Pink", "mint": "Mint", "slate": "Slate", "ocean": "Ocean", "forest": "Forest", "lavender": "Lavender", "amber": "Amber",
                       "coral": "Coral", "teal": "Teal", "graphite": "Graphite"}),
 }
 
-PAGES = ("designs", "look", "shape", "text", "study", "areas", "addons", "advanced")
+PAGES = ("designs", "look", "cards", "shape", "text", "study", "areas", "addons", "advanced")
 # Werte, die an diesen Rechner gebunden sind und beim Teilen nicht mitwandern
 PRIVATE_KEYS = ("bg_image", "bg_image_dark", "banner_image", "desktop_image", "desktop_sig", "design", "conflicts_ack")
 
@@ -355,7 +399,7 @@ class ThemeDialog(QDialog):
         self.nav.setFixedWidth(150)
         self.nav.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.pages = QStackedWidget()
-        builders = {"designs": self._page_designs, "look": self._page_look, "shape": self._page_shape, "text": self._page_text,
+        builders = {"designs": self._page_designs, "look": self._page_look, "cards": self._page_cards, "shape": self._page_shape, "text": self._page_text,
                     "areas": self._page_areas,
                     "study": self._page_study, "addons": self._page_addons, "advanced": self._page_advanced}
         for key in PAGES:
@@ -481,6 +525,21 @@ class ThemeDialog(QDialog):
             thumb = os.path.join(ADDON_DIR, "wallpapers", pack["wallpaper"].replace(".jpg", "_thumb.jpg"))
             return QIcon(QPixmap(thumb).scaled(size, Qt.AspectRatioMode.KeepAspectRatioByExpanding,
                                               Qt.TransformationMode.SmoothTransformation))
+        if pack.get("omarchy"):
+            # Farbthema: Hintergrund des Themes mit seiner Palette als Streifen
+            pm = QPixmap(size)
+            pm.fill(QColor(pack["bg_light"] if pack.get("om_light") else pack["bg_dark"]))
+            p = QPainter(pm)
+            p.setRenderHint(QPainter.RenderHint.Antialiasing)
+            cols = pack.get("palette") or [pack["accent"]]
+            w = size.width() / len(cols)
+            for i, c in enumerate(cols):
+                p.fillRect(QRectF(i * w, size.height() * .62, w + 1, size.height() * .38), QColor(c))
+            p.setBrush(QColor(pack["accent"]))
+            p.setPen(Qt.PenStyle.NoPen)
+            p.drawEllipse(QPointF(size.width() / 2, size.height() * .32), 13, 13)
+            p.end()
+            return QIcon(pm)
         # Musterpaket: helle Fläche mit Lichtschein in Akzentfarbe und dem Muster als Punkte
         def color(alpha):  # QColor versteht kein CSS-rgba(), daher Hex + Alpha
             c = QColor(pack["accent"])
@@ -522,27 +581,31 @@ class ThemeDialog(QDialog):
         self.pack_buttons = {}
         names = t("pack_names")
         groups = (("packs_art", lambda p: p.get("art")), ("packs_photo", lambda p: p.get("wallpaper")),
-                  ("packs_pattern", lambda p: not p.get("art") and not p.get("wallpaper")))
+                  ("packs_omarchy", lambda p: p.get("omarchy")),
+                  ("packs_pattern", lambda p: not p.get("art") and not p.get("wallpaper") and not p.get("omarchy")))
         sections = []
         for title, test in groups:
-            sec = Section(t(title), t("packs_hint") if not sections else None)
+            hint = t("packs_hint") if not sections else (t("packs_omarchy_hint") if title == "packs_omarchy" else None)
+            sec = Section(t(title), hint)
             grid = QGridLayout()
             grid.setSpacing(10)
             for i, (key, pack) in enumerate((k, p) for k, p in theme.PACKS.items() if test(p)):
-                b = self._tile(names[key], self._pack_icon(key, pack), lambda _=False, k=key: self._apply_pack(k))
+                b = self._tile(names.get(key) or pack.get("title", key), self._pack_icon(key, pack),
+                               lambda _=False, k=key: self._apply_pack(k))
                 grid.addWidget(b, i // 3, i % 3)
                 self.pack_buttons[key] = b
             sec.form.addRow(grid)
             sections.append(sec)
 
         mine = Section(t("my_designs"), t("my_designs_hint"))
-        row = QHBoxLayout()
-        for label, slot in ((t("save_design"), self._save_design), (t("design_from_image"), self._design_from_image),
-                            (t("import_design"), self._import_design)):
+        row = QGridLayout()  # 2x2 statt einer langen Zeile, sonst wird die Seite breiter als sichtbar
+        row.setSpacing(8)
+        for i, (label, slot) in enumerate(((t("save_design"), self._save_design), (t("design_from_image"), self._design_from_image),
+                                           (t("gallery_open"), self._open_gallery), (t("import_design"), self._import_design))):
             b = QPushButton(label)
+            b.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
             b.clicked.connect(slot)
-            row.addWidget(b)
-        row.addStretch()
+            row.addWidget(b, i // 2, i % 2)
         mine.form.addRow(row)
         self.design_grid = QGridLayout()
         self.design_grid.setSpacing(10)
@@ -630,6 +693,18 @@ class ThemeDialog(QDialog):
         exts = " ".join("*" + e for e in desktop.IMAGE_EXTS)
         getFile(self, t("design_from_image"), cb=chosen, filter=exts, key="deckorator_design_image")
 
+    def _open_gallery(self):
+        from .gallery import GalleryDialog
+
+        def on_design(look):
+            self.cfg = look
+            self._load_into_widgets()
+            self._restyle()
+            self._render_preview()
+            self._refresh_designs()
+
+        GalleryDialog(self, t, self._collect, on_design).exec()
+
     def _apply_design(self, did):
         from . import designs
         try:
@@ -664,6 +739,106 @@ class ThemeDialog(QDialog):
 
         getFile(self, t("import_design"), cb=chosen, filter="*.deckorator *.zip", key="deckorator_design_export")
 
+    def _page_cards(self):
+        from . import cards
+        styles = Section(t("card_styles"), t("card_styles_hint"))
+        grid = QGridLayout()
+        grid.setSpacing(10)
+        self.card_style_buttons = {}
+        names = t("card_style_names")
+        for i, key in enumerate(cards.STYLES):
+            b = QPushButton(names[key])
+            b.setCheckable(True)
+            b.setMinimumHeight(44)
+            b.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
+            b.clicked.connect(lambda _=False, k=key: self._select_card_style(k))
+            grid.addWidget(b, i // 3, i % 3)
+            self.card_style_buttons[key] = b
+        styles.form.addRow(grid)
+
+        target = Section(t("card_target"), t("card_target_hint"))
+        self.card_deck = QComboBox()
+        self.card_deck.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon)
+        self.card_deck.addItem(t("card_pick_deck"), None)
+        for d in sorted(mw.col.decks.all_names_and_ids(), key=lambda d: d.name):
+            self.card_deck.addItem(d.name, d.id)
+        self.card_deck.currentIndexChanged.connect(self._card_deck_chosen)
+        ui.modern_popup(self.card_deck)
+        target.row(t("card_by_deck"), self.card_deck)
+        self.card_types = QListWidget()
+        self.card_types.setMinimumHeight(170)
+        target.row(self.card_types)
+        actions = QHBoxLayout()
+        b_apply = QPushButton(t("card_apply"))
+        b_apply.setObjectName("ctPrimary")
+        b_apply.clicked.connect(self._apply_card_style_to_types)
+        b_remove = QPushButton(t("card_remove"))
+        b_remove.clicked.connect(self._remove_card_style)
+        actions.addWidget(b_apply)
+        actions.addWidget(b_remove)
+        actions.addStretch()
+        target.form.addRow(actions)
+        self._fill_card_types()
+        return [styles, target]
+
+    def _fill_card_types(self, checked=None):
+        from . import cards
+        names = t("card_style_names")
+        self.card_types.clear()
+        for ntid, name, count, style in cards.note_types():
+            label = t("card_type_row").format(name=name, count=count)
+            if style:
+                label += " · " + names.get(style, style)
+            item = QListWidgetItem(label)
+            item.setData(Qt.ItemDataRole.UserRole, ntid)
+            item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
+            item.setCheckState(Qt.CheckState.Checked if checked and ntid in checked else Qt.CheckState.Unchecked)
+            self.card_types.addItem(item)
+
+    def _checked_types(self):
+        return [self.card_types.item(i).data(Qt.ItemDataRole.UserRole) for i in range(self.card_types.count())
+                if self.card_types.item(i).checkState() == Qt.CheckState.Checked]
+
+    def _card_deck_chosen(self):
+        from . import cards
+        did = self.card_deck.currentData()
+        if did:
+            self._fill_card_types(cards.note_types_in_deck(did))
+
+    def _select_card_style(self, key):
+        for k, b in self.card_style_buttons.items():
+            b.setChecked(k == key)
+        self.selected_card_style = key
+        self.preview.set_card_style(key)
+
+    def _apply_card_style_to_types(self):
+        from . import cards
+        style = getattr(self, "selected_card_style", None)
+        types = self._checked_types()
+        if not style or not types:
+            tooltip(t("card_need_choice"), parent=self)
+            return
+        if not askUser(t("card_confirm").format(n=len(types)), parent=self):
+            return
+        self.cfg = self._collect()
+        cards.apply(types, style, self.cfg)
+        # damit der Kartenhintergrund des Stils beim Lernen sichtbar ist
+        self._set_combo(self.review_background, "note")
+        self._apply()
+        self._fill_card_types(set(types))
+        tooltip(t("card_applied"), parent=self)
+
+    def _remove_card_style(self):
+        from . import cards
+        types = self._checked_types()
+        if not types:
+            tooltip(t("card_need_types"), parent=self)
+            return
+        cards.remove(types)
+        self._fill_card_types(set(types))
+        self.preview.set_card_style(None)
+        tooltip(t("card_removed"), parent=self)
+
     def _page_look(self):
         presets = Section(t("presets"))
         grid = QGridLayout()
@@ -686,6 +861,7 @@ class ThemeDialog(QDialog):
             b.clicked.connect(lambda _=False, k=key: self._apply_preset(k))
             grid.addWidget(b, i // 4, i % 4)
             self.preset_buttons[key] = b
+            b.setMinimumSize(60, 44)
         presets.form.addRow(grid)
 
         colors = Section(t("colors"))
@@ -702,6 +878,18 @@ class ThemeDialog(QDialog):
         self.accent_info.setObjectName("ctHint")
         self.accent_info.setWordWrap(True)
         colors.row(self.accent_info)
+        swatches = QGridLayout()
+        swatches.setSpacing(6)
+        for i, col in enumerate(theme.SWATCHES):
+            s = QPushButton()
+            s.setFixedSize(26, 26)
+            s.setCursor(Qt.CursorShape.PointingHandCursor)
+            s.setToolTip(col.upper())
+            s.setStyleSheet(f"QPushButton {{ background: {col}; border: 2px solid rgba(128,128,128,.35); border-radius: 13px; padding: 0; }}"
+                            "QPushButton:hover { border: 2px solid palette(window-text); }")
+            s.clicked.connect(lambda _=False, c=col: self._pick_accent(c))
+            swatches.addWidget(s, i // 12, i % 12)
+        colors.form.addRow(t("quick_colors"), swatches)
         self.accent = ColorButton("#000000")
         self.bg_light = ColorButton("#ffffff")
         self.bg_dark = ColorButton("#000000")
@@ -795,6 +983,9 @@ class ThemeDialog(QDialog):
         glass.row(self.glass)
         self.blur = glass.row(t("blur"), self._slider(0, 40, " px"))
         self.opacity = glass.row(t("opacity"), self._slider(10, 100, " %"))
+
+        self.glow = self._toggle(t("glow"))
+        glass.row(self.glow)
 
         shapes = Section(t("shapes"))
         self.radius = shapes.row(t("radius"), self._slider(0, 32, " px"))
@@ -970,6 +1161,7 @@ class ThemeDialog(QDialog):
         self._set_combo(self.toolbar_style, c["toolbar_style"])
         self._set_combo(self.performance, c["performance"])
         self.compact.setChecked(c["compact"])
+        self.glow.setChecked(c.get("glow", True))
         self.font_default.setChecked(not c["font_family"])
         # ohne eigene Schrift die Anki-Schrift vorauswählen, nicht den ersten Eintrag der Liste
         self.font_family.setCurrentFont(QFont(c["font_family"] or mw.web.font().family()))
@@ -1007,7 +1199,7 @@ class ThemeDialog(QDialog):
             "glass": self.glass.isChecked(), "blur": self.blur.slider.value(),
             "glass_opacity": self.opacity.slider.value(), "radius": self.radius.slider.value(),
             "button_shape": self.button_shape.currentData(), "shadow": self.shadow.currentData(),
-            "toolbar_style": self.toolbar_style.currentData(), "compact": self.compact.isChecked(),
+            "toolbar_style": self.toolbar_style.currentData(), "compact": self.compact.isChecked(), "glow": self.glow.isChecked(),
             "performance": self.performance.currentData(),
             "font_family": "" if self.font_default.isChecked() else self.font_family.currentFont().family(),
             "font_scale": self.font_scale.slider.value(),
@@ -1138,7 +1330,8 @@ class ThemeDialog(QDialog):
         self._changed()
 
     def _apply_pack(self, key):
-        pack = dict(theme.PACKS[key])
+        # nur echte Einstellungen übernehmen, keine Anzeige-Daten des Pakets
+        pack = {k: v for k, v in theme.PACKS[key].items() if k not in ("omarchy", "om_light", "title", "palette")}
         wallpaper = pack.pop("wallpaper", None)
         wallpaper_dark = pack.pop("wallpaper_dark", None)
         self.cfg = self._collect()
@@ -1159,13 +1352,18 @@ class ThemeDialog(QDialog):
         self._restyle()
         self._render_preview()
 
+    def _pick_accent(self, color):
+        self.cfg = self._collect()
+        self.cfg.update(accent=color, accent_source="manual", preset="", pack="", design="")
+        self._load_into_widgets()
+        self._restyle()
+        self._render_preview()
+
     def _apply_preset(self, key):
         self.cfg = self._collect()
-        accent = self.cfg["accent"]
         self.cfg.update(theme.PRESETS[key])
-        if self.cfg["accent_source"] != "manual":
-            # automatische Akzentfarbe hat Vorrang, die Vorlage liefert nur den Rest
-            self.cfg["accent"] = accent
+        # ein Klick auf eine Vorlage ist eine bewusste Wahl: automatische Akzentfarbe aus
+        self.cfg["accent_source"] = "manual"
         self.cfg["preset"] = key
         self.cfg["pack"] = ""
         self._load_into_widgets()

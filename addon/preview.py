@@ -36,6 +36,7 @@ class ThemePreview(QWidget):
         self.night = theme_manager.night_mode
         self.card = None
         self.view = "home"
+        self.card_style = None  # Vorschau eines Karten-Designs, bevor es angewendet wird
         self._build()
 
     # ---------- Aufbau ----------
@@ -187,10 +188,29 @@ class ThemePreview(QWidget):
     def _apply(self, web, scope):
         # gleiche Ableitungen (z.B. Sparmodus) wie im Hauptfenster, damit die Vorschau stimmt
         cfg = self.api.effective(self.cfg)
+        if scope == "card" and self.card_style:
+            cfg = {**cfg, "review_background": "note"}  # so wie nach dem Anwenden eines Karten-Designs
         css = theme.build_css_text(cfg, scope, self.px, self.api.bg_url(cfg))
         if scope == "main":
             css += theme.banner_preview_css(cfg)
         web.eval(APPLY_JS % (json.dumps(css), json.dumps(self.night)))
+
+    def set_card_style(self, style_id):
+        self.card_style = style_id
+        if self.view != "study":
+            self.set_view("study")
+        else:
+            self._render_study()
+
+    def _apply_card_style(self):
+        """Karten-Design wie im Notiztyp ans Ende setzen, damit es dessen CSS überschreibt."""
+        from . import cards
+        css = cards.style_css(self.card_style, self.cfg) if self.card_style else ""
+        self.card_web.eval("""(function (css) {
+  var s = document.getElementById("deckorator-cardstyle");
+  if (!s) { s = document.createElement("style"); s.id = "deckorator-cardstyle"; document.body.appendChild(s); }
+  s.textContent = css;
+})(%s);""" % json.dumps(css))
 
     def _apply_windows(self):
         from . import windows
@@ -258,6 +278,7 @@ class ThemePreview(QWidget):
         self.card_web.eval(f"_showQuestion({json.dumps(q)}, {json.dumps(a)}, {json.dumps(bodyclass)});")
         if answer:
             self.card_web.eval(f"_showAnswer({json.dumps(a)});")
+        self._apply_card_style()
         # _showQuestion setzt die Body-Klassen neu, daher danach nochmal Hell/Dunkel setzen
         self._apply(self.card_web, "card")
 
