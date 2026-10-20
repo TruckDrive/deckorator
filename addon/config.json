@@ -30,6 +30,9 @@
         "main": true,
         "review_bar": true,
         "browser": true,
+        "editor": true,
+        "stats": true,
+        "deck_options": true,
         "addons": true,
         "other": false
     },

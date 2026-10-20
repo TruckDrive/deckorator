@@ -1,9 +1,11 @@
 # Modernes, anpassbares Theme für Ankis Web-Ansichten (Topbar, Deckliste,
 # Übersicht, Lernen). Nur CSS, keine Datenänderung. Einstellungen über
 # Extras → Theme-Einstellungen… oder den Konfigurations-Button im Add-on-Manager.
+import json
 import os
 import re
 import sys
+import weakref
 
 from aqt import gui_hooks, mw
 from aqt.deckbrowser import DeckBrowser, DeckBrowserBottomBar
@@ -110,6 +112,41 @@ def _inject(web_content, context):
         web_content.head += css[scope]
 
 
+# Svelte-Seiten bekommen ihr CSS per JavaScript, sobald Anki ihr eigenes Styling geladen hat
+PAGE_AREAS = {"editor": "editor", "deck stats": "stats", "deck options": "deck_options"}
+PAGE_JS = """(function (css) {
+  var s = document.getElementById("deckorator");
+  if (!s) { s = document.createElement("style"); s.id = "deckorator"; document.head.appendChild(s); }
+  s.textContent = css;
+})(%s);"""
+_pages = weakref.WeakSet()
+
+
+def _style_page(web):
+    try:
+        cfg, _css = _cached()
+        area = PAGE_AREAS.get(web.kind.value, "other")
+        text = _page_css() if cfg["areas"].get(area, False) else ""
+        web.eval(PAGE_JS % json.dumps(text))
+    except Exception as e:
+        log.record("page", e)
+
+
+_page_css_cache = None
+
+
+def _page_css():
+    global _page_css_cache
+    if _page_css_cache is None:
+        _page_css_cache = theme.build_css_text(_cached()[0], "pages")
+    return _page_css_cache
+
+
+def _on_page_styled(web):
+    _pages.add(web)
+    _style_page(web)
+
+
 TODAY_RE = re.compile(r'(<div id="?studiedToday"?[^>]*>\s*<span>)(.*?)(</span>)', re.S)
 
 
@@ -125,8 +162,11 @@ def _highlight_today(deck_browser, content):
 
 
 def _refresh_ui():
-    global _cache
+    global _cache, _page_css_cache
     _cache = None
+    _page_css_cache = None
+    for web in list(_pages):
+        _style_page(web)
     try:
         mw.toolbar.draw()
         if mw.state == "deckBrowser":
@@ -187,8 +227,13 @@ def _setup_menu():
 gui_hooks.webview_will_set_content.append(_inject)
 gui_hooks.deck_browser_will_render_content.append(_highlight_today)
 gui_hooks.browser_will_show.append(lambda browser: windows.register(browser, "browser", load_config()))
+gui_hooks.add_cards_did_init.append(lambda addcards: windows.register(addcards, "addcards", load_config()))
 gui_hooks.addons_dialog_will_show.append(lambda dialog: windows.register(dialog, "addons", load_config()))
 gui_hooks.theme_did_change.append(_on_theme_change)
+gui_hooks.webview_did_inject_style_into_page.append(_on_page_styled)
+# Der Editor löst den Hook oben (Anki 26.09) nicht zuverlässig aus; er meldet sich aber,
+# sobald eine Notiz geladen ist. Das CSS-Einfügen ist idempotent, mehrfach schadet nicht.
+gui_hooks.editor_did_load_note.append(lambda editor: _on_page_styled(editor.web))
 gui_hooks.profile_did_open.append(_sync_on_start)
 gui_hooks.main_window_did_init.append(_setup_menu)
 # Bei Änderung über Ankis JSON-Editor ebenfalls neu zeichnen

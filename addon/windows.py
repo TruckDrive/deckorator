@@ -52,16 +52,26 @@ ADDON_LIST = """
 """
 
 
-def _colors(accent):
-    c = ui.palette(accent, theme_manager.night_mode)
+def _colors(cfg):
+    """Fensterfarben aus der Deckorator-Hintergrundfarbe, damit Browse & Co. zum Hauptfenster passen."""
+    from . import theme
     night = theme_manager.night_mode
+    c = ui.palette(cfg["accent"], night)
+    if night:
+        bg = cfg["bg_dark"]
+        c.update(window=bg, surface=theme._mix(bg, "#ffffff", .05), input=theme._mix(bg, "#ffffff", .08),
+                 border=theme._mix(bg, "#ffffff", .12), track=theme._mix(bg, "#ffffff", .2))
+    else:
+        bg = cfg["bg_light"]
+        c.update(window=bg, surface="#ffffff", input=theme._mix(bg, "#ffffff", .5),
+                 border=theme._mix(bg, "#000000", .1), track=theme._mix(bg, "#000000", .18))
     c["alt"] = "#26262b" if night else "#f8f8fa"
     c["hover"] = "rgba(255,255,255,.05)" if night else "rgba(0,0,0,.04)"
     return c
 
 
-def _style_browser(browser, accent):
-    c = _colors(accent)
+def _style_browser(browser, cfg):
+    c = _colors(cfg)
     root = "QMainWindow#ctWindow"
     browser.setObjectName("ctWindow")
     # Schriftgröße nicht anfassen: die Kartenverwaltung hat eine eigene Schrifteinstellung
@@ -79,8 +89,19 @@ def _unstyle_browser(browser):
     browser.form.tableView.setShowGrid(True)
 
 
-def _style_addons(dialog, accent):
-    c = _colors(accent)
+def _style_addcards(window, cfg):
+    c = _colors(cfg)
+    root = "QMainWindow#ctAddCards"
+    window.setObjectName("ctAddCards")
+    add_button = getattr(window, "addButton", None)
+    if add_button is not None:
+        # Hauptaktion in Akzentfarbe; Name vor dem Stylesheet setzen, sonst greift die Regel nicht
+        add_button.setObjectName("ctPrimary")
+    window.setStyleSheet(ui.stylesheet(c, root, font_size=None))
+
+
+def _style_addons(dialog, cfg):
+    c = _colors(cfg)
     root = "QDialog#ctAddons"
     dialog.setObjectName("ctAddons")
     dialog.setStyleSheet(ui.stylesheet(c, root) + ADDON_LIST.format(root=root, **c))
@@ -88,11 +109,13 @@ def _style_addons(dialog, accent):
 
 def _apply(window, kind, cfg):
     try:
-        enabled = cfg["areas"].get(kind, True)
-        if kind == "browser":
-            _style_browser(window, cfg["accent"]) if enabled else _unstyle_browser(window)
+        enabled = cfg["areas"].get("editor" if kind == "addcards" else kind, True)
+        if kind == "addcards":
+            _style_addcards(window, cfg) if enabled else window.setStyleSheet("")
+        elif kind == "browser":
+            _style_browser(window, cfg) if enabled else _unstyle_browser(window)
         else:
-            _style_addons(window, cfg["accent"]) if enabled else window.setStyleSheet("")
+            _style_addons(window, cfg) if enabled else window.setStyleSheet("")
     except Exception as e:  # z.B. geänderte Anki-Interna: Fenster bleibt dann einfach im Standardlook
         from . import log
         log.record(f"window:{kind}", e)

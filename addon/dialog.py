@@ -93,6 +93,9 @@ STRINGS = {
     "area_review_bar": ("Untere Leiste beim Lernen", "Bottom bar while studying"),
     "area_browser": ("Kartenverwaltung (Browse)", "Card browser"),
     "area_addons": ("Add-on-Liste", "Add-ons window"),
+    "area_editor": ("Editor (Hinzufügen, Bearbeiten, Kartenverwaltung)", "Editor (add, edit, card browser)"),
+    "area_stats": ("Statistik", "Statistics"),
+    "area_deck_options": ("Stapeloptionen", "Deck options"),
     "area_other": ("Farben auch in anderen Fenstern (Editor, Kartenvorschau)", "Colors in other windows too (editor, card preview)"),
     "review_bg": ("Hintergrund beim Lernen", "Background while studying"),
     "rb_calm": ("Ruhig: Theme-Farbe, keine Effekte", "Calm: theme color, no effects"),
@@ -489,7 +492,7 @@ class ThemeDialog(QDialog):
     def _page_advanced(self):
         areas = Section(t("areas"))
         self.area_checks = {}
-        for key in ("main", "review_bar", "browser", "addons", "other"):
+        for key in ("main", "review_bar", "browser", "editor", "stats", "deck_options", "addons", "other"):
             c = self._toggle(t("area_" + key))
             areas.row(c)
             self.area_checks[key] = c

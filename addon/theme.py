@@ -418,7 +418,18 @@ html body #studiedToday .ct-num:nth-child(n+3) { font-size: 1.05em; font-weight:
   vertical-align: 0; }
 """
 
-SCOPES = ("main", "bar", "card", "colors")
+# Ankis Svelte-Seiten (Editor, Statistik, Stapeloptionen): sie hängen an Ankis CSS-Variablen,
+# die _vars_block schon setzt. Hier nur Hintergrund und wenige gezielte Details.
+PAGES_CSS = """
+html body { background-color: var(--ct-canvas) !important; }
+.editor-field { box-shadow: none !important; border-color: var(--ct-border) !important; }
+.editor-field:focus-within { outline: 2px solid var(--ct-accent) !important; outline-offset: -1px; }
+.field-container, .label-container { background: var(--ct-canvas) !important; }
+.editor-toolbar { border-bottom-color: var(--ct-border) !important; }
+.range-box { background: var(--ct-canvas) !important; border-bottom-color: var(--ct-border) !important; }
+"""
+
+SCOPES = ("main", "bar", "card", "colors", "pages")
 
 COMPACT = """
 html body #outer, html body .overview, html body #studiedToday { padding: 8px !important; }
@@ -444,6 +455,13 @@ def build_css_text(cfg, scope="main", base_px=None, bg_url=None):
         for sel, night in (("html:root:not(.night-mode)", False), ("html:root.night-mode", True)):
             bg, pattern, mask = _background(cfg, night, bg_url)
             parts.append(f"{sel} {{ --ct-bg: {bg}; --ct-pattern: {pattern}; --ct-mask: {mask}; }}\n")
+    if scope == "pages":
+        r = cfg["radius"]
+        radii = (f"--border-radius: {max(4, round(r * .45))}px; --border-radius-medium: {max(6, r)}px; "
+                 f"--border-radius-large: {max(8, round(r * 1.3))}px;")
+        parts.append(f"html:root:not(.night-mode), html:root.night-mode {{ {radii} }}\n")
+        parts.append(PAGES_CSS)
+        return "".join(parts)
     if scope == "colors":
         parts.append(COLORS_ONLY)
         return "".join(parts)
