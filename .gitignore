@@ -1,0 +1,9 @@
+# persönliche Einstellungen und Bilder, die Anki im Add-on-Ordner ablegt
+addon/meta.json
+addon/user_files/*
+!addon/user_files/README.txt
+__pycache__/
+dist/
+
+# lokale Notizen, nicht öffentlich
+forum_post.md
