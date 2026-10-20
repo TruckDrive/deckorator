@@ -62,3 +62,9 @@ The add-on lives in [`addon/`](addon). Symlink it into Anki's add-on folder (`ad
 ## License
 
 [GNU AGPL v3](LICENSE), the same license as Anki itself. The bundled wallpapers are CC0 or public domain, see [addon/wallpapers/CREDITS.md](addon/wallpapers/CREDITS.md).
+
+## Releasing
+
+1. Bump `VERSION` in `addon/__init__.py` and add an entry to `CHANGELOG.md`
+2. Run `./build.sh`
+3. Upload `dist/deckorator.ankiaddon` on AnkiWeb (add-on `1326296861`)
