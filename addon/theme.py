@@ -36,6 +36,11 @@ PACKS = {
                   "bg_intensity": 90},
     "topo":      {**_ART, "art": "topo", "banner": "", "accent": "#14b8a6", "bg_light": "#f4f8f7", "bg_dark": "#0f1413",
                   "bg_intensity": 100, "window_style": "subtle"},
+    "dunes":     {**_ART, "art": "dunes", "banner": "art:dunes", "accent": "#e08a3c", "bg_light": "#faf6f1", "bg_dark": "#16120e"},
+    "aurora":    {**_ART, "art": "aurora", "banner": "art:aurora", "accent": "#22c55e", "bg_light": "#f3f8f4", "bg_dark": "#080b10"},
+    "clouds":    {**_ART, "art": "clouds", "banner": "art:clouds", "accent": "#60a5fa", "bg_light": "#f4f7fd", "bg_dark": "#10131c"},
+    "seigaiha":  {**_ART, "art": "seigaiha", "banner": "art:seigaiha", "accent": "#0ea5e9", "bg_light": "#f4f8fa", "bg_dark": "#0e1216",
+                  "bg_intensity": 100, "window_style": "subtle"},
     "bauhaus":   {**_ART, "art": "bauhaus", "banner": "", "accent": "#f59e0b", "bg_light": "#f9f7f2", "bg_dark": "#14130f",
                   "bg_intensity": 70, "radius": 6, "button_shape": "square", "glass": False},
     "sea":    {"wallpaper": "sea.jpg",    **_PHOTO, "accent": "#6b8cc7", "bg_light": "#f4f6f8", "bg_dark": "#121417"},
@@ -45,6 +50,13 @@ PACKS = {
     "stars":  {"wallpaper": "stars.jpg",  **_PHOTO, "accent": "#8b7cf6", "bg_light": "#f6f5fa", "bg_dark": "#121119",
                "bg_intensity": 70},
     "lake":   {"wallpaper": "lake.jpg",   **_PHOTO, "accent": "#4c8fdb", "bg_light": "#f3f6fa", "bg_dark": "#111418"},
+    # Hell/Dunkel-Paare: eigenes Foto je Modus
+    "winter":  {"wallpaper": "snow.jpg", "wallpaper_dark": "aurora_night.jpg", **_PHOTO,
+                "accent": "#38bdf8", "bg_light": "#f4f7fa", "bg_dark": "#0b1016"},
+    "water":   {"wallpaper": "mist_lake.jpg", "wallpaper_dark": "city_water.jpg", **_PHOTO,
+                "accent": "#f59e0b", "bg_light": "#f6f6f5", "bg_dark": "#0f1014"},
+    "beach":   {"wallpaper": "beach.jpg", "wallpaper_dark": "pastel_sky.jpg", **_PHOTO,
+                "accent": "#c084fc", "bg_light": "#f8f7f4", "bg_dark": "#141018"},
     "minimal": {"banner": "", "accent": "#71717a", "bg_light": "#f5f5f5", "bg_dark": "#121212", "background": "dots",
                 "bg_intensity": 60, "glass": False, "radius": 10, "button_shape": "rounded", "shadow": 1,
                 "toolbar_style": "flat", "window_style": "subtle", "review_background": "calm"},
@@ -181,6 +193,8 @@ def _background(cfg, night, bg_url):
         url = _svg_url(art.wallpaper_svg(cfg.get("art", "fuji"), accent, night))
         return (f"linear-gradient({overlay}, {overlay}) center / cover no-repeat, {url} center / cover no-repeat",
                 "none", "none")
+    if style == "image" and night and cfg.get("_bg_url_dark"):
+        bg_url = cfg["_bg_url_dark"]  # eigenes Bild für den Dunkelmodus
     if style in ("image", "desktop"):
         if not bg_url:
             return "none", "none", "none"
@@ -502,6 +516,17 @@ html body:not(.flat) { background-image: linear-gradient(to bottom, transparent 
 html body:not(.flat) .header { padding-top: %(pad)spx !important; padding-bottom: %(pad)spx !important; }
 """
 
+# Variante: nur die Kapsel mit den Reitern (Stapel, Hinzufügen, …) bekommt das Motiv
+BANNER_CAPSULE_CSS = """
+html body:not(.flat) .toolbar {
+  background: linear-gradient(var(--ct-capsule-veil), var(--ct-capsule-veil)), var(--ct-banner) !important;
+  background-size: cover !important; background-position: center var(--ct-banner-y) !important;
+  border-color: color-mix(in srgb, var(--ct-accent) 35%%, transparent) !important; }
+html body:not(.flat) .hitem { color: #ffffff !important; text-shadow: 0 1px 3px rgba(0,0,0,.55); }
+html body:not(.flat) .hitem:hover { background: rgba(255,255,255,.18) !important; color: #ffffff !important; }
+html body:not(.flat) .header { padding-top: %(pad)spx !important; padding-bottom: %(pad)spx !important; }
+"""
+
 
 def _banner(cfg, night):
     """(CSS-Wert für das Bild, vertikale Position) oder None."""
@@ -522,12 +547,29 @@ def banner_preview_css(cfg):
         b = _banner(cfg, night)
         if not b:
             return ""
-        rules.append(f"{sel} .ct-band:not(.ct-bottom) {{ background: linear-gradient(to bottom, transparent 35%, "
-                     f"var(--ct-canvas)), {b[0]} center {b[1]} / cover no-repeat !important; }}\n")
+        if cfg.get("banner_area") == "capsule":
+            rules.append(f"{sel} .ct-band:not(.ct-bottom) .toolbar {{ background: linear-gradient(rgba(0,0,0,.28), "
+                         f"rgba(0,0,0,.28)), {b[0]} center {b[1]} / cover no-repeat !important; }}\n")
+        else:
+            rules.append(f"{sel} .ct-band:not(.ct-bottom) {{ background: linear-gradient(to bottom, transparent 35%, "
+                         f"var(--ct-canvas)), {b[0]} center {b[1]} / cover no-repeat !important; }}\n")
     pad = BANNER_HEIGHTS.get(cfg.get("banner_height", "medium"), 16)
+    if cfg.get("banner_area") == "capsule":
+        rules.append(".ct-band:not(.ct-bottom) .hitem { color: #fff !important; text-shadow: 0 1px 3px rgba(0,0,0,.55); }\n")
+        pad = max(2, pad // 3)
     rules.append(f".ct-band:not(.ct-bottom) .header {{ padding: {pad}px 0 !important; }}\n")
     return "".join(rules)
 
+
+# Inhalte anderer Add-ons unter der Deckliste (Statistiken, Fortschrittsbalken, Banner …):
+# Anki setzt sie als direkte Kinder von <center> hinter die Tabelle. Bekanntes ist ausgenommen.
+EMBED_CSS = """
+html body center > :not(table):not(br):not(#studiedToday):not(.rh-container):not(script):not(style):not(link) {
+  background: var(--ct-glass) !important; backdrop-filter: blur(var(--ct-blur)) saturate(150%);
+  border: 1px solid var(--ct-glass-edge) !important; border-radius: var(--ct-radius) !important;
+  box-shadow: var(--ct-shadow); padding: 12px 16px !important; margin: 16px auto 0 !important;
+  max-width: 900px; box-sizing: border-box; }
+"""
 
 SCOPES = ("main", "bar", "topbar", "card", "colors", "pages", "editor")
 
@@ -595,7 +637,15 @@ def build_css_text(cfg, scope="main", base_px=None, bg_url=None):
         if all(b for _sel, b in banners):
             for sel, (url, y) in banners:
                 parts.append(f"{sel} {{ --ct-banner: {url}; --ct-banner-y: {y}; }}\n")
-            parts.append(BANNER_CSS % {"pad": BANNER_HEIGHTS.get(cfg.get("banner_height", "medium"), 16)})
+            pad = BANNER_HEIGHTS.get(cfg.get("banner_height", "medium"), 16)
+            if cfg.get("banner_area") == "capsule":
+                # Schleier, damit die weiße Schrift auf jedem Motiv lesbar bleibt
+                parts.append("html:root { --ct-capsule-veil: rgba(0,0,0,.28); }\n")
+                parts.append(BANNER_CAPSULE_CSS % {"pad": max(2, pad // 3)})
+            else:
+                parts.append(BANNER_CSS % {"pad": pad})
+    if scope == "main" and cfg.get("embed_addons", True):
+        parts.append(EMBED_CSS)
     if scope == "main" and cfg.get("highlight_today", True):
         parts.append(TODAY_HIGHLIGHT)
     # Heatmap: "theme" = Karte + runde Zellen + Farben, "colors" = nur Farben, "original" = nichts

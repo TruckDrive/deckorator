@@ -22,7 +22,32 @@ STRINGS = {
     "page_look": ("Aussehen", "Appearance"), "page_shape": ("Form", "Shape"),
     "page_text": ("Schrift", "Text"), "page_study": ("Lernen", "Studying"),
     "page_addons": ("Add-ons", "Add-ons"), "page_advanced": ("Erweitert", "Advanced"),
-    "page_areas": ("Bereiche", "Areas"),
+    "page_areas": ("Bereiche", "Areas"), "page_designs": ("Designs", "Designs"),
+    "packs_art": ("Illustrationen", "Illustrations"), "packs_photo": ("Fotos", "Photos"),
+    "packs_pattern": ("Minimal & Muster", "Minimal & patterns"),
+    "my_designs": ("Meine Designs", "My designs"),
+    "my_designs_hint": ("Deine eigenen Looks, getrennt von den eingebauten Paketen. „Design aus Bild“ macht aus einem "
+                        "Wallpaper einen kompletten Look: Akzentfarbe, Hintergrundtöne und Bild passen sich an. "
+                        "Rechtsklick auf ein Design zum Exportieren oder Löschen.",
+                        "Your own looks, separate from the built-in packs. “Design from image” turns a wallpaper into "
+                        "a complete look: accent color, background tones and image adapt. Right-click a design to "
+                        "export or delete it."),
+    "save_design": ("Aktuellen Look speichern…", "Save current look…"),
+    "design_from_image": ("Design aus Bild…", "Design from image…"),
+    "import_design": ("Importieren…", "Import…"), "export_design": ("Exportieren…", "Export…"),
+    "apply_design": ("Anwenden", "Apply"), "delete_design": ("Löschen", "Delete"),
+    "design_name": ("Name des Designs:", "Design name:"), "my_design_default": ("Mein Design", "My design"),
+    "design_saved": ("Design gespeichert", "Design saved"), "design_exported": ("Design exportiert", "Design exported"),
+    "design_tip": ("Klick: anwenden · Rechtsklick: exportieren oder löschen", "Click: apply · Right-click: export or delete"),
+    "no_designs": ("Noch keine eigenen Designs. Speichere deinen aktuellen Look oder erstelle eins aus einem Wallpaper.",
+                   "No designs yet. Save your current look or create one from a wallpaper."),
+    "gallery_hint": ('Schöne Wallpaper findest du z.B. in den <a href="https://github.com/basecamp/omarchy/tree/master/themes">'
+                     'Omarchy-Themes</a> (Ordner „backgrounds“). Achte beim Weitergeben eigener Designs auf die Lizenz der Bilder.',
+                     'Great wallpapers can be found e.g. in the <a href="https://github.com/basecamp/omarchy/tree/master/themes">'
+                     'Omarchy themes</a> ("backgrounds" folders). Mind the image license when sharing your designs.'),
+    "bg_image_dark": ("Bild für Dunkel", "Image for dark mode"),
+    "bg_image_dark_hint": ("Optional: eigenes Bild nur für den Dunkelmodus.", "Optional: separate image for dark mode."),
+    "banner_area": ("Bereich", "Area"), "ba_bar": ("Ganze Leiste", "Whole bar"), "ba_capsule": ("Nur die Kapsel mit den Reitern", "Only the tab capsule"),
     "areas_hint": ("Für jeden Teil von Anki einzeln: Deckorator-Look oder Anki-Original. Bei Fenstern zusätzlich "
                    "„Kräftig“ (Spotlight, Glaskarten, Akzente) oder „Dezent“ (nur Farben und Rundungen).",
                    "For every part of Anki separately: Deckorator look or Anki's original. Windows can also be "
@@ -36,9 +61,11 @@ STRINGS = {
     "style_art": ("Illustration", "Illustration"),
     "art_motif": ("Motiv", "Motif"),
     "art_names": ({"fuji": "Fuji", "lofi_city": "Lofi-Stadt", "sakura": "Sakura", "mountains": "Gebirge",
-                   "planet": "Planet", "flow": "Linienfluss", "topo": "Topografie", "bauhaus": "Bauhaus"},
+                   "planet": "Planet", "flow": "Linienfluss", "topo": "Topografie", "bauhaus": "Bauhaus",
+                   "dunes": "Dünen", "aurora": "Polarlicht", "clouds": "Wolken", "seigaiha": "Seigaiha"},
                   {"fuji": "Fuji", "lofi_city": "Lofi City", "sakura": "Sakura", "mountains": "Mountains",
-                   "planet": "Planet", "flow": "Flow Lines", "topo": "Topography", "bauhaus": "Bauhaus"}),
+                   "planet": "Planet", "flow": "Flow Lines", "topo": "Topography", "bauhaus": "Bauhaus",
+                   "dunes": "Dunes", "aurora": "Aurora", "clouds": "Clouds", "seigaiha": "Seigaiha"}),
     "banner": ("Banner in der oberen Leiste", "Banner in the top bar"),
     "banner_hint": ("Ein Motiv hinter Stapel, Hinzufügen, Kartenverwaltung … Beim Lernen bleibt die Leiste ruhig.",
                     "A motif behind Decks, Add, Browse … The bar stays calm while you study."),
@@ -52,10 +79,14 @@ STRINGS = {
                    "A complete look in one click: wallpaper, colors, shapes and window style."),
     "pack_names": ({"fuji": "Fuji", "lofi": "Lofi-Nacht", "sakura": "Sakura", "mountains": "Gebirge",
                     "planet": "Planet", "flow": "Linienfluss", "topo": "Topografie", "bauhaus": "Bauhaus",
+                    "dunes": "Dünen", "aurora": "Polarlicht", "clouds": "Wolken", "seigaiha": "Seigaiha",
+                    "winter": "Winter (Hell/Dunkel)", "water": "Am Wasser (Hell/Dunkel)", "beach": "Strand (Hell/Dunkel)",
                     "sea": "Stille See", "dune": "Düne", "forest": "Nebelwald", "sunset": "Abendrot",
                     "stars": "Sternennacht", "lake": "Bergsee", "minimal": "Minimal", "paper": "Papier"},
                    {"fuji": "Fuji", "lofi": "Lofi Night", "sakura": "Sakura", "mountains": "Mountains",
                     "planet": "Planet", "flow": "Flow Lines", "topo": "Topography", "bauhaus": "Bauhaus",
+                    "dunes": "Dunes", "aurora": "Aurora", "clouds": "Clouds", "seigaiha": "Seigaiha",
+                    "winter": "Winter (light/dark)", "water": "By the Water (light/dark)", "beach": "Beach (light/dark)",
                     "sea": "Calm Sea", "dune": "Dune", "forest": "Misty Forest", "sunset": "Afterglow",
                     "stars": "Starry Night", "lake": "Mountain Lake", "minimal": "Minimal", "paper": "Paper"}), "colors": ("Farben", "Colors"), "background": ("Hintergrund", "Background"),
     "accent": ("Akzentfarbe", "Accent color"),
@@ -158,6 +189,36 @@ STRINGS = {
     "hm_missing": ("Review Heatmap ist nicht installiert oder deaktiviert. Die Einstellung greift, sobald es aktiv ist.",
                    "Review Heatmap is not installed or disabled. The setting applies once it's active."),
     "hm_style": ("Darstellung", "Style"),
+    "addon_center": ("Add-on-Zentrale", "Add-on center"),
+    "embed_title": ("Inhalte anderer Add-ons", "Content from other add-ons"),
+    "embed_hint": ("Was andere Add-ons unter die Deckliste setzen (z.B. Statistiken, Fortschrittsbalken), bekommt "
+                   "automatisch eine passende Glaskarte, ohne dass Deckorator das Add-on kennen muss.",
+                   "Whatever other add-ons place below the deck list (e.g. stats, progress bars) automatically gets "
+                   "a matching glass card, without Deckorator having to know the add-on."),
+    "embed_on": ("Automatisch einbetten", "Embed automatically"),
+    "conflicts_title": ("Konflikt-Check", "Conflict check"),
+    "conflicts_none": ("Keine anderen Theme-Add-ons gefunden.", "No other theme add-ons found."),
+    "conflicts_found": ("Diese Add-ons ändern ebenfalls Ankis Aussehen und können sich mit Deckorator überlagern:\n{names}\n"
+                        "Tipp: Stell überlappende Bereiche unter „Bereiche“ auf „Anki-Original“.",
+                        "These add-ons also change Anki's look and may clash with Deckorator:\n{names}\n"
+                        "Tip: set overlapping areas to “Anki original” under “Areas”."),
+    "conflict_text": ("Deckorator hat Add-ons gefunden, die ebenfalls Ankis Aussehen ändern:\n\n{names}\n\n"
+                      "Zwei Themes gleichzeitig können sich überlagern und kaputt aussehen. Du kannst die "
+                      "überlappenden Bereiche in Deckorator auf „Anki-Original“ stellen oder das andere Add-on deaktivieren.",
+                      "Deckorator found add-ons that also change Anki's look:\n\n{names}\n\n"
+                      "Two themes at once can overlap and look broken. You can set overlapping areas in Deckorator "
+                      "to “Anki original” or disable the other add-on."),
+    "conflict_areas": ("Bereiche anpassen", "Adjust areas"), "conflict_disable": ("Andere deaktivieren", "Disable others"),
+    "conflict_ignore": ("Beides behalten", "Keep both"),
+    "conflict_restart": ("Deaktiviert. Die Änderung wirkt nach einem Neustart von Anki.", "Disabled. Takes effect after restarting Anki."),
+    "addon_center_hint": ("Zeigt deine Add-ons als Karten mit Schalter, Einstellungen und Link zur Seite, statt als graue "
+                          "Namensliste. Alle Knöpfe von Anki (Löschen, Updates suchen …) funktionieren weiter.",
+                          "Shows your add-ons as cards with a switch, settings and a link to their page instead of a "
+                          "grey list of names. All of Anki's buttons (delete, check for updates …) keep working."),
+    "addon_center_on": ("Karten statt Liste", "Cards instead of a list"),
+    "ac_updated": ("aktualisiert {date}", "updated {date}"), "ac_incompatible": ("nicht kompatibel", "not compatible"),
+    "ac_settings": ("Einstellungen", "Settings"), "ac_page": ("Seite", "Page"),
+    "ac_toggle": ("An/Aus (wirkt nach Neustart)", "On/off (applies after restart)"),
     "custom_css": ("Eigenes CSS", "Custom CSS"),
     "custom_css_hint": ("Wird zuletzt angehängt und überschreibt damit alles andere.",
                         "Appended last, so it overrides everything else."),
@@ -168,7 +229,23 @@ STRINGS = {
     "reset": ("Auf Standard zurücksetzen", "Reset to defaults"),
     "cancel": ("Abbrechen", "Cancel"), "apply": ("Übernehmen", "Apply"), "save": ("Speichern", "Save"),
     "light": ("Hell", "Light"), "dark": ("Dunkel", "Dark"),
-    "view_home": ("Startseite", "Home"), "view_study": ("Lernen", "Study"),
+    "view_home": ("Startseite", "Home"), "view_study": ("Lernen", "Study"), "view_windows": ("Fenster", "Windows"),
+    "mock_info": ("Kartenverwaltung: {browser} · Anki-Einstellungen: {prefs}", "Card browser: {browser} · Preferences: {prefs}"),
+    "mock_search": ("Karten suchen…", "Search cards…"),
+    "mock_columns": (("Sortierfeld", "Fällig", "Stapel"), ("Sort field", "Due", "Deck")),
+    "mock_rows": ((("M. biceps brachii", "Morgen", "Anatomie"), ("Ursprung M. deltoideus", "Heute", "Anatomie"),
+                   ("Nernst-Gleichung", "In 3 Tagen", "Physiologie"), ("la biblioteca", "Neu", "Spanisch"),
+                   ("Hauptstadt von Japan", "Neu", "Hauptstädte"), ("Wirkmechanismus ASS", "Heute", "Pharmakologie")),
+                  (("Biceps brachii", "Tomorrow", "Anatomy"), ("Origin of deltoid", "Today", "Anatomy"),
+                   ("Nernst equation", "In 3 days", "Physiology"), ("la biblioteca", "New", "Spanish"),
+                   ("Capital of Japan", "New", "Capitals"), ("Aspirin mechanism", "Today", "Pharmacology"))),
+    "mock_sidebar": ((("Heute", ("Fällig", "Hinzugefügt")), ("Flaggen", ("Rot", "Blau")), ("Stapel", ("Anatomie", "Physiologie"))),
+                     (("Today", ("Due", "Added")), ("Flags", ("Red", "Blue")), ("Decks", ("Anatomy", "Physiology")))),
+    "mock_group": ("Allgemein", "General"),
+    "mock_checks": (("Nach Updates suchen", "Animationen deaktivieren", "Restliche Karten anzeigen"),
+                    ("Check for updates", "Disable animations", "Show remaining card count")),
+    "mock_spin": ("Neue Karten pro Tag", "New cards per day"),
+    "mock_tabs": (("Erscheinungsbild", "Wiederholung", "Bearbeiten"), ("Appearance", "Review", "Editing")),
     "other_card": ("Andere Karte", "Another card"), "image_card": ("Karte mit Bild", "Card with image"),
     "answer_side": ("Antwort zeigen", "Show answer"),
     "no_image": ("In deiner Sammlung gibt es keine Karte mit Bild.", "Your collection has no card with an image."),
@@ -184,9 +261,9 @@ STRINGS = {
                       "coral": "Coral", "teal": "Teal", "graphite": "Graphite"}),
 }
 
-PAGES = ("look", "shape", "text", "study", "areas", "addons", "advanced")
+PAGES = ("designs", "look", "shape", "text", "study", "areas", "addons", "advanced")
 # Werte, die an diesen Rechner gebunden sind und beim Teilen nicht mitwandern
-PRIVATE_KEYS = ("bg_image", "desktop_image", "desktop_sig")
+PRIVATE_KEYS = ("bg_image", "bg_image_dark", "banner_image", "desktop_image", "desktop_sig", "design", "conflicts_ack")
 
 
 def t(key):
@@ -278,7 +355,7 @@ class ThemeDialog(QDialog):
         self.nav.setFixedWidth(150)
         self.nav.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.pages = QStackedWidget()
-        builders = {"look": self._page_look, "shape": self._page_shape, "text": self._page_text,
+        builders = {"designs": self._page_designs, "look": self._page_look, "shape": self._page_shape, "text": self._page_text,
                     "areas": self._page_areas,
                     "study": self._page_study, "addons": self._page_addons, "advanced": self._page_advanced}
         for key in PAGES:
@@ -383,10 +460,21 @@ class ThemeDialog(QDialog):
             p = QPainter(pm)
             p.setClipRect(pm.rect())
             # feine Linienmotive sind im Dunkeln als kleines Bild kaum zu erkennen
-            svg = art.wallpaper_svg(pack["art"], pack["accent"], pack["art"] not in ("topo", "flow"))
+            svg = art.wallpaper_svg(pack["art"], pack["accent"], pack["art"] not in ("topo", "flow", "seigaiha", "clouds"))
             # Seitenverhältnis wie "slice": auf Breite skalieren, vertikal zentrieren
             h = size.width() * art.H / art.W
             QSvgRenderer(QByteArray(svg.encode())).render(p, QRectF(0, (size.height() - h) / 2, size.width(), h))
+            p.end()
+            return QIcon(pm)
+        if pack.get("wallpaper_dark"):
+            # Hell/Dunkel-Paar: links das helle, rechts das dunkle Bild
+            pm = QPixmap(size)
+            p = QPainter(pm)
+            for i, key in enumerate(("wallpaper", "wallpaper_dark")):
+                thumb = QPixmap(os.path.join(ADDON_DIR, "wallpapers", pack[key].replace(".jpg", "_thumb.jpg")))
+                half = thumb.scaled(size, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
+                w = size.width() // 2
+                p.drawPixmap(i * w, 0, half, (half.width() - size.width()) // 2 + i * w, 0, w, size.height())
             p.end()
             return QIcon(pm)
         if pack.get("wallpaper"):
@@ -415,29 +503,168 @@ class ThemeDialog(QDialog):
         p.end()
         return QIcon(pm)
 
-    def _page_look(self):
-        packs = Section(t("packs"), t("packs_hint"))
-        pgrid = QGridLayout()
-        pgrid.setSpacing(10)
+    def _tile(self, text, icon, on_click):
+        b = QToolButton()
+        b.setText(text)
+        b.setIcon(icon)
+        b.setIconSize(QSize(124, 70))
+        b.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
+        b.setCheckable(True)
+        b.setCursor(Qt.CursorShape.PointingHandCursor)
+        # darf schmaler werden als sein Inhalt, sonst wird die Spalte breiter als sichtbar
+        b.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
+        b.setMinimumSize(90, 108)
+        b.setObjectName("ctPack")
+        b.clicked.connect(on_click)
+        return b
+
+    def _page_designs(self):
         self.pack_buttons = {}
         names = t("pack_names")
-        for i, (key, pack) in enumerate(theme.PACKS.items()):
-            b = QToolButton()
-            b.setText(names[key])
-            b.setIcon(self._pack_icon(key, pack))
-            b.setIconSize(QSize(124, 70))
-            b.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
-            b.setCheckable(True)
-            b.setCursor(Qt.CursorShape.PointingHandCursor)
-            # darf schmaler werden als sein Inhalt, sonst wird die Spalte breiter als sichtbar
-            b.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
-            b.setMinimumSize(90, 108)
-            b.setObjectName("ctPack")
-            b.clicked.connect(lambda _=False, k=key: self._apply_pack(k))
-            pgrid.addWidget(b, i // 3, i % 3)
-            self.pack_buttons[key] = b
-        packs.form.addRow(pgrid)
+        groups = (("packs_art", lambda p: p.get("art")), ("packs_photo", lambda p: p.get("wallpaper")),
+                  ("packs_pattern", lambda p: not p.get("art") and not p.get("wallpaper")))
+        sections = []
+        for title, test in groups:
+            sec = Section(t(title), t("packs_hint") if not sections else None)
+            grid = QGridLayout()
+            grid.setSpacing(10)
+            for i, (key, pack) in enumerate((k, p) for k, p in theme.PACKS.items() if test(p)):
+                b = self._tile(names[key], self._pack_icon(key, pack), lambda _=False, k=key: self._apply_pack(k))
+                grid.addWidget(b, i // 3, i % 3)
+                self.pack_buttons[key] = b
+            sec.form.addRow(grid)
+            sections.append(sec)
 
+        mine = Section(t("my_designs"), t("my_designs_hint"))
+        row = QHBoxLayout()
+        for label, slot in ((t("save_design"), self._save_design), (t("design_from_image"), self._design_from_image),
+                            (t("import_design"), self._import_design)):
+            b = QPushButton(label)
+            b.clicked.connect(slot)
+            row.addWidget(b)
+        row.addStretch()
+        mine.form.addRow(row)
+        self.design_grid = QGridLayout()
+        self.design_grid.setSpacing(10)
+        mine.form.addRow(self.design_grid)
+        self.design_empty = QLabel(t("no_designs"))
+        self.design_empty.setObjectName("ctHint")
+        self.design_empty.setWordWrap(True)
+        mine.form.addRow(self.design_empty)
+        gallery = QLabel(t("gallery_hint"))
+        gallery.setObjectName("ctHint")
+        gallery.setWordWrap(True)
+        gallery.setOpenExternalLinks(True)
+        mine.form.addRow(gallery)
+        self.design_buttons = {}
+        self._refresh_designs()
+        return [mine] + sections
+
+    def _refresh_designs(self):
+        from . import designs
+        while self.design_grid.count():
+            w = self.design_grid.takeAt(0).widget()
+            if w:
+                w.deleteLater()
+        self.design_buttons = {}
+        items = designs.list_designs()
+        for i, (did, data, folder) in enumerate(items):
+            thumb = os.path.join(folder, "thumb.jpg")
+            if os.path.isfile(thumb):
+                icon = QIcon(QPixmap(thumb).scaled(QSize(124, 70), Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+                                                   Qt.TransformationMode.SmoothTransformation))
+            else:
+                icon = self._pack_icon(did, {"accent": data["settings"].get("accent", "#888888"),
+                                             "bg_light": data["settings"].get("bg_light", "#f5f5f5"),
+                                             "bg_dark": data["settings"].get("bg_dark", "#151515")})
+            b = self._tile(data.get("name", did), icon, lambda _=False, d=did: self._apply_design(d))
+            b.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+            b.customContextMenuRequested.connect(lambda _pos, d=did, w=b: self._design_menu(d, w))
+            b.setToolTip(t("design_tip"))
+            self.design_grid.addWidget(b, i // 3, i % 3)
+            self.design_buttons[did] = b
+        self.design_empty.setVisible(not items)
+        self._update_presets()
+
+    def _design_menu(self, did, widget):
+        from . import designs
+        menu = QMenu(self)
+        menu.addAction(t("apply_design"), lambda: self._apply_design(did))
+        menu.addAction(t("export_design"), lambda: self._export_design(did))
+        menu.addSeparator()
+        menu.addAction(t("delete_design"), lambda: (designs.delete_design(did), self._refresh_designs()))
+        menu.exec(widget.mapToGlobal(widget.rect().bottomLeft()))
+
+    def _ask_name(self, default):
+        name, ok = QInputDialog.getText(self, t("my_designs"), t("design_name"), text=default)
+        return name.strip() if ok and name.strip() else None
+
+    def _save_design(self):
+        from . import designs
+        name = self._ask_name(t("my_design_default"))
+        if name:
+            self.cfg = self._collect()
+            self.cfg["design"] = designs.save_design(name, self.cfg)
+            self._refresh_designs()
+            tooltip(t("design_saved"), parent=self)
+
+    def _design_from_image(self):
+        from . import designs
+
+        def chosen(path):
+            if not path:
+                return
+            name = self._ask_name(os.path.splitext(os.path.basename(path))[0][:40])
+            if not name:
+                return
+            look = designs.design_from_image(path, name, self._collect())
+            if not look:
+                showWarning(f"{t('import_err')}\n{path}", parent=self)
+                return
+            self.cfg = look
+            self._load_into_widgets()
+            self._restyle()
+            self._render_preview()
+            self._refresh_designs()
+
+        exts = " ".join("*" + e for e in desktop.IMAGE_EXTS)
+        getFile(self, t("design_from_image"), cb=chosen, filter=exts, key="deckorator_design_image")
+
+    def _apply_design(self, did):
+        from . import designs
+        try:
+            self.cfg = designs.apply_design(did, self._collect())
+        except (OSError, ValueError) as e:
+            showWarning(f"{t('import_err')}\n{e}", parent=self)
+            return
+        self._load_into_widgets()
+        self._restyle()
+        self._render_preview()
+
+    def _export_design(self, did):
+        from . import designs
+        path = getSaveFile(self, t("export_design"), "deckorator_design_export", "Deckorator", ".deckorator",
+                           f"{did}.deckorator")
+        if path:
+            designs.export_design(did, path)
+            tooltip(t("design_exported"), parent=self)
+
+    def _import_design(self):
+        from . import designs
+
+        def chosen(path):
+            if not path:
+                return
+            try:
+                designs.import_design(path)
+            except Exception as e:
+                showWarning(f"{t('import_err')}\n{e}", parent=self)
+                return
+            self._refresh_designs()
+
+        getFile(self, t("import_design"), cb=chosen, filter="*.deckorator *.zip", key="deckorator_design_export")
+
+    def _page_look(self):
         presets = Section(t("presets"))
         grid = QGridLayout()
         grid.setSpacing(10)
@@ -516,6 +743,21 @@ class ThemeDialog(QDialog):
         self.img_row = QWidget()
         self.img_row.setLayout(img)
         bg.row(t("bg_image"), self.img_row)
+        drow = QHBoxLayout()
+        drow.setContentsMargins(0, 0, 0, 0)
+        self.dark_image_label = QLabel()
+        self.dark_image_label.setObjectName("ctHint")
+        self.dark_image_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
+        b_dark = QPushButton(t("choose"))
+        b_dark.clicked.connect(self._choose_dark_image)
+        b_dark_rm = QPushButton(t("remove"))
+        b_dark_rm.clicked.connect(lambda: self._set_cfg(bg_image_dark=""))
+        for w in (self.dark_image_label, b_dark, b_dark_rm):
+            drow.addWidget(w, 1 if w is self.dark_image_label else 0)
+        self.dark_row = QWidget()
+        self.dark_row.setLayout(drow)
+        self.dark_row.setToolTip(t("bg_image_dark_hint"))
+        bg.row(t("bg_image_dark"), self.dark_row)
         self.bg_form = bg.form
 
         banner = Section(t("banner"), t("banner_hint"))
@@ -527,6 +769,8 @@ class ThemeDialog(QDialog):
         items += [("image", t("banner_image"))]
         self.banner = banner.row(t("banner_motif"), self._combo(items))
         self.banner.currentIndexChanged.connect(self._update_enabled)
+        self.banner_area = banner.row(t("banner_area"), self._combo(
+            [("bar", t("ba_bar")), ("capsule", t("ba_capsule"))]))
         self.banner_height = banner.row(t("banner_height"), self._combo(
             [("small", t("bh_small")), ("medium", t("bh_medium")), ("large", t("bh_large"))]))
         brow = QHBoxLayout()
@@ -542,7 +786,7 @@ class ThemeDialog(QDialog):
         self.banner_row.setLayout(brow)
         banner.row(t("banner_image"), self.banner_row)
         self.banner_form = banner.form
-        return [packs, presets, colors, bg, banner]
+        return [presets, colors, bg, banner]
 
     def _page_shape(self):
         glass = Section(t("glass_title"), t("glass_hint"))
@@ -586,6 +830,8 @@ class ThemeDialog(QDialog):
         three = [("bold", t("mode_bold")), ("subtle", t("mode_subtle")), ("original", t("mode_original"))]
         for kind in windows.WINDOW_KINDS:
             self.area_modes[kind] = wins.row(t("area_" + kind), self._combo(three))
+            self.area_modes[kind].currentIndexChanged.connect(
+                lambda _: None if self._loading else self.preview.set_view("windows"))
         h = QHBoxLayout()
         for label, mode in ((t("all_bold"), "bold"), (t("all_original"), "original")):
             b = QPushButton(label)
@@ -651,7 +897,18 @@ class ThemeDialog(QDialog):
             [("theme", t("hm_theme")), ("colors", t("hm_colors")), ("original", t("hm_original"))]))
         self.heatmap_style.currentIndexChanged.connect(
             lambda _: None if self._loading else self.preview.set_view("home"))
-        return [sec]
+        center = Section(t("addon_center"), t("addon_center_hint"))
+        self.addon_center = self._toggle(t("addon_center_on"))
+        center.row(self.addon_center)
+        embed = Section(t("embed_title"), t("embed_hint"))
+        self.embed_addons = self._toggle(t("embed_on"))
+        self.embed_addons.toggled.connect(lambda _: None if self._loading else self.preview.set_view("home"))
+        embed.row(self.embed_addons)
+        from . import conflicts
+        found = conflicts.find(self.api.MODULE)
+        conf = Section(t("conflicts_title"), t("conflicts_found").format(names=", ".join(n for _d, n in found))
+                       if found else t("conflicts_none"))
+        return [sec, center, embed, conf]
 
     def _page_advanced(self):
         motion = Section(t("motion"), t("motion_hint"))
@@ -721,6 +978,8 @@ class ThemeDialog(QDialog):
         self.colored_answers.setChecked(c["colored_answers"])
         self.animations.setChecked(c["animations"])
         self.highlight_today.setChecked(c["highlight_today"])
+        self.addon_center.setChecked(c.get("addon_center", True))
+        self.embed_addons.setChecked(c.get("embed_addons", True))
         self._set_combo(self.review_background, c["review_background"])
         self._set_combo(self.heatmap_style, c["heatmap_style"])
         from . import windows
@@ -732,6 +991,7 @@ class ThemeDialog(QDialog):
         self._set_combo(self.art, c.get("art", "fuji"))
         self._set_combo(self.banner, c.get("banner", ""))
         self._set_combo(self.banner_height, c.get("banner_height", "medium"))
+        self._set_combo(self.banner_area, c.get("banner_area", "bar"))
         self.custom_css.setPlainText(c["custom_css"])
         self._update_image_label()
         self._update_presets()
@@ -754,11 +1014,12 @@ class ThemeDialog(QDialog):
             "count_badges": self.count_badges.isChecked(), "colored_answers": self.colored_answers.isChecked(),
             "animations": self.animations.isChecked(),
             "highlight_today": self.highlight_today.isChecked(),
+            "addon_center": self.addon_center.isChecked(), "embed_addons": self.embed_addons.isChecked(),
             "review_background": self.review_background.currentData(),
             "heatmap_style": self.heatmap_style.currentData(),
             **self._collect_areas(),
             "art": self.art.currentData(), "banner": self.banner.currentData(),
-            "banner_height": self.banner_height.currentData(),
+            "banner_height": self.banner_height.currentData(), "banner_area": self.banner_area.currentData(),
             "custom_css": self.custom_css.toPlainText(),
         })
         return c
@@ -773,6 +1034,22 @@ class ThemeDialog(QDialog):
             if key in windows.WINDOW_KINDS and mode != "original":
                 styles[key] = mode
         return {"areas": areas, "window_styles": styles}
+
+    def _set_cfg(self, **values):
+        self.cfg = self._collect()
+        self.cfg.update(values)
+        self._load_into_widgets()
+        self._render_preview()
+
+    def _choose_dark_image(self):
+        def chosen(path):
+            if path:
+                name = desktop.prepare_image(path, USER_DIR, "background_dark")
+                if name:
+                    self._set_cfg(bg_image_dark=name, background="image")
+
+        exts = " ".join("*" + e for e in desktop.IMAGE_EXTS)
+        getFile(self, t("bg_image_dark"), cb=chosen, filter=exts, key="deckorator_bg_dark")
 
     def _choose_banner(self):
         def chosen(path):
@@ -800,12 +1077,15 @@ class ThemeDialog(QDialog):
         style = self.bg_style.currentData()
         # Zeilen samt Beschriftung nur zeigen, wenn sie gerade etwas bewirken
         self.bg_form.setRowVisible(self.img_row, style == "image")
+        self.bg_form.setRowVisible(self.dark_row, style == "image")
+        self.dark_image_label.setText(self.cfg.get("bg_image_dark") or t("none"))
         self.bg_intensity.setEnabled(style != "solid")
         self.desktop_info.setVisible(style == "desktop")
         self.art.setVisible(style == "art")
         self.art_label.setVisible(style == "art")
         has_banner = bool(self.banner.currentData())
         self.banner_height.setEnabled(has_banner)
+        self.banner_area.setEnabled(has_banner)
         self.banner_form.setRowVisible(self.banner_row, self.banner.currentData() == "image")
         self.banner_image_label.setText(self.cfg.get("banner_image") or t("none"))
         if style == "desktop" and not self.desktop_info.text():
@@ -817,10 +1097,13 @@ class ThemeDialog(QDialog):
         self.font_family.setEnabled(not self.font_default.isChecked())
 
     def _update_presets(self):
-        for k, b in self.preset_buttons.items():
+        # beim Aufbau existieren noch nicht alle Knöpfe (Designs-Seite kommt zuerst)
+        for k, b in getattr(self, "preset_buttons", {}).items():
             b.setChecked(k == self.cfg.get("preset"))
-        for k, b in self.pack_buttons.items():
+        for k, b in getattr(self, "pack_buttons", {}).items():
             b.setChecked(k == self.cfg.get("pack"))
+        for k, b in getattr(self, "design_buttons", {}).items():
+            b.setChecked(k == self.cfg.get("design"))
 
     def _update_image_label(self):
         name = self.cfg.get("bg_image") or ""
@@ -850,15 +1133,17 @@ class ThemeDialog(QDialog):
     def _custom_changed(self):
         self.cfg["preset"] = ""
         self.cfg["pack"] = ""
+        self.cfg["design"] = ""
         self._update_presets()
         self._changed()
 
     def _apply_pack(self, key):
         pack = dict(theme.PACKS[key])
         wallpaper = pack.pop("wallpaper", None)
+        wallpaper_dark = pack.pop("wallpaper_dark", None)
         self.cfg = self._collect()
         self.cfg.update(pack)
-        self.cfg.update(preset="", pack=key, accent_source="manual")
+        self.cfg.update(preset="", pack=key, design="", accent_source="manual")
         from . import windows
         if "window_style" in pack:
             self.cfg["window_styles"] = {k: pack["window_style"] for k in windows.WINDOW_KINDS}
@@ -866,6 +1151,10 @@ class ThemeDialog(QDialog):
             name = desktop.prepare_image(os.path.join(ADDON_DIR, "wallpapers", wallpaper), USER_DIR, "background")
             if name:
                 self.cfg["bg_image"] = name
+        self.cfg["bg_image_dark"] = ""
+        if wallpaper_dark:
+            name = desktop.prepare_image(os.path.join(ADDON_DIR, "wallpapers", wallpaper_dark), USER_DIR, "background_dark")
+            self.cfg["bg_image_dark"] = name or ""
         self._load_into_widgets()
         self._restyle()
         self._render_preview()
@@ -989,6 +1278,10 @@ class ThemeDialog(QDialog):
     def _ok(self):
         self._apply()
         self.accept()
+
+    def open_page(self, key):
+        if key in PAGES:
+            self.nav.setCurrentRow(PAGES.index(key))
 
     def showEvent(self, event):
         super().showEvent(event)

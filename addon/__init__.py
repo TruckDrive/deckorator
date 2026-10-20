@@ -71,7 +71,17 @@ def effective(cfg):
     """Konfiguration plus abgeleitete Werte, mit denen das CSS gebaut wird."""
     mode = cfg.get("performance", "auto")
     return {**cfg, "_light": mode == "light" or (mode == "auto" and hardware()["weak"]),
-            "_banner_url": banner_url(cfg)}
+            "_banner_url": banner_url(cfg), "_bg_url_dark": _user_file_url(cfg.get("bg_image_dark"))}
+
+
+def _user_file_url(name):
+    if not name:
+        return None
+    try:
+        version = int(os.path.getmtime(os.path.join(USER_DIR, name)))
+    except OSError:
+        return None
+    return f"/_addons/{ADDON_FOLDER}/user_files/{name}?v={version}"
 
 
 def banner_url(cfg):
@@ -238,17 +248,31 @@ def _sync_on_start():
         if "accent" in changes:
             cfg["preset"] = ""
         save_config(cfg)
+    # kurz nach dem Start, damit Anki fertig gezeichnet ist
+    QTimer.singleShot(1500, _check_conflicts)
 
 
-def open_settings():
+def _check_conflicts():
+    try:
+        from . import conflicts
+        from .dialog import t
+        conflicts.check_on_start(MODULE, load_config(), save_config, open_settings, t)
+    except Exception as e:
+        log.record("conflicts", e)
+
+
+def open_settings(page=None):
     from .dialog import ThemeDialog
-    ThemeDialog(sys.modules[__name__]).exec()
+    dialog = ThemeDialog(sys.modules[__name__])
+    if page:
+        dialog.open_page(page)
+    dialog.exec()
 
 
 def _setup_menu():
     from .dialog import t
     action = QAction(t("title") + "…", mw)
-    action.triggered.connect(open_settings)
+    action.triggered.connect(lambda: open_settings())
     mw.form.menuTools.addAction(action)
 
 
@@ -281,4 +305,4 @@ gui_hooks.profile_did_open.append(_sync_on_start)
 gui_hooks.main_window_did_init.append(_setup_menu)
 # Bei Änderung über Ankis JSON-Editor ebenfalls neu zeichnen
 mw.addonManager.setConfigUpdatedAction(MODULE, lambda _cfg: _refresh_ui())
-mw.addonManager.setConfigAction(MODULE, open_settings)
+mw.addonManager.setConfigAction(MODULE, lambda: open_settings())

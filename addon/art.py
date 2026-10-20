@@ -236,6 +236,88 @@ def planet(p, night):
     return _svg(body, defs)
 
 
+@art("dunes", .6)
+def dunes(p, night):
+    rng = random.Random(14)
+    defs = _sky(p)
+    body = f'<rect width="{W}" height="{H}" fill="url(#sky)"/>'
+    sun = _mix(p["a"], "#ffd9a0", .5)
+    body += f'<circle cx="430" cy="380" r="150" fill="{sun}" opacity="{.75 if night else .9}"/>'
+    if night:
+        body += _stars(rng, 90, 0, 420, "#ffffff", 1.2)
+    sand = [_mix(p["a"], "#c8955a", .55), _mix(p["a"], "#b5794a", .5), _mix(p["a"], "#9a5f3a", .45), _mix(p["a"], "#7a4630", .4)]
+    for i, y in enumerate((560, 640, 730, 830)):
+        color = _mix(sand[i], "#000000", .45) if night else _mix(sand[i], p["base"], .25 - i * .05)
+        # Dünen: eine geschwungene Kante mit wenigen großen Bögen
+        d = f"M0,{H} L0,{y + 40}"
+        x = 0
+        while x < W:
+            w = rng.randint(380, 620)
+            d += f" Q{x + w * .55:.0f},{y - rng.randint(40, 110)} {x + w:.0f},{y + rng.randint(10, 50)}"
+            x += w
+        body += f'<path d="{d} L{W},{H} Z" fill="{color}"/>'
+    return _svg(body, defs)
+
+
+@art("aurora", .35)
+def aurora(p, night):
+    rng = random.Random(4)
+    sky = "#05060d" if night else _mix(p["base"], p["c"], .18)
+    defs = f'<filter id="blur" x="-20%" y="-150%" width="140%" height="400%"><feGaussianBlur stdDeviation="28"/></filter>'
+    body = f'<rect width="{W}" height="{H}" fill="{sky}"/>'
+    body += _stars(rng, 200 if night else 40, 0, 650, "#ffffff" if night else p["deep"], 1.3)
+    for i, (col, y, amp, op) in enumerate(((p["b"], 300, 90, .55), (p["a"], 380, 120, .6), (p["c"], 260, 70, .4))):
+        d = f"M-100,{y}"
+        for k in range(6):
+            d += f" Q{k * 340 + 70},{y - amp * (1 if k % 2 else -1)} {k * 340 + 240},{y + rng.randint(-30, 30)}"
+        body += (f'<path d="{d}" fill="none" stroke="{col}" stroke-width="{90 - i * 20}" stroke-linecap="round" '
+                 f'opacity="{op if night else op * .6:.2f}" filter="url(#blur)"/>')
+    ridge = "#07080f" if night else _mix(p["deep"], "#2a2a3a", .5)
+    body += f'<path d="{_ridge(rng, 800, 70, 8)}" fill="{_mix(ridge, sky, .3)}"/>'
+    body += f'<path d="{_ridge(rng, 880, 50, 6)}" fill="{ridge}"/>'
+    return _svg(body, defs)
+
+
+@art("clouds", .4)
+def clouds(p, night):
+    rng = random.Random(8)
+    top = _mix(p["base"], p["a"], .35 if night else .22)
+    defs = (f'<linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{top}"/>'
+            f'<stop offset="1" stop-color="{_mix(p["base"], p["b"], .2 if night else .12)}"/></linearGradient>')
+    body = f'<rect width="{W}" height="{H}" fill="url(#s)"/>'
+    if night:
+        body += _stars(rng, 80, 0, 500, "#ffffff", 1.1)
+    for _ in range(11):
+        # Wolke aus überlappenden Kreisen auf flacher Basis, zufällig verteilt und skaliert
+        x, y, k = rng.uniform(-150, W), rng.uniform(140, H - 60), rng.uniform(.55, 1.6)
+        depth = (y - 140) / (H - 200)  # weiter unten = näher = heller/kräftiger
+        tone = _mix(p["a"], p["base"], .7 - depth * .25) if night else _mix(p["base"], "#ffffff", .45 + depth * .4)
+        parts = "".join(f'<circle cx="{x + 300 * k * f:.0f}" cy="{y - r * k * .6:.0f}" r="{r * k:.0f}"/>'
+                        for f, r in ((.22, 50), (.42, 78), (.66, 60), (.84, 38)))
+        body += (f'<g fill="{tone}" opacity="{.55 + depth * .4:.2f}">{parts}'
+                 f'<rect x="{x:.0f}" y="{y - 28 * k:.0f}" width="{300 * k:.0f}" height="{56 * k:.0f}" rx="{28 * k:.0f}"/></g>')
+    return _svg(body, defs)
+
+
+@art("seigaiha", .5)
+def seigaiha(p, night):
+    """Klassisches japanisches Wellenmuster, in Akzentfarbe und fein."""
+    r = 60
+    line = _mix(p["a"], p["base"], .2 if night else .45)
+    # Eine Kachel (2r x r) mit Bögen, als <pattern> wiederholt: winzige Datei, beliebig groß
+    tile = ""
+    for cx, cy in ((0, r), (2 * r, r), (r, r / 2), (0, 0), (2 * r, 0)):
+        for k, rr in enumerate((r, r * .78, r * .56, r * .34)):
+            tile += (f'<path d="M{cx - rr:.0f},{cy:.0f} A{rr:.0f},{rr:.0f} 0 0 1 {cx + rr:.0f},{cy:.0f} Z" fill="{p["base"]}" '
+                     f'stroke="{line}" stroke-width="1.6" stroke-opacity="{.8 if k == 0 else .55}"/>')
+    defs = (f'<pattern id="w" width="{2 * r}" height="{r}" patternUnits="userSpaceOnUse">{tile}</pattern>'
+            f'<radialGradient id="v" cx=".5" cy=".45" r=".65"><stop offset=".3" stop-color="{p["base"]}" stop-opacity=".6"/>'
+            f'<stop offset="1" stop-color="{p["base"]}" stop-opacity="0"/></radialGradient>')
+    body = f'<rect width="{W}" height="{H}" fill="{p["base"]}"/><rect width="{W}" height="{H}" fill="url(#w)"/>'
+    body += f'<rect width="{W}" height="{H}" fill="url(#v)"/>'
+    return _svg(body, defs)
+
+
 def wallpaper_svg(name, accent, night):
     fn, _focus = ART[name]
     return fn(_palette(accent, night), night)

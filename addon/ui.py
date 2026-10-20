@@ -164,7 +164,7 @@ class ColorButton(QPushButton):
         fg = "#ffffff" if _luma(color) < .6 else "#111111"
         self.setText(color.upper())
         self.setStyleSheet(f"QPushButton {{ background: {color}; color: {fg}; border: 1px solid rgba(128,128,128,.35);"
-                           " border-radius: 9px; font-family: monospace; font-weight: 600; }}"
+                           " border-radius: 9px; font-family: monospace; font-weight: 600; }"
                            "QPushButton:hover { border: 2px solid rgba(128,128,128,.8); }")
 
     def color(self):

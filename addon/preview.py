@@ -65,7 +65,8 @@ class ThemePreview(QWidget):
 
         head = QHBoxLayout()
         self.view_buttons = self._segmented(
-            head, [("home", self.t("view_home")), ("study", self.t("view_study"))], self.set_view)
+            head, [("home", self.t("view_home")), ("study", self.t("view_study")), ("windows", self.t("view_windows"))],
+            self.set_view)
         head.addStretch()
         self.mode_buttons = self._segmented(
             head, [(False, self.t("light")), (True, self.t("dark"))], self.set_night)
@@ -102,6 +103,18 @@ class ThemePreview(QWidget):
         sl.addWidget(self.card_web, 1)
         sl.addWidget(self.bar_web)
         self.stack.addWidget(study)
+        from .mockwin import MockBrowser, MockPreferences
+        wins = QWidget()
+        wl = QVBoxLayout(wins)
+        wl.setContentsMargins(0, 0, 0, 0)
+        self.mode_info = QLabel()
+        self.mode_info.setObjectName("ctHint")
+        self.mock_browser = MockBrowser(self.t)
+        self.mock_prefs = MockPreferences(self.t)
+        wl.addWidget(self.mode_info)
+        wl.addWidget(self.mock_browser, 3)
+        wl.addWidget(self.mock_prefs, 2)
+        self.stack.addWidget(wins)
         v.addWidget(self.stack, 1)
 
         self.view_buttons["home"].setChecked(True)
@@ -125,8 +138,10 @@ class ThemePreview(QWidget):
         self.view = view
         self.view_buttons[view].setChecked(True)
         self.card_bar.setVisible(view == "study")
-        self.stack.setCurrentIndex(0 if view == "home" else 1)
-        if view == "study":
+        self.stack.setCurrentIndex({"home": 0, "study": 1, "windows": 2}[view])
+        if view == "windows":
+            self._apply_windows()
+        elif view == "study":
             if self.card is None:
                 self.next_card(image=False)
             else:
@@ -177,8 +192,19 @@ class ThemePreview(QWidget):
             css += theme.banner_preview_css(cfg)
         web.eval(APPLY_JS % (json.dumps(css), json.dumps(self.night)))
 
+    def _apply_windows(self):
+        from . import windows
+        cfg = self.api.effective(self.cfg)
+        windows._apply(self.mock_browser, "browser", cfg, self.night)
+        windows._apply(self.mock_prefs, "preferences", cfg, self.night)
+        names = {m: self.t("mode_" + m) for m in ("bold", "subtle", "original")}
+        self.mode_info.setText(self.t("mock_info").format(
+            browser=names[windows.window_mode(cfg, "browser")], prefs=names[windows.window_mode(cfg, "preferences")]))
+
     def _apply_all(self):
-        if self.view == "home":
+        if self.view == "windows":
+            self._apply_windows()
+        elif self.view == "home":
             self._apply(self.home_web, "main")
         else:
             self._apply(self.card_web, "card")

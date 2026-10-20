@@ -105,10 +105,12 @@ CONTROLS = """
 """
 
 
-def _colors(cfg):
-    """Fensterfarben aus der Deckorator-Hintergrundfarbe, damit Browse & Co. zum Hauptfenster passen."""
+def _colors(cfg, night=None):
+    """Fensterfarben aus der Deckorator-Hintergrundfarbe, damit Browse & Co. zum Hauptfenster passen.
+    night=None: wie Anki gerade läuft; die Vorschau gibt Hell/Dunkel selbst vor."""
     from . import theme
-    night = theme_manager.night_mode
+    if night is None:
+        night = theme_manager.night_mode
     c = ui.palette(cfg["accent"], night)
     if night:
         bg = cfg["bg_dark"]
@@ -128,6 +130,7 @@ def _colors(cfg):
     c["accent_mid"] = theme._rgba(cfg["accent"], .55)
     c["check"] = f"{ui.ASSETS}/check.svg"
     c["chevron_up"] = f"{ui.ASSETS}/chevron-up-{'dark' if night else 'light'}.svg"
+    c["chevron"] = f"{ui.ASSETS}/chevron-{'dark' if night else 'light'}.svg"
     return c
 
 
@@ -145,8 +148,8 @@ def _bold(cfg, kind):
     return window_mode(cfg, kind) == "bold"
 
 
-def _style_browser(browser, cfg):
-    c = _colors(cfg)
+def _style_browser(browser, cfg, night=None):
+    c = _colors(cfg, night)
     root = "QMainWindow#ctWindow"
     browser.setObjectName("ctWindow")
     # Schriftgröße nicht anfassen: die Kartenverwaltung hat eine eigene Schrifteinstellung
@@ -174,8 +177,8 @@ def _unstyle_browser(browser):
         browser.form.tableView.verticalHeader().setDefaultSectionSize(browser._ct_row_height)
 
 
-def _style_addcards(window, cfg):
-    c = _colors(cfg)
+def _style_addcards(window, cfg, night=None):
+    c = _colors(cfg, night)
     root = "QMainWindow#ctAddCards"
     window.setObjectName("ctAddCards")
     add_button = getattr(window, "addButton", None)
@@ -185,33 +188,46 @@ def _style_addcards(window, cfg):
     window.setStyleSheet(ui.stylesheet(c, root, font_size=None) + (BOLD.format(root=root, **c) if _bold(cfg, "editor") else ""))
 
 
-def _style_preferences(dialog, cfg):
-    c = _colors(cfg)
+def _style_preferences(dialog, cfg, night=None):
+    c = _colors(cfg, night)
     root = "QDialog#ctPrefs"
     dialog.setObjectName("ctPrefs")
     dialog.setStyleSheet(ui.stylesheet(c, root, font_size=None) + CONTROLS.format(root=root, **c)
                          + (BOLD.format(root=root, **c) if _bold(cfg, "preferences") else ""))
 
 
-def _style_addons(dialog, cfg):
-    c = _colors(cfg)
+def _style_addons(dialog, cfg, night=None):
+    from . import addoncenter
+    from .dialog import t
+    c = _colors(cfg, night)
     root = "QDialog#ctAddons"
     dialog.setObjectName("ctAddons")
+    ui.COLORS.update(c)  # für die Schalter auf den Karten
     dialog.setStyleSheet(ui.stylesheet(c, root) + ADDON_LIST.format(root=root, **c)
+                         + addoncenter.CARD_CSS.format(root=root, **c)
                          + (BOLD.format(root=root, **c) if _bold(cfg, "addons") else ""))
+    if cfg.get("addon_center", True):
+        addoncenter.build(dialog, t)
+    else:
+        addoncenter.remove(dialog)
 
 
-def _apply(window, kind, cfg):
+def _apply(window, kind, cfg, night=None):
     try:
         enabled = window_mode(cfg, "editor" if kind == "addcards" else kind) != "original"
         if kind == "addcards":
-            _style_addcards(window, cfg) if enabled else window.setStyleSheet("")
+            _style_addcards(window, cfg, night) if enabled else window.setStyleSheet("")
         elif kind == "preferences":
-            _style_preferences(window, cfg) if enabled else window.setStyleSheet("")
+            _style_preferences(window, cfg, night) if enabled else window.setStyleSheet("")
         elif kind == "browser":
-            _style_browser(window, cfg) if enabled else _unstyle_browser(window)
+            _style_browser(window, cfg, night) if enabled else _unstyle_browser(window)
         else:
-            _style_addons(window, cfg) if enabled else window.setStyleSheet("")
+            if enabled:
+                _style_addons(window, cfg, night)
+            else:
+                from . import addoncenter
+                addoncenter.remove(window)
+                window.setStyleSheet("")
     except Exception as e:  # z.B. geänderte Anki-Interna: Fenster bleibt dann einfach im Standardlook
         from . import log
         log.record(f"window:{kind}", e)

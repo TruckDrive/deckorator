@@ -233,6 +233,15 @@ def dominant_color(path):
     return QColor.fromRgbF(r, g, b).name()
 
 
+def average_color(path):
+    """Grundstimmung des Bildes (Mittelwert) für leicht getönte Hintergrundfarben."""
+    img = QImage(path)
+    if img.isNull():
+        return None
+    c = img.scaled(1, 1, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation).pixelColor(0, 0)
+    return c.name()
+
+
 # ---------- Abgleich beim Start ----------
 
 def sync(cfg, folder, night=False):

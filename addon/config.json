@@ -1,6 +1,7 @@
 {
     "preset": "rose",
     "pack": "",
+    "design": "",
     "accent_source": "manual",
     "accent": "#db2777",
     "bg_light": "#f7f6f8",
@@ -9,11 +10,13 @@
     "bg_intensity": 70,
     "art": "fuji",
     "bg_image": "",
+    "bg_image_dark": "",
     "desktop_image": "",
     "desktop_sig": "",
     "banner": "",
     "banner_image": "",
     "banner_height": "medium",
+    "banner_area": "bar",
     "glass": true,
     "blur": 18,
     "glass_opacity": 60,
@@ -33,6 +36,8 @@
     "highlight_today": true,
     "review_background": "calm",
     "heatmap_style": "theme",
+    "addon_center": true,
+    "embed_addons": true,
     "areas": {
         "main": true,
         "review_bar": true,
@@ -44,5 +49,6 @@
         "other": false,
         "preferences": true
     },
-    "custom_css": ""
+    "custom_css": "",
+    "conflicts_ack": []
 }
