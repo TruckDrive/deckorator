@@ -26,7 +26,7 @@
 **Windows & add-ons**
 - **Card browser, editor, statistics, deck options, preferences and add-ons window** in the same style, bold or subtle
 - **Every area adjustable**: Deckorator look or Anki's original, per window
-- **Add-on center**: your add-ons as cards with a switch, settings and page link
+- **Add-on center**: your add-ons as cards with a switch, settings and page link; pin favorites to the top
 - Content other add-ons place below the deck list gets a matching card; other theme add-ons are detected
 - **[Review Heatmap](https://ankiweb.net/shared/info/1771074083) support**: fully restyled, colors only, or left untouched
 

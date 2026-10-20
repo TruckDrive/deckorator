@@ -19,15 +19,16 @@ USER_DIR = os.path.join(ADDON_DIR, "user_files")
 
 STRINGS = {
     "title": ("Deckorator – Theme-Einstellungen", "Deckorator – Theme settings"),
-    "page_look": ("Aussehen", "Appearance"), "page_shape": ("Form", "Shape"),
-    "page_text": ("Schrift", "Text"), "page_study": ("Lernen", "Studying"),
+    "page_look": ("Aussehen", "Appearance"), "page_shape": ("Form & Schrift", "Shape & text"),
+    "page_study": ("Lernen & Karten", "Studying & cards"),
     "page_addons": ("Add-ons", "Add-ons"), "page_advanced": ("Erweitert", "Advanced"),
-    "page_areas": ("Bereiche", "Areas"), "page_designs": ("Designs", "Designs"), "page_cards": ("Karten", "Cards"),
+    "page_areas": ("Bereiche", "Areas"), "page_designs": ("Designs", "Designs"),
     "card_styles": ("Karten-Designs", "Card designs"),
     "card_styles_hint": ("Fertige Stile für deine Karten, wie bei der Muskeltabelle, für beliebige Decks. Klick auf einen "
-                         "Stil zeigt ihn in der Vorschau an einer deiner Karten. Die Farben kommen aus deinem Theme.",
+                         "Stil zeigt ihn in der Vorschau an einer deiner Karten, ein zweiter Klick nimmt ihn wieder heraus. "
+                         "Die Farben kommen aus deinem Theme.",
                          "Ready-made styles for your cards, like the muscle table, for any deck. Clicking a style shows "
-                         "it in the preview on one of your cards. Colors come from your theme."),
+                         "it in the preview on one of your cards, a second click takes it out again. Colors come from your theme."),
     "card_style_names": ({"clean": "Klar", "index": "Karteikarte", "minimal": "Minimal",
                           "focus": "Fokus", "notes": "Lernzettel", "theme": "Wie mein Theme"},
                          {"clean": "Clean", "index": "Index card", "minimal": "Minimal",
@@ -40,8 +41,12 @@ STRINGS = {
     "card_by_deck": ("Aus Stapel", "From deck"), "card_pick_deck": ("Notiztypen eines Stapels auswählen…", "Select note types of a deck…"),
     "card_type_row": ("{name} ({count} Karten)", "{name} ({count} cards)"),
     "card_apply": ("Auf ausgewählte anwenden", "Apply to selected"), "card_remove": ("Stil entfernen", "Remove style"),
-    "card_need_choice": ("Wähle einen Stil und mindestens einen Notiztyp.", "Pick a style and at least one note type."),
-    "card_need_types": ("Wähle mindestens einen Notiztyp.", "Pick at least one note type."),
+    "card_step_both": ("1. Oben einen Stil wählen  2. Notiztypen ankreuzen (oder einen Stapel wählen)",
+                       "1. Pick a style above  2. Tick note types (or pick a deck)"),
+    "card_step_style": ("Wähle oben noch einen Stil.", "Now pick a style above."),
+    "card_step_types": ("„{style}“ gewählt. Kreuze jetzt Notiztypen an oder wähle einen Stapel.",
+                        "“{style}” selected. Now tick note types or pick a deck."),
+    "card_ready": ("„{style}“ auf {n} Notiztyp(en) anwenden.", "Apply “{style}” to {n} note type(s)."),
     "card_confirm": ("Den Stil auf {n} Notiztyp(en) anwenden? Das ändert deren CSS (umkehrbar mit „Stil entfernen“).",
                      "Apply the style to {n} note type(s)? This changes their CSS (reversible with “Remove style”)."),
     "card_applied": ("Kartenstil angewendet", "Card style applied"), "card_removed": ("Kartenstil entfernt", "Card style removed"),
@@ -61,14 +66,16 @@ STRINGS = {
                         "export or delete it."),
     "save_design": ("Aktuellen Look speichern…", "Save current look…"),
     "gallery_open": ("Online-Galerie…", "Online gallery…"), "gallery": ("Online-Galerie", "Online gallery"),
-    "gallery_note": ("Wallpaper aus öffentlichen Sammlungen auf GitHub (Omarchy, ML4W). Liste und Bilder werden erst jetzt "
-                     "direkt von GitHub geladen. Die Bilder gehören ihren Urhebern und sind für deinen eigenen Gebrauch; "
-                     "teile Designs mit diesen Bildern nicht weiter.",
-                     "Wallpapers from public collections on GitHub (Omarchy, ML4W). The list and images are loaded "
-                     "directly from GitHub only now. The images belong to their creators and are for your own use; "
-                     "don't share designs containing them."),
+    "gallery_note": ("Wallpaper aus öffentlichen Sammlungen auf GitHub (Omarchy, ML4W), erst beim Öffnen geladen. Die kleinen "
+                     "Vorschaubilder kommen verkleinert über wsrv.nl, das Original direkt von GitHub. Die Bilder gehören "
+                     "ihren Urhebern und sind für deinen eigenen Gebrauch; teile Designs mit diesen Bildern nicht weiter.",
+                     "Wallpapers from public collections on GitHub (Omarchy, ML4W), loaded only when you open this. "
+                     "Thumbnails come downscaled via wsrv.nl, the original straight from GitHub. The images belong to "
+                     "their creators and are for your own use; don't share designs containing them."),
+    "gallery_count": ("{n} Bilder", "{n} images"),
+    "gallery_downloading": ("Originalbild wird geladen…", "Downloading the original image…"),
     "gallery_repo": ("Auf GitHub ansehen", "View on GitHub"), "gallery_filter": ("Suchen…", "Search…"),
-    "gallery_pick": ("Wähle links ein Bild für die Vorschau.", "Pick an image on the left to preview it."),
+    "gallery_pick": ("Wähle links ein Bild für eine größere Vorschau.", "Pick an image on the left for a larger preview."),
     "gallery_loading": ("Wird geladen…", "Loading…"), "gallery_error": ("Konnte nicht laden: {err}", "Couldn't load: {err}"),
     "gallery_use": ("Als Design übernehmen", "Use as design"),
     "design_from_image": ("Design aus Bild…", "Design from image…"),
@@ -112,7 +119,6 @@ STRINGS = {
     "banner_image": ("Eigenes Bild", "Own image"), "banner_height": ("Höhe", "Height"),
     "bh_small": ("Schmal", "Slim"), "bh_medium": ("Mittel", "Medium"), "bh_large": ("Hoch", "Tall"),
     "presets": ("Farbvorlagen", "Color presets"),
-    "packs": ("Theme-Pakete", "Theme packs"),
     "packs_hint": ("Ein kompletter Look auf einen Klick: Hintergrundbild, Farben, Formen und Fensterstil.",
                    "A complete look in one click: wallpaper, colors, shapes and window style."),
     "pack_names": ({"fuji": "Fuji", "lofi": "Lofi-Nacht", "sakura": "Sakura", "mountains": "Gebirge",
@@ -140,12 +146,6 @@ STRINGS = {
                      "erscheinen als Standbild.",
                      "Currently: {name}. Re-synced every time Anki starts. Live and video wallpapers "
                      "show up as a still image."),
-    "windows": ("Andere Fenster", "Other windows"),
-    "windows_hint": ("Kartenverwaltung, Hinzufügen, Statistik, Stapeloptionen, Anki-Einstellungen und Add-on-Liste.",
-                     "Card browser, add, statistics, deck options, Anki preferences and add-ons window."),
-    "window_style": ("Stil", "Style"),
-    "ws_bold": ("Kräftig: Spotlight, Glaskarten, Akzente", "Bold: spotlight, glass cards, accents"),
-    "ws_subtle": ("Dezent: nur Farben und Rundungen", "Subtle: colors and corners only"),
     "performance": ("Leistung", "Performance"), "perf_mode": ("Effekte", "Effects"),
     "perf_auto": ("Automatisch an die Hardware anpassen", "Adapt to the hardware automatically"),
     "perf_full": ("Alle Effekte", "All effects"),
@@ -176,7 +176,7 @@ STRINGS = {
     "radius": ("Eckenradius", "Corner radius"), "buttons": ("Buttons", "Buttons"),
     "btn_pill": ("Pille", "Pill"), "btn_rounded": ("Abgerundet", "Rounded"), "btn_square": ("Eckig", "Square"),
     "shadow": ("Schatten", "Shadows"), "shadow_levels": (("Aus", "Leicht", "Mittel", "Stark"), ("Off", "Light", "Medium", "Strong")),
-    "bars": ("Leisten", "Bars"),
+    "bars": ("Startseite & Leisten", "Home screen & bars"),
     "toolbar": ("Obere Leiste", "Top bar"), "tb_floating": ("Schwebende Kapsel", "Floating capsule"),
     "tb_flat": ("Flach", "Flat"), "compact": ("Kompakte Abstände", "Compact spacing"),
     "font": ("Schriftart", "Font"), "font_default": ("Anki-Standardschrift verwenden", "Use Anki's default font"),
@@ -198,7 +198,6 @@ STRINGS = {
     "motion": ("Bewegung", "Motion"),
     "motion_hint": ("Wenn in Anki „Bewegung reduzieren“ an ist, bleiben Animationen ohnehin aus.",
                     "If Anki's “Reduce motion” is on, animations stay off anyway."),
-    "areas": ("Anwenden auf", "Apply to"),
     "area_main": ("Deckliste, Übersicht und Leisten", "Deck list, overview and bars"),
     "area_review_bar": ("Untere Leiste beim Lernen", "Bottom bar while studying"),
     "area_browser": ("Kartenverwaltung (Browse)", "Card browser"),
@@ -213,9 +212,11 @@ STRINGS = {
     "rb_full": ("Wie auf der Startseite", "Same as the home screen"),
     "rb_note": ("Vom Notiztyp (Theme hält sich raus)", "From the note type (theme stays out)"),
     "rb_hint": ("Beim Lernen steht die Karte im Mittelpunkt. „Ruhig“ übernimmt die Farbe deines Themes, "
-                "verzichtet aber auf Farbflecken und Bild, damit nichts ablenkt.",
-                "While studying, the card comes first. “Calm” keeps your theme's color but drops "
-                "blobs and images so nothing distracts you."),
+                "verzichtet aber auf Farbflecken und Bild. „Vom Notiztyp“ zeigt die Seite genau so, wie dein "
+                "Notiztyp bzw. sein Karten-Design (unten) sie gestaltet.",
+                "While studying, the card comes first. “Calm” keeps your theme's color but drops blobs and "
+                "images. “From the note type” shows the page exactly as your note type or its card design "
+                "(below) styles it."),
     "heatmap": ("Review Heatmap", "Review Heatmap"),
     "hm_theme": ("Komplett anpassen: Karte, runde Zellen, Akzentfarbe", "Fully restyle: card, rounded cells, accent color"),
     "hm_colors": ("Nur Farben anpassen, Form bleibt original", "Colors only, keep the original shape"),
@@ -256,6 +257,8 @@ STRINGS = {
     "addon_center_on": ("Karten statt Liste", "Cards instead of a list"),
     "ac_updated": ("aktualisiert {date}", "updated {date}"), "ac_incompatible": ("nicht kompatibel", "not compatible"),
     "ac_settings": ("Einstellungen", "Settings"), "ac_page": ("Seite", "Page"),
+    "ac_pin": ("Oben anheften", "Pin to top"), "ac_unpin": ("Nicht mehr anheften", "Unpin"),
+    "ac_pinned": ("Angeheftet", "Pinned"), "ac_all": ("Alle Add-ons", "All add-ons"),
     "ac_toggle": ("An/Aus (wirkt nach Neustart)", "On/off (applies after restart)"),
     "custom_css": ("Eigenes CSS", "Custom CSS"),
     "custom_css_hint": ("Wird zuletzt angehängt und überschreibt damit alles andere.",
@@ -268,7 +271,18 @@ STRINGS = {
     "cancel": ("Abbrechen", "Cancel"), "apply": ("Übernehmen", "Apply"), "save": ("Speichern", "Save"),
     "light": ("Hell", "Light"), "dark": ("Dunkel", "Dark"),
     "view_home": ("Startseite", "Home"), "view_study": ("Lernen", "Study"), "view_windows": ("Fenster", "Windows"),
-    "mock_info": ("Kartenverwaltung: {browser} · Anki-Einstellungen: {prefs}", "Card browser: {browser} · Preferences: {prefs}"),
+    "mock_info": ("{window}: {mode}", "{window}: {mode}"),
+    "win_browser": ("Browse", "Browse"), "win_editor": ("Editor", "Editor"), "win_stats": ("Statistik", "Stats"),
+    "win_deck_options": ("Optionen", "Options"), "win_preferences": ("Einstellungen", "Preferences"),
+    "win_addons": ("Add-ons", "Add-ons"),
+    "mock_addons_head": ("Installierte Add-ons:", "Installed add-ons:"),
+    "mock_addon_buttons": (("Add-ons holen…", "Updates suchen", "Dateien anzeigen", "Löschen"),
+                           ("Get Add-ons…", "Check for Updates", "View Files", "Delete")),
+    "mock_editor_top": ((("Typ", "Einfach"), ("Stapel", "Anatomie")), (("Type", "Basic"), ("Deck", "Anatomy"))),
+    "mock_editor_buttons": (("Hilfe", "Verlauf", "Hinzufügen"), ("Help", "History", "Add")),
+    "mock_editor_fields": ((("Vorderseite", "Ursprung des M. biceps brachii?"), ("Rückseite", "Caput breve: Proc. coracoideus")),
+                           (("Front", "Origin of the biceps brachii?"), ("Back", "Short head: coracoid process"))),
+    "mock_editor_tags": (("anatomie", "arm"), ("anatomy", "arm")),
     "mock_search": ("Karten suchen…", "Search cards…"),
     "mock_columns": (("Sortierfeld", "Fällig", "Stapel"), ("Sort field", "Due", "Deck")),
     "mock_rows": ((("M. biceps brachii", "Morgen", "Anatomie"), ("Ursprung M. deltoideus", "Heute", "Anatomie"),
@@ -305,7 +319,9 @@ STRINGS = {
                       "coral": "Coral", "teal": "Teal", "graphite": "Graphite"}),
 }
 
-PAGES = ("designs", "look", "cards", "shape", "text", "study", "areas", "addons", "advanced")
+PAGES = ("designs", "look", "shape", "study", "areas", "addons", "advanced")
+# Welche Vorschau zu einer Seite gehört; beim Seitenwechsel springt die Vorschau dorthin
+PAGE_VIEWS = {"study": "study", "areas": "windows"}
 # Werte, die an diesen Rechner gebunden sind und beim Teilen nicht mitwandern
 PRIVATE_KEYS = ("bg_image", "bg_image_dark", "banner_image", "desktop_image", "desktop_sig", "design", "conflicts_ack")
 
@@ -399,9 +415,9 @@ class ThemeDialog(QDialog):
         self.nav.setFixedWidth(150)
         self.nav.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.pages = QStackedWidget()
-        builders = {"designs": self._page_designs, "look": self._page_look, "cards": self._page_cards, "shape": self._page_shape, "text": self._page_text,
-                    "areas": self._page_areas,
-                    "study": self._page_study, "addons": self._page_addons, "advanced": self._page_advanced}
+        builders = {"designs": self._page_designs, "look": self._page_look, "shape": self._page_shape,
+                    "study": self._page_study, "areas": self._page_areas, "addons": self._page_addons,
+                    "advanced": self._page_advanced}
         for key in PAGES:
             self.nav.addItem(t("page_" + key))
             self.pages.addWidget(self._page(t("page_" + key), builders[key]()))
@@ -421,6 +437,7 @@ class ThemeDialog(QDialog):
         fl.addWidget(self.preview)
         split.addWidget(frame)
         split.setSizes([660, 600])
+        self.nav.currentRowChanged.connect(self._page_changed)
 
         # unten: Aktionen
         bar = QHBoxLayout()
@@ -493,6 +510,25 @@ class ThemeDialog(QDialog):
         c = Toggle(text)
         c.toggled.connect(self._changed)
         return c
+
+    def _show_on(self, signal, view, window=None, answer=False):
+        """Wenn sich diese Einstellung ändert, zeigt die Vorschau die Stelle, an der man es sieht."""
+        def show(*_):
+            if self._loading:
+                return
+            if window:
+                self.preview.set_window(window)
+            self.preview.set_view(view)
+            if answer:
+                self.preview.show_answer(True)
+        signal.connect(show)
+
+    def _page_changed(self, row):
+        key = PAGES[row]
+        self.preview.set_view(PAGE_VIEWS.get(key, "home"))
+        # eine nur angesehene (nicht angewendete) Karten-Vorschau nicht auf andere Seiten mitnehmen
+        if key != "study" and getattr(self, "selected_card_style", None):
+            self._select_card_style(self.selected_card_style)
 
     def _pack_icon(self, key, pack):
         """Vorschaubild: das Wallpaper, bei Musterpaketen eine Farbfläche mit Akzentpunkt."""
@@ -739,12 +775,14 @@ class ThemeDialog(QDialog):
 
         getFile(self, t("import_design"), cb=chosen, filter="*.deckorator *.zip", key="deckorator_design_export")
 
-    def _page_cards(self):
+    def _card_sections(self):
+        """Karten-Designs: Stil wählen (Vorschau), Notiztypen ankreuzen, anwenden."""
         from . import cards
         styles = Section(t("card_styles"), t("card_styles_hint"))
         grid = QGridLayout()
         grid.setSpacing(10)
         self.card_style_buttons = {}
+        self.selected_card_style = None
         names = t("card_style_names")
         for i, key in enumerate(cards.STYLES):
             b = QPushButton(names[key])
@@ -766,16 +804,26 @@ class ThemeDialog(QDialog):
         ui.modern_popup(self.card_deck)
         target.row(t("card_by_deck"), self.card_deck)
         self.card_types = QListWidget()
+        self.card_types.setObjectName("ctCardTypes")
         self.card_types.setMinimumHeight(170)
+        self.card_types.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
+        # ganze Zeile anklickbar, nicht nur das kleine Kästchen
+        self.card_types.itemPressed.connect(lambda item: setattr(self, "_pressed_state", item.checkState()))
+        self.card_types.itemClicked.connect(self._card_type_clicked)
+        self.card_types.itemChanged.connect(lambda _item: self._update_card_buttons())
         target.row(self.card_types)
+        self.card_status = QLabel()
+        self.card_status.setObjectName("ctHint")
+        self.card_status.setWordWrap(True)
+        target.row(self.card_status)
         actions = QHBoxLayout()
-        b_apply = QPushButton(t("card_apply"))
-        b_apply.setObjectName("ctPrimary")
-        b_apply.clicked.connect(self._apply_card_style_to_types)
-        b_remove = QPushButton(t("card_remove"))
-        b_remove.clicked.connect(self._remove_card_style)
-        actions.addWidget(b_apply)
-        actions.addWidget(b_remove)
+        self.b_card_apply = QPushButton(t("card_apply"))
+        self.b_card_apply.setObjectName("ctPrimary")
+        self.b_card_apply.clicked.connect(self._apply_card_style_to_types)
+        self.b_card_remove = QPushButton(t("card_remove"))
+        self.b_card_remove.clicked.connect(self._remove_card_style)
+        actions.addWidget(self.b_card_apply)
+        actions.addWidget(self.b_card_remove)
         actions.addStretch()
         target.form.addRow(actions)
         self._fill_card_types()
@@ -784,20 +832,50 @@ class ThemeDialog(QDialog):
     def _fill_card_types(self, checked=None):
         from . import cards
         names = t("card_style_names")
+        self.card_types.blockSignals(True)
         self.card_types.clear()
+        self._card_type_styles = {}
         for ntid, name, count, style in cards.note_types():
+            # unbenutzte Notiztypen nur zeigen, wenn sie einen Stil tragen (sonst endlose Liste)
+            if not count and not style:
+                continue
             label = t("card_type_row").format(name=name, count=count)
             if style:
                 label += " · " + names.get(style, style)
             item = QListWidgetItem(label)
             item.setData(Qt.ItemDataRole.UserRole, ntid)
-            item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
+            item.setFlags((item.flags() | Qt.ItemFlag.ItemIsUserCheckable) & ~Qt.ItemFlag.ItemIsSelectable)
             item.setCheckState(Qt.CheckState.Checked if checked and ntid in checked else Qt.CheckState.Unchecked)
             self.card_types.addItem(item)
+            self._card_type_styles[ntid] = style
+        self.card_types.blockSignals(False)
+        self._update_card_buttons()
+
+    def _card_type_clicked(self, item):
+        if item.checkState() == getattr(self, "_pressed_state", None):  # Klick auf den Text, nicht aufs Kästchen
+            item.setCheckState(Qt.CheckState.Unchecked if item.checkState() == Qt.CheckState.Checked
+                               else Qt.CheckState.Checked)
 
     def _checked_types(self):
         return [self.card_types.item(i).data(Qt.ItemDataRole.UserRole) for i in range(self.card_types.count())
                 if self.card_types.item(i).checkState() == Qt.CheckState.Checked]
+
+    def _update_card_buttons(self):
+        """Knöpfe nur aktiv, wenn sie etwas tun können, und darunter sagen, was noch fehlt."""
+        types = self._checked_types()
+        style = self.selected_card_style
+        styled = [n for n in types if self._card_type_styles.get(n)]
+        self.b_card_apply.setEnabled(bool(style and types))
+        self.b_card_remove.setEnabled(bool(styled))
+        if not style and not types:
+            text = t("card_step_both")
+        elif not style:
+            text = t("card_step_style")
+        elif not types:
+            text = t("card_step_types").format(style=t("card_style_names")[style])
+        else:
+            text = t("card_ready").format(style=t("card_style_names")[style], n=len(types))
+        self.card_status.setText(text)
 
     def _card_deck_chosen(self):
         from . import cards
@@ -806,37 +884,34 @@ class ThemeDialog(QDialog):
             self._fill_card_types(cards.note_types_in_deck(did))
 
     def _select_card_style(self, key):
+        # zweiter Klick auf denselben Stil hebt die Auswahl (und die Vorschau) wieder auf
+        if key == self.selected_card_style:
+            key = None
         for k, b in self.card_style_buttons.items():
             b.setChecked(k == key)
         self.selected_card_style = key
         self.preview.set_card_style(key)
+        self._update_card_buttons()
 
     def _apply_card_style_to_types(self):
         from . import cards
-        style = getattr(self, "selected_card_style", None)
+        style = self.selected_card_style
         types = self._checked_types()
         if not style or not types:
-            tooltip(t("card_need_choice"), parent=self)
             return
         if not askUser(t("card_confirm").format(n=len(types)), parent=self):
             return
-        self.cfg = self._collect()
-        cards.apply(types, style, self.cfg)
-        # damit der Kartenhintergrund des Stils beim Lernen sichtbar ist
-        self._set_combo(self.review_background, "note")
-        self._apply()
+        cards.apply(types, style, self._collect())
         self._fill_card_types(set(types))
         tooltip(t("card_applied"), parent=self)
 
     def _remove_card_style(self):
         from . import cards
-        types = self._checked_types()
+        types = [n for n in self._checked_types() if self._card_type_styles.get(n)]
         if not types:
-            tooltip(t("card_need_types"), parent=self)
             return
         cards.remove(types)
         self._fill_card_types(set(types))
-        self.preview.set_card_style(None)
         tooltip(t("card_removed"), parent=self)
 
     def _page_look(self):
@@ -905,6 +980,7 @@ class ThemeDialog(QDialog):
         bg = Section(t("background"))
         self.bg_style = self._combo([(s, t("style_" + s)) for s in theme.BACKGROUND_STYLES])
         self.bg_style.currentIndexChanged.connect(self._style_changed)
+        self._show_on(self.bg_style.currentIndexChanged, "home")
         bg.row(t("bg_style"), self.bg_style)
         from . import art
         art_names = t("art_names")
@@ -957,10 +1033,13 @@ class ThemeDialog(QDialog):
         items += [("image", t("banner_image"))]
         self.banner = banner.row(t("banner_motif"), self._combo(items))
         self.banner.currentIndexChanged.connect(self._update_enabled)
+        self._show_on(self.banner.currentIndexChanged, "home")
         self.banner_area = banner.row(t("banner_area"), self._combo(
             [("bar", t("ba_bar")), ("capsule", t("ba_capsule"))]))
         self.banner_height = banner.row(t("banner_height"), self._combo(
             [("small", t("bh_small")), ("medium", t("bh_medium")), ("large", t("bh_large"))]))
+        for combo in (self.art, self.banner_area, self.banner_height):
+            self._show_on(combo.currentIndexChanged, "home")
         brow = QHBoxLayout()
         brow.setContentsMargins(0, 0, 0, 0)
         self.banner_image_label = QLabel()
@@ -997,16 +1076,13 @@ class ThemeDialog(QDialog):
         self.toolbar_style = bars.row(t("toolbar"), self._combo([("floating", t("tb_floating")), ("flat", t("tb_flat"))]))
         self.compact = self._toggle(t("compact"))
         bars.row(self.compact)
+        self._show_on(self.toolbar_style.currentIndexChanged, "home")
+        self._show_on(self.compact.toggled, "home")
+        self.highlight_today = self._toggle(t("highlight_today"))
+        self._show_on(self.highlight_today.toggled, "home")
+        bars.row(self.highlight_today)
 
-        perf = Section(t("performance"))
-        self.performance = perf.row(t("perf_mode"), self._combo(
-            [("auto", t("perf_auto")), ("full", t("perf_full")), ("light", t("perf_light"))]))
-        self.performance.currentIndexChanged.connect(self._update_enabled)
-        self.perf_info = QLabel(self._hardware_text())
-        self.perf_info.setObjectName("ctHint")
-        self.perf_info.setWordWrap(True)
-        perf.row(self.perf_info)
-        return [perf, glass, shapes, bars]
+        return [glass, shapes, bars, self._font_section()]
 
     def _page_areas(self):
         from . import windows
@@ -1015,14 +1091,15 @@ class ThemeDialog(QDialog):
         self.area_modes = {}
         for key in ("main", "review_bar"):
             self.area_modes[key] = home.row(t("area_" + key), self._combo(two))
+        self._show_on(self.area_modes["main"].currentIndexChanged, "home")
+        self._show_on(self.area_modes["review_bar"].currentIndexChanged, "study")
         self.area_modes["other"] = home.row(t("area_other"), self._combo(
             [("on", t("mode_colors")), ("original", t("mode_original"))]))
         wins = Section(t("areas_windows"))
         three = [("bold", t("mode_bold")), ("subtle", t("mode_subtle")), ("original", t("mode_original"))]
         for kind in windows.WINDOW_KINDS:
             self.area_modes[kind] = wins.row(t("area_" + kind), self._combo(three))
-            self.area_modes[kind].currentIndexChanged.connect(
-                lambda _: None if self._loading else self.preview.set_view("windows"))
+            self._show_on(self.area_modes[kind].currentIndexChanged, "windows", window=kind)
         h = QHBoxLayout()
         for label, mode in ((t("all_bold"), "bold"), (t("all_original"), "original")):
             b = QPushButton(label)
@@ -1050,7 +1127,7 @@ class ThemeDialog(QDialog):
         verdict = t("hw_weak") if hw["weak"] else t("hw_strong")
         return t("hw_detected").format(facts=", ".join(facts), verdict=verdict)
 
-    def _page_text(self):
+    def _font_section(self):
         sec = Section(t("font"), t("font_hint"))
         self.font_default = self._toggle(t("font_default"))
         self.font_default.toggled.connect(self._update_enabled)
@@ -1062,38 +1139,36 @@ class ThemeDialog(QDialog):
         self.font_family.currentFontChanged.connect(self._changed)
         sec.row(t("font"), self.font_family)
         self.font_scale = sec.row(t("font_scale"), self._slider(80, 140, " %"))
-        return [sec]
+        return sec
 
     def _page_study(self):
         bg = Section(t("review_bg"), t("rb_hint"))
         self.review_background = self._combo(
             [("calm", t("rb_calm")), ("full", t("rb_full")), ("note", t("rb_note"))])
-        self.review_background.currentIndexChanged.connect(
-            lambda _: None if self._loading else self.preview.set_view("study"))
+        self._show_on(self.review_background.currentIndexChanged, "study")
         bg.row(self.review_background)
         display = Section(t("display"))
         self.colored_answers = self._toggle(t("answers"))
         self.count_badges = self._toggle(t("badges"))
-        self.highlight_today = self._toggle(t("highlight_today"))
-        self.highlight_today.toggled.connect(lambda _: None if self._loading else self.preview.set_view("home"))
-        display.row(self.highlight_today)
+        self._show_on(self.colored_answers.toggled, "study", answer=True)
+        self._show_on(self.count_badges.toggled, "study")
         display.row(self.colored_answers)
         display.row(self.count_badges)
-        return [bg, display]
+        return [bg, display] + self._card_sections()
 
     def _page_addons(self):
         hint = t("hm_hint") if heatmap_active() else t("hm_missing")
         sec = Section(t("heatmap"), hint)
         self.heatmap_style = sec.row(t("hm_style"), self._combo(
             [("theme", t("hm_theme")), ("colors", t("hm_colors")), ("original", t("hm_original"))]))
-        self.heatmap_style.currentIndexChanged.connect(
-            lambda _: None if self._loading else self.preview.set_view("home"))
+        self._show_on(self.heatmap_style.currentIndexChanged, "home")
         center = Section(t("addon_center"), t("addon_center_hint"))
         self.addon_center = self._toggle(t("addon_center_on"))
+        self._show_on(self.addon_center.toggled, "windows", window="addons")
         center.row(self.addon_center)
         embed = Section(t("embed_title"), t("embed_hint"))
         self.embed_addons = self._toggle(t("embed_on"))
-        self.embed_addons.toggled.connect(lambda _: None if self._loading else self.preview.set_view("home"))
+        self._show_on(self.embed_addons.toggled, "home")
         embed.row(self.embed_addons)
         from . import conflicts
         found = conflicts.find(self.api.MODULE)
@@ -1102,6 +1177,14 @@ class ThemeDialog(QDialog):
         return [sec, center, embed, conf]
 
     def _page_advanced(self):
+        perf = Section(t("performance"))
+        self.performance = perf.row(t("perf_mode"), self._combo(
+            [("auto", t("perf_auto")), ("full", t("perf_full")), ("light", t("perf_light"))]))
+        self.performance.currentIndexChanged.connect(self._update_enabled)
+        self.perf_info = QLabel(self._hardware_text())
+        self.perf_info.setObjectName("ctHint")
+        self.perf_info.setWordWrap(True)
+        perf.row(self.perf_info)
         motion = Section(t("motion"), t("motion_hint"))
         self.animations = self._toggle(t("animations"))
         motion.row(self.animations)
@@ -1130,7 +1213,7 @@ class ThemeDialog(QDialog):
         hh.addWidget(b_diag)
         hh.addStretch()
         help_.form.addRow(hh)
-        return [motion, css, share, help_]
+        return [perf, motion, css, share, help_]
 
     def _copy_diagnostics(self):
         QApplication.clipboard().setText(diagnostics(self.api, self._collect()))

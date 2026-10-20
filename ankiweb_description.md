@@ -7,7 +7,7 @@
 - **46 theme packs**, including the Omarchy color themes: a complete look in one click, illustrated or with photo wallpapers
 - **Illustrated wallpapers** in your accent color, plus a **banner in the top bar**
 - **My designs**: save your look, or turn any wallpaper into a complete theme (accent and tones adapt), share as a .deckorator file
-- **Add-on center**: your add-ons as cards with a switch, settings and page link
+- **Add-on center**: your add-ons as cards with a switch, settings and page link; pin favorites to the top
 - **Plays well with other add-ons**: their content below the deck list gets a matching card; other theme add-ons are detected
 - **Online gallery**: browse wallpapers from Omarchy and ML4W on GitHub and turn them into designs
 - **Card designs**: six styles for any note type (clean, index card, minimal, focus, study notes, like my theme), previewed on your own cards and fully reversible

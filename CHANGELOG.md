@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.2.0 – 2026-10-20
+
+### Settings window
+- Tidier: 7 pages instead of 9. "Cards" and "Studying" are now one page (**Studying & cards**), "Shape" and "Text" are merged, performance moved to "Advanced"
+- The preview follows you: switching pages or changing a setting jumps to the view where you can see it (home, study, answer side, windows)
+- **Windows preview for every window**: card browser, editor, statistics, deck options, Anki preferences and add-ons window, each in the chosen style (statistics and deck options are Anki's real pages)
+- Card designs: the buttons only become active once a style and note types are picked, and a line below says what's missing; click anywhere on a row to tick a note type; unused note types are hidden; a second click on a style removes it from the preview
+- Fixed: choosing a card design no longer locks the study background; "Background while studying" now always shows its effect in the preview and applying a card design no longer changes it
+- Answer buttons fit into the study preview
+
+### Online gallery
+- Much faster: thumbnail grid with small preview images (via wsrv.nl) instead of downloading every full-size wallpaper; the original is only downloaded when you use it
+- The image list is cached for a few days, so the gallery opens instantly
+- Fixed: Omarchy could disappear from the source list after picking ML4W (now two always-visible buttons); a slow answer can no longer show the wrong source or image
+
+### Add-on center
+- Pin add-ons to the top with the pin button
+
 ## 1.1.0 – 2026-10-20
 
 ### Designs & wallpapers

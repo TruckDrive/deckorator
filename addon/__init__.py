@@ -17,7 +17,7 @@ from aqt.toolbar import BottomToolbar, TopToolbar
 
 from . import desktop, log, system, theme, windows
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 MODULE = __name__
 ADDON_FOLDER = MODULE.split(".")[0]
 USER_DIR = os.path.join(os.path.dirname(__file__), "user_files")
@@ -177,6 +177,9 @@ def _page_css(scope, mode):
 
 
 def _on_page_styled(web):
+    if hasattr(web, "_ct_preview"):  # Seite in der Vorschau des Einstellungsfensters
+        web._ct_preview()
+        return
     _pages.add(web)
     _style_page(web)
 

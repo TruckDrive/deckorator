@@ -58,6 +58,7 @@ QPushButton:checked {{ background: {c['accent_soft']}; border-color: {c['accent'
 QPushButton:disabled {{ color: {c['sub']}; border-color: {c['border']}; }}
 QPushButton#ctPrimary {{ background: {c['accent']}; color: {c['on_accent']}; border: none; font-weight: 600; padding: 7px 20px; }}
 QPushButton#ctPrimary:hover {{ background: {theme._mix(c['accent'], '#000000', .1)}; }}
+QPushButton#ctPrimary:disabled {{ background: {c['input']}; color: {c['sub']}; border: 1px solid {c['border']}; }}
 QToolButton#ctPack {{ background: {c['input']}; border: 2px solid transparent; border-radius: 12px; padding: 6px;
   color: {c['text']}; font-weight: 600; }}
 QToolButton#ctPack:hover {{ border-color: {c['accent_soft']}; }}

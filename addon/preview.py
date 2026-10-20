@@ -100,21 +100,33 @@ class ThemePreview(QWidget):
         sl.setSpacing(0)
         self.card_web = self._web()
         self.bar_web = self._web()
-        self.bar_web.setFixedHeight(76)
+        self.bar_web.setFixedHeight(64)
+        # die Vorschau ist schmaler als Ankis Fenster; verkleinert passen alle vier Antwort-Buttons hinein
+        self.bar_web.setZoomFactor(.8)
         sl.addWidget(self.card_web, 1)
         sl.addWidget(self.bar_web)
         self.stack.addWidget(study)
-        from .mockwin import MockBrowser, MockPreferences
         wins = QWidget()
         wl = QVBoxLayout(wins)
         wl.setContentsMargins(0, 0, 0, 0)
+        row = QHBoxLayout()
+        row.setSpacing(4)
+        from .windows import WINDOW_KINDS
+        self.window_buttons = self._segmented(row, [(k, self.t("win_" + k)) for k in WINDOW_KINDS], self.set_window)
+        for b in self.window_buttons.values():
+            b.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
+            b.setMinimumWidth(40)
+            b.setStyleSheet("padding: 5px 4px;")
+        wl.addLayout(row)
         self.mode_info = QLabel()
         self.mode_info.setObjectName("ctHint")
-        self.mock_browser = MockBrowser(self.t)
-        self.mock_prefs = MockPreferences(self.t)
         wl.addWidget(self.mode_info)
-        wl.addWidget(self.mock_browser, 3)
-        wl.addWidget(self.mock_prefs, 2)
+        # Nachbauten erst bei Bedarf anlegen, Statistik und Stapeloptionen sind echte Anki-Seiten
+        self.window_stack = QStackedWidget()
+        self.mocks = {}
+        wl.addWidget(self.window_stack, 1)
+        self.window = "browser"
+        self.window_buttons[self.window].setChecked(True)
         self.stack.addWidget(wins)
         v.addWidget(self.stack, 1)
 
@@ -149,6 +161,17 @@ class ThemePreview(QWidget):
                 self._render_study()
         else:
             self._render_home()
+
+    def set_window(self, kind):
+        """Welches Fenster die Fenster-Vorschau zeigt."""
+        self.window = kind
+        self.window_buttons[kind].setChecked(True)
+        if self.view == "windows":
+            self._apply_windows()
+
+    def show_answer(self, on):
+        if self.view == "study" and self.answer_toggle.isChecked() != on:
+            self.answer_toggle.setChecked(on)
 
     def set_night(self, night):
         self.night = night
@@ -188,17 +211,18 @@ class ThemePreview(QWidget):
     def _apply(self, web, scope):
         # gleiche Ableitungen (z.B. Sparmodus) wie im Hauptfenster, damit die Vorschau stimmt
         cfg = self.api.effective(self.cfg)
-        if scope == "card" and self.card_style:
-            cfg = {**cfg, "review_background": "note"}  # so wie nach dem Anwenden eines Karten-Designs
         css = theme.build_css_text(cfg, scope, self.px, self.api.bg_url(cfg))
         if scope == "main":
             css += theme.banner_preview_css(cfg)
         web.eval(APPLY_JS % (json.dumps(css), json.dumps(self.night)))
 
     def set_card_style(self, style_id):
+        if style_id == self.card_style:
+            return
         self.card_style = style_id
         if self.view != "study":
-            self.set_view("study")
+            if style_id:
+                self.set_view("study")
         else:
             self._render_study()
 
@@ -212,14 +236,78 @@ class ThemePreview(QWidget):
   s.textContent = css;
 })(%s);""" % json.dumps(css))
 
-    def _apply_windows(self):
+    def _mock(self, kind):
+        if kind not in self.mocks:
+            from . import mockwin
+            if kind == "browser":
+                w = mockwin.MockBrowser(self.t)
+            elif kind == "preferences":
+                w = mockwin.MockPreferences(self.t)
+            elif kind == "addons":
+                w = mockwin.MockAddons(self.t)
+            elif kind == "editor":
+                self.editor_web = self._web()
+                self.editor_web.stdHtml(mockwin.editor_html(self.t), context=theme.PreviewContext())
+                w = mockwin.MockEditor(self.t, self.editor_web)
+            else:
+                w = self._page_web(kind)
+            self.mocks[kind] = w
+            self.window_stack.addWidget(w)
+        return self.mocks[kind]
+
+    def _page_web(self, kind):
+        """Echte Anki-Seite (Statistik, Stapeloptionen) zum Ansehen; Befehle der Seite werden ignoriert."""
+        from aqt.webview import AnkiWebViewKind
+        # die richtige Art, sonst verweigert Anki der Seite den Zugriff auf ihre Daten
+        w = AnkiWebView(self, kind=AnkiWebViewKind.DECK_STATS if kind == "stats" else AnkiWebViewKind.DECK_OPTIONS)
+        w.set_bridge_command(lambda _cmd: None, theme.PreviewContext())
+        w.setContextMenuPolicy(Qt.ContextMenuPolicy.NoContextMenu)
+        # Deckorator stylt Anki-Seiten nach dem Laden; diese hier stylt die Vorschau selbst
+        w._ct_preview = lambda: self._style_page_web(kind)
+        if kind == "stats":
+            w.load_sveltekit_page("graphs")
+        else:
+            w.load_sveltekit_page(f"deck-options/{mw.col.decks.get_current_id()}")
+            w.setEnabled(False)  # nur ansehen: hier soll niemand versehentlich echte Optionen speichern
+        w.setZoomFactor(.8)
+        return w
+
+    def _style_page_web(self, kind):
         from . import windows
+        w = self.mocks.get(kind)
+        if w is None or not self.cfg:
+            return
         cfg = self.api.effective(self.cfg)
-        windows._apply(self.mock_browser, "browser", cfg, self.night)
-        windows._apply(self.mock_prefs, "preferences", cfg, self.night)
-        names = {m: self.t("mode_" + m) for m in ("bold", "subtle", "original")}
-        self.mode_info.setText(self.t("mock_info").format(
-            browser=names[windows.window_mode(cfg, "browser")], prefs=names[windows.window_mode(cfg, "preferences")]))
+        mode = windows.window_mode(cfg, kind)
+        css = theme.build_css_text({**cfg, "window_style": mode}, "pages") if mode != "original" else ""
+        w.eval(APPLY_JS % (json.dumps(css), json.dumps(self.night)))
+
+    def _apply_windows(self):
+        from . import ui, windows
+        cfg = self.api.effective(self.cfg)
+        kind = self.window
+        w = self._mock(kind)
+        self.window_stack.setCurrentWidget(w)
+        # das Stylen setzt die Farben für selbst gezeichnete Schalter; die gehören dem Einstellungsfenster
+        saved = dict(ui.COLORS)
+        try:
+            if kind == "editor":
+                windows._apply(w, "addcards", cfg, self.night)
+                mode = windows.window_mode(cfg, "editor")
+                css = theme.build_css_text({**cfg, "window_style": mode}, "editor") if mode != "original" else ""
+                bold = mode == "bold"
+                self.editor_web.page().setBackgroundColor(QColor(0, 0, 0, 0) if bold else QColor(
+                    self.cfg["bg_dark"] if self.night else "#ffffff"))
+                self.editor_web.eval(APPLY_JS % (json.dumps(css), json.dumps(self.night)))
+            elif kind in ("stats", "deck_options"):
+                self._style_page_web(kind)
+            else:
+                windows._apply(w, kind, cfg, self.night)
+        finally:
+            ui.COLORS.clear()
+            ui.COLORS.update(saved)
+        mode = self.t("mode_" + windows.window_mode(cfg, kind))
+        self.mode_info.setText(self.t("mock_info").format(window=self.t("area_" + kind), mode=mode))
 
     def _apply_all(self):
         if self.view == "windows":
@@ -302,8 +390,11 @@ class ThemePreview(QWidget):
                 "<span class=learn-count>%s</span> + <span class=review-count>%s</span></span>" % tuple(counts))
 
     def cleanup(self):
-        for w in (self.home_web, self.card_web, self.bar_web):
-            w.cleanup()
+        webs = [self.home_web, self.card_web, self.bar_web, getattr(self, "editor_web", None)]
+        webs += [w for w in self.mocks.values() if isinstance(w, AnkiWebView)]
+        for w in webs:
+            if w is not None:
+                w.cleanup()
 
     def _bar_body(self, answer):
         if answer:
