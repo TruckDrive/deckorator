@@ -22,7 +22,14 @@ STRINGS = {
     "page_look": ("Aussehen", "Appearance"), "page_shape": ("Form", "Shape"),
     "page_text": ("Schrift", "Text"), "page_study": ("Lernen", "Studying"),
     "page_addons": ("Add-ons", "Add-ons"), "page_advanced": ("Erweitert", "Advanced"),
-    "presets": ("Vorlagen", "Presets"), "colors": ("Farben", "Colors"), "background": ("Hintergrund", "Background"),
+    "presets": ("Farbvorlagen", "Color presets"),
+    "packs": ("Theme-Pakete", "Theme packs"),
+    "packs_hint": ("Ein kompletter Look auf einen Klick: Hintergrundbild, Farben, Formen und Fensterstil.",
+                   "A complete look in one click: wallpaper, colors, shapes and window style."),
+    "pack_names": ({"sea": "Stille See", "dune": "Düne", "forest": "Nebelwald", "sunset": "Abendrot",
+                    "stars": "Sternennacht", "lake": "Bergsee", "minimal": "Minimal", "paper": "Papier"},
+                   {"sea": "Calm Sea", "dune": "Dune", "forest": "Misty Forest", "sunset": "Afterglow",
+                    "stars": "Starry Night", "lake": "Mountain Lake", "minimal": "Minimal", "paper": "Paper"}), "colors": ("Farben", "Colors"), "background": ("Hintergrund", "Background"),
     "accent": ("Akzentfarbe", "Accent color"),
     "bg_light": ("Hell", "Light"), "bg_dark": ("Dunkel", "Dark"),
     "bg_style": ("Stil", "Style"), "bg_intensity": ("Intensität", "Intensity"),
@@ -337,7 +344,58 @@ class ThemeDialog(QDialog):
         c.toggled.connect(self._changed)
         return c
 
+    def _pack_icon(self, key, pack):
+        """Vorschaubild: das Wallpaper, bei Musterpaketen eine Farbfläche mit Akzentpunkt."""
+        size = QSize(124, 70)
+        if pack.get("wallpaper"):
+            thumb = os.path.join(ADDON_DIR, "wallpapers", pack["wallpaper"].replace(".jpg", "_thumb.jpg"))
+            return QIcon(QPixmap(thumb).scaled(size, Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+                                              Qt.TransformationMode.SmoothTransformation))
+        # Musterpaket: helle Fläche mit Lichtschein in Akzentfarbe und dem Muster als Punkte
+        def color(alpha):  # QColor versteht kein CSS-rgba(), daher Hex + Alpha
+            c = QColor(pack["accent"])
+            c.setAlphaF(alpha)
+            return c
+
+        pm = QPixmap(size)
+        pm.fill(QColor(pack["bg_light"]))
+        p = QPainter(pm)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
+        glow = QRadialGradient(QPointF(size.width() / 2, -10), size.width() * .7)
+        glow.setColorAt(0, color(.45))
+        glow.setColorAt(1, color(0))
+        p.fillRect(pm.rect(), glow)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(color(.55))
+        for x in range(8, size.width(), 12):
+            for y in range(8, size.height(), 12):
+                p.drawEllipse(QPointF(x, y), 1.3, 1.3)
+        p.end()
+        return QIcon(pm)
+
     def _page_look(self):
+        packs = Section(t("packs"), t("packs_hint"))
+        pgrid = QGridLayout()
+        pgrid.setSpacing(10)
+        self.pack_buttons = {}
+        names = t("pack_names")
+        for i, (key, pack) in enumerate(theme.PACKS.items()):
+            b = QToolButton()
+            b.setText(names[key])
+            b.setIcon(self._pack_icon(key, pack))
+            b.setIconSize(QSize(124, 70))
+            b.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
+            b.setCheckable(True)
+            b.setCursor(Qt.CursorShape.PointingHandCursor)
+            # darf schmaler werden als sein Inhalt, sonst wird die Spalte breiter als sichtbar
+            b.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
+            b.setMinimumSize(90, 108)
+            b.setObjectName("ctPack")
+            b.clicked.connect(lambda _=False, k=key: self._apply_pack(k))
+            pgrid.addWidget(b, i // 3, i % 3)
+            self.pack_buttons[key] = b
+        packs.form.addRow(pgrid)
+
         presets = Section(t("presets"))
         grid = QGridLayout()
         grid.setSpacing(10)
@@ -411,7 +469,7 @@ class ThemeDialog(QDialog):
         self.img_row = QWidget()
         self.img_row.setLayout(img)
         bg.row(t("bg_image"), self.img_row)
-        return [presets, colors, bg]
+        return [packs, presets, colors, bg]
 
     def _page_shape(self):
         glass = Section(t("glass_title"), t("glass_hint"))
@@ -631,6 +689,8 @@ class ThemeDialog(QDialog):
     def _update_presets(self):
         for k, b in self.preset_buttons.items():
             b.setChecked(k == self.cfg.get("preset"))
+        for k, b in self.pack_buttons.items():
+            b.setChecked(k == self.cfg.get("pack"))
 
     def _update_image_label(self):
         name = self.cfg.get("bg_image") or ""
@@ -659,8 +719,23 @@ class ThemeDialog(QDialog):
 
     def _custom_changed(self):
         self.cfg["preset"] = ""
+        self.cfg["pack"] = ""
         self._update_presets()
         self._changed()
+
+    def _apply_pack(self, key):
+        pack = dict(theme.PACKS[key])
+        wallpaper = pack.pop("wallpaper", None)
+        self.cfg = self._collect()
+        self.cfg.update(pack)
+        self.cfg.update(preset="", pack=key, accent_source="manual")
+        if wallpaper:
+            name = desktop.prepare_image(os.path.join(ADDON_DIR, "wallpapers", wallpaper), USER_DIR, "background")
+            if name:
+                self.cfg["bg_image"] = name
+        self._load_into_widgets()
+        self._restyle()
+        self._render_preview()
 
     def _apply_preset(self, key):
         self.cfg = self._collect()
@@ -670,6 +745,7 @@ class ThemeDialog(QDialog):
             # automatische Akzentfarbe hat Vorrang, die Vorlage liefert nur den Rest
             self.cfg["accent"] = accent
         self.cfg["preset"] = key
+        self.cfg["pack"] = ""
         self._load_into_widgets()
         self._restyle()
         self._render_preview()

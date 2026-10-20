@@ -10,7 +10,7 @@ python -I - "$ROOT/dist/deckorator.ankiaddon" <<'PY'
 import sys, zipfile
 import glob
 # alle Quelldateien automatisch; nie persönliche Einstellungen (meta.json) oder Bilder aus user_files
-files = sorted(glob.glob("*.py") + glob.glob("assets/*")) + ["config.json", "config.md", "user_files/README.txt"]
+files = sorted(glob.glob("*.py") + glob.glob("assets/*") + glob.glob("wallpapers/*")) + ["config.json", "config.md", "user_files/README.txt"]
 with zipfile.ZipFile(sys.argv[1], "w", zipfile.ZIP_DEFLATED) as z:
     for f in files:
         z.write(f)

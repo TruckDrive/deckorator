@@ -4,7 +4,8 @@
 
 ### Features
 
-- **8 presets** or your own accent color, or take it from your **system accent color** or **desktop wallpaper**
+- **8 theme packs**: a complete look in one click, six with calm wallpapers
+- **8 color presets** or your own accent color, or take it from your **system accent color** or **desktop wallpaper**
 - **Backgrounds:** spotlight, dot grid, line grid, grain, waves, your own image, or your **desktop wallpaper** (re-synced on every start; live and video wallpapers become a still image)
 - **Calm study mode:** while reviewing, the background stays quiet so the card comes first
 - **Readable review counters** and tinted answer buttons

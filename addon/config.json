@@ -1,5 +1,6 @@
 {
     "preset": "rose",
+    "pack": "",
     "accent_source": "manual",
     "accent": "#db2777",
     "bg_light": "#f7f6f8",

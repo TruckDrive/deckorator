@@ -18,6 +18,28 @@ PRESETS = {
 
 IMAGE_EXTS = ("png", "jpg", "jpeg", "webp", "gif")
 
+# Theme-Pakete: komplette Looks auf einen Klick. Wallpaper liegen in wallpapers/ (CC0/gemeinfrei,
+# siehe wallpapers/CREDITS.md). Nicht genannte Einstellungen bleiben, wie der Nutzer sie hat.
+_PHOTO = {"background": "image", "bg_intensity": 55, "glass": True, "blur": 20, "glass_opacity": 55,
+          "radius": 18, "button_shape": "pill", "shadow": 2, "toolbar_style": "floating",
+          "window_style": "bold", "review_background": "calm"}
+PACKS = {
+    "sea":    {"wallpaper": "sea.jpg",    **_PHOTO, "accent": "#6b8cc7", "bg_light": "#f4f6f8", "bg_dark": "#121417"},
+    "dune":   {"wallpaper": "dune.jpg",   **_PHOTO, "accent": "#e08a3c", "bg_light": "#faf6f1", "bg_dark": "#17140f"},
+    "forest": {"wallpaper": "forest.jpg", **_PHOTO, "accent": "#3fa37e", "bg_light": "#f3f7f5", "bg_dark": "#111615"},
+    "sunset": {"wallpaper": "sunset.jpg", **_PHOTO, "accent": "#f0954b", "bg_light": "#faf6f2", "bg_dark": "#171310"},
+    "stars":  {"wallpaper": "stars.jpg",  **_PHOTO, "accent": "#8b7cf6", "bg_light": "#f6f5fa", "bg_dark": "#121119",
+               "bg_intensity": 70},
+    "lake":   {"wallpaper": "lake.jpg",   **_PHOTO, "accent": "#4c8fdb", "bg_light": "#f3f6fa", "bg_dark": "#111418"},
+    "minimal": {"accent": "#71717a", "bg_light": "#f5f5f5", "bg_dark": "#121212", "background": "dots",
+                "bg_intensity": 60, "glass": False, "radius": 10, "button_shape": "rounded", "shadow": 1,
+                "toolbar_style": "flat", "window_style": "subtle", "review_background": "calm"},
+    "paper":  {"accent": "#c2410c", "bg_light": "#f8f4ec", "bg_dark": "#1a1714", "background": "grain",
+               "bg_intensity": 80, "glass": True, "blur": 12, "glass_opacity": 75, "radius": 14,
+               "button_shape": "rounded", "shadow": 1, "toolbar_style": "floating", "window_style": "bold",
+               "review_background": "calm"},
+}
+
 
 def _rgb(hex_color):
     h = hex_color.lstrip("#")

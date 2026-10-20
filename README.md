@@ -9,7 +9,8 @@
 
 ## Features
 
-- **8 presets** or your own accent color. The accent can also come from your **system accent color** or your **desktop wallpaper**.
+- **8 theme packs** for a complete look in one click, six of them with calm wallpapers (sea, dunes, misty forest, afterglow, starry night, mountain lake)
+- **8 color presets** or your own accent color. The accent can also come from your **system accent color** or your **desktop wallpaper**.
 - **Backgrounds:** spotlight, dot grid, line grid, grain, waves, your own image, or your **desktop wallpaper**. The wallpaper is re-synced on every start, and live/video wallpapers become a still image.
 - **Calm study mode:** while you review, the background stays quiet so the card comes first.
 - **Readable review counters** (new / learning / review) and tinted answer buttons
@@ -52,4 +53,4 @@ The add-on lives in [`addon/`](addon). Symlink it into Anki's add-on folder (`ad
 
 ## License
 
-[GNU AGPL v3](LICENSE), the same license as Anki itself.
+[GNU AGPL v3](LICENSE), the same license as Anki itself. The bundled wallpapers are CC0 or public domain, see [addon/wallpapers/CREDITS.md](addon/wallpapers/CREDITS.md).
