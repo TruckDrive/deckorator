@@ -29,6 +29,8 @@
     "areas": {
         "main": true,
         "review_bar": true,
+        "browser": true,
+        "addons": true,
         "other": false
     },
     "custom_css": ""

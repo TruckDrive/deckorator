@@ -16,6 +16,7 @@
 - **"Studied today" highlighted** on the home screen
 - **[Review Heatmap](https://ankiweb.net/shared/info/1771074083) support:** fully restyled, colors only, or left untouched
 - **Performance mode:** on weak laptops (4 CPU threads or less, software rendering, on battery) blur is switched off automatically
+- **Card browser and add-ons window** in the same style (flag, marked and suspended colors stay as in Anki), each can be switched off
 - **Settings window with a live preview of your own decks and cards**, light and dark mode, theme export and import
 - English and German interface, follows Anki's language
 
@@ -26,6 +27,8 @@
 | Studying: question | Studying: answer |
 |---|---|
 | ![Calm study screen with counters](screenshots/study-question.png) | ![Answer buttons tinted by rating](screenshots/study-answer.png) |
+
+![Card browser](screenshots/browser.png)
 
 ![Settings window with live preview](screenshots/settings.png)
 

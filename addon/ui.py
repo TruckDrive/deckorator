@@ -31,10 +31,13 @@ def _luma(hex_color):
     return (0.299 * r + 0.587 * g + 0.114 * b) / 255
 
 
-def stylesheet(c):
+def stylesheet(c, root="QDialog#ctDialog", font_size="10pt"):
+    """Qt-Stylesheet im Deckorator-Look. root = Selektor des Fensters, font_size=None lässt
+    die Schriftgröße unangetastet (z.B. für die Kartenverwaltung mit eigener Schrifteinstellung)."""
+    size = f" font-size: {font_size};" if font_size else ""
     return f"""
-QDialog#ctDialog {{ background: {c['window']}; }}
-QDialog#ctDialog QWidget {{ color: {c['text']}; font-size: 10pt; }}
+{root} {{ background: {c['window']}; }}
+{root} QWidget {{ color: {c['text']};{size} }}
 QScrollArea, QScrollArea > QWidget > QWidget, QStackedWidget, QWidget#ctPage {{ background: transparent; border: none; }}
 
 QListWidget#ctNav {{ background: transparent; border: none; outline: 0; padding-top: 4px; }}
@@ -42,9 +45,9 @@ QListWidget#ctNav::item {{ padding: 9px 14px; margin: 1px 0; border-radius: 10px
 QListWidget#ctNav::item:hover {{ background: {c['accent_soft']}; }}
 QListWidget#ctNav::item:selected {{ background: {c['accent_soft']}; color: {c['accent_text']}; font-weight: 600; }}
 
-QDialog#ctDialog QLabel#ctPageTitle {{ font-size: 18pt; font-weight: 700; padding: 0 2px 4px; }}
-QDialog#ctDialog QLabel#ctSectionTitle {{ font-weight: 650; font-size: 10.5pt; }}
-QDialog#ctDialog QLabel#ctHint {{ color: {c['sub']}; font-size: 9pt; }}
+{root} QLabel#ctPageTitle {{ font-size: 18pt; font-weight: 700; padding: 0 2px 4px; }}
+{root} QLabel#ctSectionTitle {{ font-weight: 650; font-size: 10.5pt; }}
+{root} QLabel#ctHint {{ color: {c['sub']}; font-size: 9pt; }}
 QFrame#ctCard {{ background: {c['surface']}; border: 1px solid {c['border']}; border-radius: 14px; }}
 QFrame#ctPreviewFrame {{ background: {c['surface']}; border: 1px solid {c['border']}; border-radius: 14px; }}
 

@@ -8,14 +8,14 @@ import sys
 from aqt import gui_hooks, mw
 from aqt.deckbrowser import DeckBrowser, DeckBrowserBottomBar
 from aqt.overview import Overview, OverviewBottomBar
-from aqt.qt import QAction
+from aqt.qt import QAction, QTimer
 from aqt.reviewer import Reviewer, ReviewerBottomBar
 from aqt.theme import theme_manager
 from aqt.toolbar import BottomToolbar, TopToolbar
 
-from . import desktop, log, system, theme
+from . import desktop, log, system, theme, windows
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 MODULE = __name__
 ADDON_FOLDER = MODULE.split(".")[0]
 USER_DIR = os.path.join(os.path.dirname(__file__), "user_files")
@@ -143,6 +143,12 @@ def _refresh_ui():
 def save_config(cfg):
     mw.addonManager.writeConfig(MODULE, {k: v for k, v in cfg.items() if not k.startswith("_")})
     _refresh_ui()
+    windows.refresh_all(load_config())
+
+
+def _on_theme_change():
+    # nach Ankis eigenen Handlern, die z.B. das Sidebar-Styling zurücksetzen
+    QTimer.singleShot(0, lambda: windows.refresh_all(load_config()))
 
 
 def sync_desktop(cfg, force=False):
@@ -180,6 +186,9 @@ def _setup_menu():
 
 gui_hooks.webview_will_set_content.append(_inject)
 gui_hooks.deck_browser_will_render_content.append(_highlight_today)
+gui_hooks.browser_will_show.append(lambda browser: windows.register(browser, "browser", load_config()))
+gui_hooks.addons_dialog_will_show.append(lambda dialog: windows.register(dialog, "addons", load_config()))
+gui_hooks.theme_did_change.append(_on_theme_change)
 gui_hooks.profile_did_open.append(_sync_on_start)
 gui_hooks.main_window_did_init.append(_setup_menu)
 # Bei Änderung über Ankis JSON-Editor ebenfalls neu zeichnen

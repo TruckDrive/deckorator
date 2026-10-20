@@ -8,8 +8,9 @@ cd "$ROOT/addon"
 rm -rf __pycache__
 python -I - "$ROOT/dist/deckorator.ankiaddon" <<'PY'
 import sys, zipfile
-files = ["__init__.py", "theme.py", "dialog.py", "preview.py", "ui.py", "desktop.py", "system.py", "log.py",
-         "config.json", "config.md", "user_files/README.txt", "assets/chevron-light.svg", "assets/chevron-dark.svg"]
+import glob
+# alle Quelldateien automatisch; nie persönliche Einstellungen (meta.json) oder Bilder aus user_files
+files = sorted(glob.glob("*.py") + glob.glob("assets/*")) + ["config.json", "config.md", "user_files/README.txt"]
 with zipfile.ZipFile(sys.argv[1], "w", zipfile.ZIP_DEFLATED) as z:
     for f in files:
         z.write(f)
