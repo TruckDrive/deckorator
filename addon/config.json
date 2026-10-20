@@ -18,6 +18,7 @@
     "toolbar_style": "floating",
     "compact": false,
     "performance": "auto",
+    "window_style": "bold",
     "font_family": "",
     "font_scale": 100,
     "count_badges": true,

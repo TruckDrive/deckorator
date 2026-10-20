@@ -7,10 +7,10 @@ import re
 import sys
 import weakref
 
-from aqt import gui_hooks, mw
+from aqt import colors, gui_hooks, mw
 from aqt.deckbrowser import DeckBrowser, DeckBrowserBottomBar
 from aqt.overview import Overview, OverviewBottomBar
-from aqt.qt import QAction, QTimer
+from aqt.qt import QAction, QColor, QTimer
 from aqt.reviewer import Reviewer, ReviewerBottomBar
 from aqt.theme import theme_manager
 from aqt.toolbar import BottomToolbar, TopToolbar
@@ -126,20 +126,25 @@ def _style_page(web):
     try:
         cfg, _css = _cached()
         area = PAGE_AREAS.get(web.kind.value, "other")
-        text = _page_css() if cfg["areas"].get(area, False) else ""
+        enabled = cfg["areas"].get(area, False)
+        editor = area == "editor"
+        text = _page_css("editor" if editor else "pages") if enabled else ""
+        if editor:
+            # durchsichtig, damit der Fensterhintergrund (Spotlight) hinter den Feldern sichtbar ist
+            transparent = enabled and cfg.get("window_style", "bold") == "bold"
+            web.page().setBackgroundColor(QColor(0, 0, 0, 0) if transparent else theme_manager.qcolor(colors.CANVAS))
         web.eval(PAGE_JS % json.dumps(text))
     except Exception as e:
         log.record("page", e)
 
 
-_page_css_cache = None
+_page_css_cache = {}
 
 
-def _page_css():
-    global _page_css_cache
-    if _page_css_cache is None:
-        _page_css_cache = theme.build_css_text(_cached()[0], "pages")
-    return _page_css_cache
+def _page_css(scope):
+    if scope not in _page_css_cache:
+        _page_css_cache[scope] = theme.build_css_text(_cached()[0], scope)
+    return _page_css_cache[scope]
 
 
 def _on_page_styled(web):
@@ -164,7 +169,7 @@ def _highlight_today(deck_browser, content):
 def _refresh_ui():
     global _cache, _page_css_cache
     _cache = None
-    _page_css_cache = None
+    _page_css_cache = {}
     for web in list(_pages):
         _style_page(web)
     try:
@@ -188,7 +193,11 @@ def save_config(cfg):
 
 def _on_theme_change():
     # nach Ankis eigenen Handlern, die z.B. das Sidebar-Styling zurücksetzen
-    QTimer.singleShot(0, lambda: windows.refresh_all(load_config()))
+    def later():
+        windows.refresh_all(load_config())
+        for web in list(_pages):  # Anki setzt den Seitenhintergrund beim Wechsel zurück
+            _style_page(web)
+    QTimer.singleShot(0, later)
 
 
 def sync_desktop(cfg, force=False):

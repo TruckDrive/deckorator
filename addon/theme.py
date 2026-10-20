@@ -429,7 +429,28 @@ html body { background-color: var(--ct-canvas) !important; }
 .range-box { background: var(--ct-canvas) !important; border-bottom-color: var(--ct-border) !important; }
 """
 
-SCOPES = ("main", "bar", "card", "colors", "pages")
+# Kräftiger Fensterstil auf Statistik/Stapeloptionen: Spotlight und Überschriften in Akzentfarbe
+PAGES_BOLD = """
+html body { background: radial-gradient(ellipse 75% 55% at 50% -12%, var(--ct-glow), transparent 70%) fixed,
+  var(--ct-canvas) !important; }
+h1 { color: var(--ct-accent-text) !important; }
+.range-box { background: var(--ct-glass) !important; backdrop-filter: blur(var(--ct-blur)); }
+"""
+
+# Kräftiger Stil im Editor: durchsichtiger Hintergrund (das Fenster dahinter trägt den Spotlight),
+# Felder als Glaskarten, Feldnamen und Schlagwörter in Akzentfarbe
+EDITOR_BOLD = """
+html, html body { background: transparent !important; }
+.field-container, .label-container, .editing-area { background: transparent !important; }
+.editor-field { background: var(--ct-glass) !important; border: 1px solid var(--ct-glass-edge) !important;
+  border-radius: calc(var(--ct-radius) * .8) !important; }
+.label-container { color: var(--ct-accent-text) !important; font-weight: 600; }
+.fields { grid-gap: 12px !important; }
+.tag { background: var(--ct-accent-bg) !important; color: var(--ct-accent-text) !important;
+  border-radius: 999px !important; --border-color: transparent; }
+"""
+
+SCOPES = ("main", "bar", "card", "colors", "pages", "editor")
 
 COMPACT = """
 html body #outer, html body .overview, html body #studiedToday { padding: 8px !important; }
@@ -455,12 +476,16 @@ def build_css_text(cfg, scope="main", base_px=None, bg_url=None):
         for sel, night in (("html:root:not(.night-mode)", False), ("html:root.night-mode", True)):
             bg, pattern, mask = _background(cfg, night, bg_url)
             parts.append(f"{sel} {{ --ct-bg: {bg}; --ct-pattern: {pattern}; --ct-mask: {mask}; }}\n")
-    if scope == "pages":
+    if scope in ("pages", "editor"):
         r = cfg["radius"]
         radii = (f"--border-radius: {max(4, round(r * .45))}px; --border-radius-medium: {max(6, r)}px; "
                  f"--border-radius-large: {max(8, round(r * 1.3))}px;")
         parts.append(f"html:root:not(.night-mode), html:root.night-mode {{ {radii} }}\n")
         parts.append(PAGES_CSS)
+        if cfg.get("window_style", "bold") == "bold":
+            glow = _rgba(cfg["accent"], .22)
+            parts.append(f"html:root {{ --ct-glow: {glow}; }}\n")
+            parts.append(EDITOR_BOLD if scope == "editor" else PAGES_BOLD)
         return "".join(parts)
     if scope == "colors":
         parts.append(COLORS_ONLY)

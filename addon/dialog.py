@@ -36,6 +36,12 @@ STRINGS = {
                      "erscheinen als Standbild.",
                      "Currently: {name}. Re-synced every time Anki starts. Live and video wallpapers "
                      "show up as a still image."),
+    "windows": ("Andere Fenster", "Other windows"),
+    "windows_hint": ("Kartenverwaltung, Hinzufügen, Statistik, Stapeloptionen und Add-on-Liste.",
+                     "Card browser, add, statistics, deck options and add-ons window."),
+    "window_style": ("Stil", "Style"),
+    "ws_bold": ("Kräftig: Spotlight, Glaskarten, Akzente", "Bold: spotlight, glass cards, accents"),
+    "ws_subtle": ("Dezent: nur Farben und Rundungen", "Subtle: colors and corners only"),
     "performance": ("Leistung", "Performance"), "perf_mode": ("Effekte", "Effects"),
     "perf_auto": ("Automatisch an die Hardware anpassen", "Adapt to the hardware automatically"),
     "perf_full": ("Alle Effekte", "All effects"),
@@ -425,6 +431,10 @@ class ThemeDialog(QDialog):
         self.compact = self._toggle(t("compact"))
         bars.row(self.compact)
 
+        wins = Section(t("windows"), t("windows_hint"))
+        self.window_style = wins.row(t("window_style"), self._combo(
+            [("bold", t("ws_bold")), ("subtle", t("ws_subtle"))]))
+
         perf = Section(t("performance"))
         self.performance = perf.row(t("perf_mode"), self._combo(
             [("auto", t("perf_auto")), ("full", t("perf_full")), ("light", t("perf_light"))]))
@@ -433,7 +443,7 @@ class ThemeDialog(QDialog):
         self.perf_info.setObjectName("ctHint")
         self.perf_info.setWordWrap(True)
         perf.row(self.perf_info)
-        return [perf, glass, shapes, bars]
+        return [perf, glass, shapes, bars, wins]
 
     def _hardware_text(self):
         hw = self.api.hardware()
@@ -554,6 +564,7 @@ class ThemeDialog(QDialog):
         self._set_combo(self.shadow, c["shadow"])
         self._set_combo(self.toolbar_style, c["toolbar_style"])
         self._set_combo(self.performance, c["performance"])
+        self._set_combo(self.window_style, c["window_style"])
         self.compact.setChecked(c["compact"])
         self.font_default.setChecked(not c["font_family"])
         # ohne eigene Schrift die Anki-Schrift vorauswählen, nicht den ersten Eintrag der Liste
@@ -584,6 +595,7 @@ class ThemeDialog(QDialog):
             "button_shape": self.button_shape.currentData(), "shadow": self.shadow.currentData(),
             "toolbar_style": self.toolbar_style.currentData(), "compact": self.compact.isChecked(),
             "performance": self.performance.currentData(),
+            "window_style": self.window_style.currentData(),
             "font_family": "" if self.font_default.isChecked() else self.font_family.currentFont().family(),
             "font_scale": self.font_scale.slider.value(),
             "count_badges": self.count_badges.isChecked(), "colored_answers": self.colored_answers.isChecked(),

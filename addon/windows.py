@@ -43,6 +43,28 @@ QTreeView::item:hover {{ background: {hover}; }}
 QTreeView::item:selected {{ background: {accent_soft}; color: {accent_text}; }}
 """
 
+# "Kräftig": Spotlight in Akzentfarbe hinter dem Fenster, schwebende Glas-Karten, Akzente
+BOLD = """
+{root} {{ background: qradialgradient(cx:0.5, cy:-0.2, radius:1.05, fx:0.5, fy:-0.2,
+  stop:0 {glow}, stop:0.6 {window}, stop:1 {window}); }}
+{root} QTableView {{ background: {panel}; alternate-background-color: {panel_alt}; border: 1px solid {edge};
+  border-radius: 16px; }}
+{root} QHeaderView::section {{ background: transparent; color: {accent_text}; border: none;
+  border-bottom: 2px solid {accent}; padding: 9px 10px; font-weight: 650; }}
+{root} QTableCornerButton::section {{ background: transparent; }}
+{root} QComboBox#searchEdit {{ background: {panel}; border: 1px solid {accent_mid}; }}
+{root} QListWidget {{ background: {panel}; border: 1px solid {edge}; border-radius: 16px; }}
+{root} QListWidget::item:selected {{ background: {accent}; color: {on_accent}; }}
+"""
+
+SIDEBAR_BOLD = """
+QTreeView {{ background: {panel}; border: 1px solid {edge}; border-radius: 16px; padding: 8px 4px 8px 6px; outline: 0;
+  show-decoration-selected: 0; }}
+QTreeView::item {{ padding: 4px 6px; border-radius: 8px; }}
+QTreeView::item:hover {{ background: {hover}; }}
+QTreeView::item:selected {{ background: {accent}; color: {on_accent}; }}
+"""
+
 ADDON_LIST = """
 {root} QListWidget {{ background: {surface}; border: 1px solid {border}; border-radius: 12px; padding: 6px; outline: 0; }}
 {root} QListWidget::item {{ padding: 7px 10px; border-radius: 8px; }}
@@ -67,7 +89,17 @@ def _colors(cfg):
                  border=theme._mix(bg, "#000000", .1), track=theme._mix(bg, "#000000", .18))
     c["alt"] = "#26262b" if night else "#f8f8fa"
     c["hover"] = "rgba(255,255,255,.05)" if night else "rgba(0,0,0,.04)"
+    # für den kräftigen Stil
+    c["glow"] = theme._mix(c["window"], cfg["accent"], .30 if night else .18)
+    c["panel"] = "rgba(255,255,255,.045)" if night else "rgba(255,255,255,.80)"
+    c["panel_alt"] = "rgba(255,255,255,.075)" if night else "rgba(250,250,252,.88)"
+    c["edge"] = "rgba(255,255,255,.09)" if night else "rgba(0,0,0,.08)"
+    c["accent_mid"] = theme._rgba(cfg["accent"], .55)
     return c
+
+
+def _bold(cfg):
+    return cfg.get("window_style", "bold") == "bold"
 
 
 def _style_browser(browser, cfg):
@@ -75,9 +107,17 @@ def _style_browser(browser, cfg):
     root = "QMainWindow#ctWindow"
     browser.setObjectName("ctWindow")
     # Schriftgröße nicht anfassen: die Kartenverwaltung hat eine eigene Schrifteinstellung
-    browser.setStyleSheet(ui.stylesheet(c, root, font_size=None) + TABLE.format(root=root, **c))
-    browser.sidebar.setStyleSheet(SIDEBAR.format(**c))
-    browser.form.tableView.setShowGrid(False)
+    bold = _bold(cfg)
+    browser.setStyleSheet(ui.stylesheet(c, root, font_size=None) + TABLE.format(root=root, **c)
+                          + (BOLD.format(root=root, **c) if bold else ""))
+    browser.sidebar.setStyleSheet((SIDEBAR_BOLD if bold else SIDEBAR).format(**c))
+    table = browser.form.tableView
+    table.setShowGrid(False)
+    # luftigere Zeilen im kräftigen Stil; Ankis Höhe merken, um sie wiederherzustellen
+    header = table.verticalHeader()
+    if not hasattr(browser, "_ct_row_height"):
+        browser._ct_row_height = header.defaultSectionSize()
+    header.setDefaultSectionSize(browser._ct_row_height + (10 if bold else 0))
     if not getattr(browser, "_ct_popup", False):
         ui.modern_popup(browser.form.searchEdit)
         browser._ct_popup = True
@@ -87,6 +127,8 @@ def _unstyle_browser(browser):
     browser.setStyleSheet("")
     browser.sidebar._setup_style()  # Ankis eigenes Sidebar-Styling zurück
     browser.form.tableView.setShowGrid(True)
+    if hasattr(browser, "_ct_row_height"):
+        browser.form.tableView.verticalHeader().setDefaultSectionSize(browser._ct_row_height)
 
 
 def _style_addcards(window, cfg):
@@ -97,14 +139,15 @@ def _style_addcards(window, cfg):
     if add_button is not None:
         # Hauptaktion in Akzentfarbe; Name vor dem Stylesheet setzen, sonst greift die Regel nicht
         add_button.setObjectName("ctPrimary")
-    window.setStyleSheet(ui.stylesheet(c, root, font_size=None))
+    window.setStyleSheet(ui.stylesheet(c, root, font_size=None) + (BOLD.format(root=root, **c) if _bold(cfg) else ""))
 
 
 def _style_addons(dialog, cfg):
     c = _colors(cfg)
     root = "QDialog#ctAddons"
     dialog.setObjectName("ctAddons")
-    dialog.setStyleSheet(ui.stylesheet(c, root) + ADDON_LIST.format(root=root, **c))
+    dialog.setStyleSheet(ui.stylesheet(c, root) + ADDON_LIST.format(root=root, **c)
+                         + (BOLD.format(root=root, **c) if _bold(cfg) else ""))
 
 
 def _apply(window, kind, cfg):
