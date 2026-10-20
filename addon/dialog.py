@@ -22,13 +22,41 @@ STRINGS = {
     "page_look": ("Aussehen", "Appearance"), "page_shape": ("Form", "Shape"),
     "page_text": ("Schrift", "Text"), "page_study": ("Lernen", "Studying"),
     "page_addons": ("Add-ons", "Add-ons"), "page_advanced": ("Erweitert", "Advanced"),
+    "page_areas": ("Bereiche", "Areas"),
+    "areas_hint": ("Für jeden Teil von Anki einzeln: Deckorator-Look oder Anki-Original. Bei Fenstern zusätzlich "
+                   "„Kräftig“ (Spotlight, Glaskarten, Akzente) oder „Dezent“ (nur Farben und Rundungen).",
+                   "For every part of Anki separately: Deckorator look or Anki's original. Windows can also be "
+                   "“Bold” (spotlight, glass cards, accents) or “Subtle” (colors and corners only)."),
+    "areas_home": ("Startseite & Hauptfenster", "Home & main window"),
+    "areas_windows": ("Fenster", "Windows"),
+    "mode_on": ("Deckorator", "Deckorator"), "mode_original": ("Anki-Original", "Anki original"),
+    "mode_bold": ("Kräftig", "Bold"), "mode_subtle": ("Dezent", "Subtle"), "mode_colors": ("Nur Farben", "Colors only"),
+    "all_original": ("Alles auf Anki-Original", "Everything to Anki original"),
+    "all_bold": ("Alles auf Kräftig", "Everything to bold"),
+    "style_art": ("Illustration", "Illustration"),
+    "art_motif": ("Motiv", "Motif"),
+    "art_names": ({"fuji": "Fuji", "lofi_city": "Lofi-Stadt", "sakura": "Sakura", "mountains": "Gebirge",
+                   "planet": "Planet", "flow": "Linienfluss", "topo": "Topografie", "bauhaus": "Bauhaus"},
+                  {"fuji": "Fuji", "lofi_city": "Lofi City", "sakura": "Sakura", "mountains": "Mountains",
+                   "planet": "Planet", "flow": "Flow Lines", "topo": "Topography", "bauhaus": "Bauhaus"}),
+    "banner": ("Banner in der oberen Leiste", "Banner in the top bar"),
+    "banner_hint": ("Ein Motiv hinter Stapel, Hinzufügen, Kartenverwaltung … Beim Lernen bleibt die Leiste ruhig.",
+                    "A motif behind Decks, Add, Browse … The bar stays calm while you study."),
+    "banner_motif": ("Motiv", "Motif"), "banner_none": ("Kein Banner", "No banner"),
+    "banner_art": ("Illustration: {name}", "Illustration: {name}"), "banner_photo": ("Foto: {name}", "Photo: {name}"),
+    "banner_image": ("Eigenes Bild", "Own image"), "banner_height": ("Höhe", "Height"),
+    "bh_small": ("Schmal", "Slim"), "bh_medium": ("Mittel", "Medium"), "bh_large": ("Hoch", "Tall"),
     "presets": ("Farbvorlagen", "Color presets"),
     "packs": ("Theme-Pakete", "Theme packs"),
     "packs_hint": ("Ein kompletter Look auf einen Klick: Hintergrundbild, Farben, Formen und Fensterstil.",
                    "A complete look in one click: wallpaper, colors, shapes and window style."),
-    "pack_names": ({"sea": "Stille See", "dune": "Düne", "forest": "Nebelwald", "sunset": "Abendrot",
+    "pack_names": ({"fuji": "Fuji", "lofi": "Lofi-Nacht", "sakura": "Sakura", "mountains": "Gebirge",
+                    "planet": "Planet", "flow": "Linienfluss", "topo": "Topografie", "bauhaus": "Bauhaus",
+                    "sea": "Stille See", "dune": "Düne", "forest": "Nebelwald", "sunset": "Abendrot",
                     "stars": "Sternennacht", "lake": "Bergsee", "minimal": "Minimal", "paper": "Papier"},
-                   {"sea": "Calm Sea", "dune": "Dune", "forest": "Misty Forest", "sunset": "Afterglow",
+                   {"fuji": "Fuji", "lofi": "Lofi Night", "sakura": "Sakura", "mountains": "Mountains",
+                    "planet": "Planet", "flow": "Flow Lines", "topo": "Topography", "bauhaus": "Bauhaus",
+                    "sea": "Calm Sea", "dune": "Dune", "forest": "Misty Forest", "sunset": "Afterglow",
                     "stars": "Starry Night", "lake": "Mountain Lake", "minimal": "Minimal", "paper": "Paper"}), "colors": ("Farben", "Colors"), "background": ("Hintergrund", "Background"),
     "accent": ("Akzentfarbe", "Accent color"),
     "bg_light": ("Hell", "Light"), "bg_dark": ("Dunkel", "Dark"),
@@ -110,7 +138,7 @@ STRINGS = {
     "area_editor": ("Editor (Hinzufügen, Bearbeiten, Kartenverwaltung)", "Editor (add, edit, card browser)"),
     "area_stats": ("Statistik", "Statistics"),
     "area_deck_options": ("Stapeloptionen", "Deck options"),
-    "area_other": ("Farben auch in anderen Fenstern (Editor, Kartenvorschau)", "Colors in other windows too (editor, card preview)"),
+    "area_other": ("Andere Fenster (Kartenvorschau, Notiztypen …)", "Other windows (card preview, note types …)"),
     "review_bg": ("Hintergrund beim Lernen", "Background while studying"),
     "rb_calm": ("Ruhig: Theme-Farbe, keine Effekte", "Calm: theme color, no effects"),
     "rb_full": ("Wie auf der Startseite", "Same as the home screen"),
@@ -156,7 +184,7 @@ STRINGS = {
                       "coral": "Coral", "teal": "Teal", "graphite": "Graphite"}),
 }
 
-PAGES = ("look", "shape", "text", "study", "addons", "advanced")
+PAGES = ("look", "shape", "text", "study", "areas", "addons", "advanced")
 # Werte, die an diesen Rechner gebunden sind und beim Teilen nicht mitwandern
 PRIVATE_KEYS = ("bg_image", "desktop_image", "desktop_sig")
 
@@ -251,6 +279,7 @@ class ThemeDialog(QDialog):
         self.nav.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.pages = QStackedWidget()
         builders = {"look": self._page_look, "shape": self._page_shape, "text": self._page_text,
+                    "areas": self._page_areas,
                     "study": self._page_study, "addons": self._page_addons, "advanced": self._page_advanced}
         for key in PAGES:
             self.nav.addItem(t("page_" + key))
@@ -347,6 +376,19 @@ class ThemeDialog(QDialog):
     def _pack_icon(self, key, pack):
         """Vorschaubild: das Wallpaper, bei Musterpaketen eine Farbfläche mit Akzentpunkt."""
         size = QSize(124, 70)
+        if pack.get("art"):
+            from PyQt6.QtSvg import QSvgRenderer
+            from . import art
+            pm = QPixmap(size)
+            p = QPainter(pm)
+            p.setClipRect(pm.rect())
+            # feine Linienmotive sind im Dunkeln als kleines Bild kaum zu erkennen
+            svg = art.wallpaper_svg(pack["art"], pack["accent"], pack["art"] not in ("topo", "flow"))
+            # Seitenverhältnis wie "slice": auf Breite skalieren, vertikal zentrieren
+            h = size.width() * art.H / art.W
+            QSvgRenderer(QByteArray(svg.encode())).render(p, QRectF(0, (size.height() - h) / 2, size.width(), h))
+            p.end()
+            return QIcon(pm)
         if pack.get("wallpaper"):
             thumb = os.path.join(ADDON_DIR, "wallpapers", pack["wallpaper"].replace(".jpg", "_thumb.jpg"))
             return QIcon(QPixmap(thumb).scaled(size, Qt.AspectRatioMode.KeepAspectRatioByExpanding,
@@ -449,6 +491,11 @@ class ThemeDialog(QDialog):
         self.bg_style = self._combo([(s, t("style_" + s)) for s in theme.BACKGROUND_STYLES])
         self.bg_style.currentIndexChanged.connect(self._style_changed)
         bg.row(t("bg_style"), self.bg_style)
+        from . import art
+        art_names = t("art_names")
+        self.art = self._combo([(n, art_names[n]) for n in art.ART])
+        self.art_label = QLabel(t("art_motif"))
+        bg.form.addRow(self.art_label, self.art)
         self.desktop_info = QLabel()
         self.desktop_info.setObjectName("ctHint")
         self.desktop_info.setWordWrap(True)
@@ -469,7 +516,33 @@ class ThemeDialog(QDialog):
         self.img_row = QWidget()
         self.img_row.setLayout(img)
         bg.row(t("bg_image"), self.img_row)
-        return [packs, presets, colors, bg]
+        self.bg_form = bg.form
+
+        banner = Section(t("banner"), t("banner_hint"))
+        items = [("", t("banner_none"))]
+        items += [(f"art:{n}", t("banner_art").format(name=art_names[n])) for n in art.ART]
+        pack_names = t("pack_names")
+        items += [(f"photo:{k}", t("banner_photo").format(name=pack_names[k]))
+                  for k, pk in theme.PACKS.items() if pk.get("wallpaper")]
+        items += [("image", t("banner_image"))]
+        self.banner = banner.row(t("banner_motif"), self._combo(items))
+        self.banner.currentIndexChanged.connect(self._update_enabled)
+        self.banner_height = banner.row(t("banner_height"), self._combo(
+            [("small", t("bh_small")), ("medium", t("bh_medium")), ("large", t("bh_large"))]))
+        brow = QHBoxLayout()
+        brow.setContentsMargins(0, 0, 0, 0)
+        self.banner_image_label = QLabel()
+        self.banner_image_label.setObjectName("ctHint")
+        self.banner_image_label.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
+        b_banner = QPushButton(t("choose"))
+        b_banner.clicked.connect(self._choose_banner)
+        brow.addWidget(self.banner_image_label, 1)
+        brow.addWidget(b_banner)
+        self.banner_row = QWidget()
+        self.banner_row.setLayout(brow)
+        banner.row(t("banner_image"), self.banner_row)
+        self.banner_form = banner.form
+        return [packs, presets, colors, bg, banner]
 
     def _page_shape(self):
         glass = Section(t("glass_title"), t("glass_hint"))
@@ -490,10 +563,6 @@ class ThemeDialog(QDialog):
         self.compact = self._toggle(t("compact"))
         bars.row(self.compact)
 
-        wins = Section(t("windows"), t("windows_hint"))
-        self.window_style = wins.row(t("window_style"), self._combo(
-            [("bold", t("ws_bold")), ("subtle", t("ws_subtle"))]))
-
         perf = Section(t("performance"))
         self.performance = perf.row(t("perf_mode"), self._combo(
             [("auto", t("perf_auto")), ("full", t("perf_full")), ("light", t("perf_light"))]))
@@ -502,7 +571,33 @@ class ThemeDialog(QDialog):
         self.perf_info.setObjectName("ctHint")
         self.perf_info.setWordWrap(True)
         perf.row(self.perf_info)
-        return [perf, glass, shapes, bars, wins]
+        return [perf, glass, shapes, bars]
+
+    def _page_areas(self):
+        from . import windows
+        home = Section(t("areas_home"), t("areas_hint"))
+        two = [("on", t("mode_on")), ("original", t("mode_original"))]
+        self.area_modes = {}
+        for key in ("main", "review_bar"):
+            self.area_modes[key] = home.row(t("area_" + key), self._combo(two))
+        self.area_modes["other"] = home.row(t("area_other"), self._combo(
+            [("on", t("mode_colors")), ("original", t("mode_original"))]))
+        wins = Section(t("areas_windows"))
+        three = [("bold", t("mode_bold")), ("subtle", t("mode_subtle")), ("original", t("mode_original"))]
+        for kind in windows.WINDOW_KINDS:
+            self.area_modes[kind] = wins.row(t("area_" + kind), self._combo(three))
+        h = QHBoxLayout()
+        for label, mode in ((t("all_bold"), "bold"), (t("all_original"), "original")):
+            b = QPushButton(label)
+            b.clicked.connect(lambda _=False, m=mode: self._set_all_areas(m))
+            h.addWidget(b)
+        h.addStretch()
+        wins.form.addRow(h)
+        return [home, wins]
+
+    def _set_all_areas(self, mode):
+        for key, combo in self.area_modes.items():
+            self._set_combo(combo, mode if combo.findData(mode) >= 0 else ("on" if mode != "original" else "original"))
 
     def _hardware_text(self):
         hw = self.api.hardware()
@@ -559,12 +654,6 @@ class ThemeDialog(QDialog):
         return [sec]
 
     def _page_advanced(self):
-        areas = Section(t("areas"))
-        self.area_checks = {}
-        for key in ("main", "review_bar", "browser", "editor", "stats", "deck_options", "preferences", "addons", "other"):
-            c = self._toggle(t("area_" + key))
-            areas.row(c)
-            self.area_checks[key] = c
         motion = Section(t("motion"), t("motion_hint"))
         self.animations = self._toggle(t("animations"))
         motion.row(self.animations)
@@ -593,7 +682,7 @@ class ThemeDialog(QDialog):
         hh.addWidget(b_diag)
         hh.addStretch()
         help_.form.addRow(hh)
-        return [areas, motion, css, share, help_]
+        return [motion, css, share, help_]
 
     def _copy_diagnostics(self):
         QApplication.clipboard().setText(diagnostics(self.api, self._collect()))
@@ -623,7 +712,6 @@ class ThemeDialog(QDialog):
         self._set_combo(self.shadow, c["shadow"])
         self._set_combo(self.toolbar_style, c["toolbar_style"])
         self._set_combo(self.performance, c["performance"])
-        self._set_combo(self.window_style, c["window_style"])
         self.compact.setChecked(c["compact"])
         self.font_default.setChecked(not c["font_family"])
         # ohne eigene Schrift die Anki-Schrift vorauswählen, nicht den ersten Eintrag der Liste
@@ -635,8 +723,15 @@ class ThemeDialog(QDialog):
         self.highlight_today.setChecked(c["highlight_today"])
         self._set_combo(self.review_background, c["review_background"])
         self._set_combo(self.heatmap_style, c["heatmap_style"])
-        for k, cb in self.area_checks.items():
-            cb.setChecked(c["areas"].get(k, False))
+        from . import windows
+        for key, combo in self.area_modes.items():
+            if key in windows.WINDOW_KINDS:
+                self._set_combo(combo, windows.window_mode(c, key))
+            else:
+                self._set_combo(combo, "on" if c["areas"].get(key, key != "other") else "original")
+        self._set_combo(self.art, c.get("art", "fuji"))
+        self._set_combo(self.banner, c.get("banner", ""))
+        self._set_combo(self.banner_height, c.get("banner_height", "medium"))
         self.custom_css.setPlainText(c["custom_css"])
         self._update_image_label()
         self._update_presets()
@@ -654,7 +749,6 @@ class ThemeDialog(QDialog):
             "button_shape": self.button_shape.currentData(), "shadow": self.shadow.currentData(),
             "toolbar_style": self.toolbar_style.currentData(), "compact": self.compact.isChecked(),
             "performance": self.performance.currentData(),
-            "window_style": self.window_style.currentData(),
             "font_family": "" if self.font_default.isChecked() else self.font_family.currentFont().family(),
             "font_scale": self.font_scale.slider.value(),
             "count_badges": self.count_badges.isChecked(), "colored_answers": self.colored_answers.isChecked(),
@@ -662,10 +756,39 @@ class ThemeDialog(QDialog):
             "highlight_today": self.highlight_today.isChecked(),
             "review_background": self.review_background.currentData(),
             "heatmap_style": self.heatmap_style.currentData(),
-            "areas": {k: cb.isChecked() for k, cb in self.area_checks.items()},
+            **self._collect_areas(),
+            "art": self.art.currentData(), "banner": self.banner.currentData(),
+            "banner_height": self.banner_height.currentData(),
             "custom_css": self.custom_css.toPlainText(),
         })
         return c
+
+    def _collect_areas(self):
+        from . import windows
+        areas = dict(self.cfg.get("areas", {}))
+        styles = dict(self.cfg.get("window_styles", {}))
+        for key, combo in self.area_modes.items():
+            mode = combo.currentData()
+            areas[key] = mode != "original"
+            if key in windows.WINDOW_KINDS and mode != "original":
+                styles[key] = mode
+        return {"areas": areas, "window_styles": styles}
+
+    def _choose_banner(self):
+        def chosen(path):
+            if not path:
+                return
+            name = desktop.prepare_image(path, USER_DIR, "banner")
+            if not name:
+                showWarning(f"{t('import_err')}\n{path}", parent=self)
+                return
+            self.cfg = self._collect()
+            self.cfg.update(banner_image=name, banner="image")
+            self._load_into_widgets()
+            self._render_preview()
+
+        exts = " ".join("*" + e for e in desktop.IMAGE_EXTS)
+        getFile(self, t("banner_image"), cb=chosen, filter=exts, key="deckorator_banner")
 
     def _update_enabled(self):
         manual = self.accent_source.currentData() == "manual"
@@ -675,9 +798,16 @@ class ThemeDialog(QDialog):
         if not manual and not self.accent_info.text():
             self.accent_info.setText(t("src_hint"))
         style = self.bg_style.currentData()
-        self.img_row.setEnabled(style == "image")
+        # Zeilen samt Beschriftung nur zeigen, wenn sie gerade etwas bewirken
+        self.bg_form.setRowVisible(self.img_row, style == "image")
         self.bg_intensity.setEnabled(style != "solid")
         self.desktop_info.setVisible(style == "desktop")
+        self.art.setVisible(style == "art")
+        self.art_label.setVisible(style == "art")
+        has_banner = bool(self.banner.currentData())
+        self.banner_height.setEnabled(has_banner)
+        self.banner_form.setRowVisible(self.banner_row, self.banner.currentData() == "image")
+        self.banner_image_label.setText(self.cfg.get("banner_image") or t("none"))
         if style == "desktop" and not self.desktop_info.text():
             self._update_desktop_info()
         light = self.performance.currentData() == "light" or (
@@ -729,6 +859,9 @@ class ThemeDialog(QDialog):
         self.cfg = self._collect()
         self.cfg.update(pack)
         self.cfg.update(preset="", pack=key, accent_source="manual")
+        from . import windows
+        if "window_style" in pack:
+            self.cfg["window_styles"] = {k: pack["window_style"] for k in windows.WINDOW_KINDS}
         if wallpaper:
             name = desktop.prepare_image(os.path.join(ADDON_DIR, "wallpapers", wallpaper), USER_DIR, "background")
             if name:
@@ -856,6 +989,13 @@ class ThemeDialog(QDialog):
     def _ok(self):
         self._apply()
         self.accept()
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        # Qt setzt den Fokus beim Öffnen sonst ins erste Eingabefeld (die Schriftauswahl) und
+        # blättert damit auf die Seite "Schrift"; deshalb Fokus und Seite fest auf die Navigation
+        self.nav.setFocus()
+        self.pages.setCurrentIndex(self.nav.currentRow())
 
     def done(self, result):
         # Vorschau-Webansichten freigeben, sonst bleiben sie nach dem Schließen im Speicher

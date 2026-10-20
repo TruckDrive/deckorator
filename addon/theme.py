@@ -20,10 +20,24 @@ IMAGE_EXTS = ("png", "jpg", "jpeg", "webp", "gif")
 
 # Theme-Pakete: komplette Looks auf einen Klick. Wallpaper liegen in wallpapers/ (CC0/gemeinfrei,
 # siehe wallpapers/CREDITS.md). Nicht genannte Einstellungen bleiben, wie der Nutzer sie hat.
-_PHOTO = {"background": "image", "bg_intensity": 55, "glass": True, "blur": 20, "glass_opacity": 55,
+_PHOTO = {"background": "image", "banner": "", "bg_intensity": 55, "glass": True, "blur": 20, "glass_opacity": 55,
           "radius": 18, "button_shape": "pill", "shadow": 2, "toolbar_style": "floating",
           "window_style": "bold", "review_background": "calm"}
+_ART = {"background": "art", "bg_intensity": 80, "glass": True, "blur": 18, "glass_opacity": 55,
+        "radius": 18, "button_shape": "pill", "shadow": 2, "toolbar_style": "floating",
+        "window_style": "bold", "review_background": "calm", "banner_height": "medium"}
 PACKS = {
+    "fuji":      {**_ART, "art": "fuji", "banner": "art:fuji", "accent": "#f472b6", "bg_light": "#faf5f8", "bg_dark": "#150f18"},
+    "lofi":      {**_ART, "art": "lofi_city", "banner": "art:lofi_city", "accent": "#a78bfa", "bg_light": "#f7f5fb", "bg_dark": "#110f18"},
+    "sakura":    {**_ART, "art": "sakura", "banner": "art:sakura", "accent": "#ec4899", "bg_light": "#fbf5f8", "bg_dark": "#161014"},
+    "mountains": {**_ART, "art": "mountains", "banner": "art:mountains", "accent": "#3b82f6", "bg_light": "#f4f7fb", "bg_dark": "#0f1219"},
+    "planet":    {**_ART, "art": "planet", "banner": "", "accent": "#f43f5e", "bg_light": "#faf5f6", "bg_dark": "#0d0b10"},
+    "flow":      {**_ART, "art": "flow", "banner": "art:flow", "accent": "#8b5cf6", "bg_light": "#f7f6fb", "bg_dark": "#121119",
+                  "bg_intensity": 90},
+    "topo":      {**_ART, "art": "topo", "banner": "", "accent": "#14b8a6", "bg_light": "#f4f8f7", "bg_dark": "#0f1413",
+                  "bg_intensity": 100, "window_style": "subtle"},
+    "bauhaus":   {**_ART, "art": "bauhaus", "banner": "", "accent": "#f59e0b", "bg_light": "#f9f7f2", "bg_dark": "#14130f",
+                  "bg_intensity": 70, "radius": 6, "button_shape": "square", "glass": False},
     "sea":    {"wallpaper": "sea.jpg",    **_PHOTO, "accent": "#6b8cc7", "bg_light": "#f4f6f8", "bg_dark": "#121417"},
     "dune":   {"wallpaper": "dune.jpg",   **_PHOTO, "accent": "#e08a3c", "bg_light": "#faf6f1", "bg_dark": "#17140f"},
     "forest": {"wallpaper": "forest.jpg", **_PHOTO, "accent": "#3fa37e", "bg_light": "#f3f7f5", "bg_dark": "#111615"},
@@ -31,10 +45,10 @@ PACKS = {
     "stars":  {"wallpaper": "stars.jpg",  **_PHOTO, "accent": "#8b7cf6", "bg_light": "#f6f5fa", "bg_dark": "#121119",
                "bg_intensity": 70},
     "lake":   {"wallpaper": "lake.jpg",   **_PHOTO, "accent": "#4c8fdb", "bg_light": "#f3f6fa", "bg_dark": "#111418"},
-    "minimal": {"accent": "#71717a", "bg_light": "#f5f5f5", "bg_dark": "#121212", "background": "dots",
+    "minimal": {"banner": "", "accent": "#71717a", "bg_light": "#f5f5f5", "bg_dark": "#121212", "background": "dots",
                 "bg_intensity": 60, "glass": False, "radius": 10, "button_shape": "rounded", "shadow": 1,
                 "toolbar_style": "flat", "window_style": "subtle", "review_background": "calm"},
-    "paper":  {"accent": "#c2410c", "bg_light": "#f8f4ec", "bg_dark": "#1a1714", "background": "grain",
+    "paper":  {"banner": "", "accent": "#c2410c", "bg_light": "#f8f4ec", "bg_dark": "#1a1714", "background": "grain",
                "bg_intensity": 80, "glass": True, "blur": 12, "glass_opacity": 75, "radius": 14,
                "button_shape": "rounded", "shadow": 1, "toolbar_style": "floating", "window_style": "bold",
                "review_background": "calm"},
@@ -136,7 +150,8 @@ def _vars_block(selector, p, cfg):
 
 # Alte Stilnamen aus früheren Versionen
 LEGACY_STYLES = {"aurora": "spotlight", "soft": "spotlight"}
-BACKGROUND_STYLES = ("solid", "spotlight", "dots", "grid", "grain", "waves", "desktop", "image")
+BACKGROUND_STYLES = ("solid", "spotlight", "dots", "grid", "grain", "waves", "art", "desktop", "image")
+BANNER_HEIGHTS = {"small": 4, "medium": 16, "large": 30}  # zusätzlicher Innenabstand der oberen Leiste in px
 
 FADE_MASK = "radial-gradient(ellipse 85% 75% at 50% 38%, #000 30%, transparent 85%)"
 EDGE_MASK = "linear-gradient(transparent, #000 14%, #000 86%, transparent)"
@@ -160,6 +175,12 @@ def _background(cfg, night, bg_url):
     canvas = cfg["bg_dark"] if night else cfg["bg_light"]
     ink = "#ffffff" if night else "#000000"
     light = (.34 if night else .22) * k
+    if style == "art":
+        from . import art
+        overlay = _rgba(canvas, max(0.0, 1 - k) * .85)
+        url = _svg_url(art.wallpaper_svg(cfg.get("art", "fuji"), accent, night))
+        return (f"linear-gradient({overlay}, {overlay}) center / cover no-repeat, {url} center / cover no-repeat",
+                "none", "none")
     if style in ("image", "desktop"):
         if not bg_url:
             return "none", "none", "none"
@@ -472,7 +493,43 @@ html, html body { background: transparent !important; }
   border-radius: 999px !important; --border-color: transparent; }
 """
 
-SCOPES = ("main", "bar", "card", "colors", "pages", "editor")
+# Banner hinter der oberen Leiste (Stapel, Hinzufügen, …). Läuft nach unten in die
+# Hintergrundfarbe aus; beim Lernen ("flat") bleibt die Leiste ruhig.
+BANNER_CSS = """
+html body:not(.flat) { background-image: linear-gradient(to bottom, transparent 35%%, var(--ct-canvas)), var(--ct-banner) !important;
+  background-size: cover !important; background-repeat: no-repeat !important;
+  background-position: center var(--ct-banner-y) !important; }
+html body:not(.flat) .header { padding-top: %(pad)spx !important; padding-bottom: %(pad)spx !important; }
+"""
+
+
+def _banner(cfg, night):
+    """(CSS-Wert für das Bild, vertikale Position) oder None."""
+    banner = cfg.get("banner", "")
+    if banner.startswith("art:"):
+        from . import art
+        name = banner[4:]
+        return _svg_url(art.wallpaper_svg(name, cfg["accent"], night)), f"{art.focus(name) * 100:.0f}%"
+    if banner and cfg.get("_banner_url"):
+        return f"url('{cfg['_banner_url']}')", "50%"
+    return None
+
+
+def banner_preview_css(cfg):
+    """Banner für die nachgebaute obere Leiste in der Vorschau des Einstellungsfensters."""
+    rules = []
+    for sel, night in (("html:root:not(.night-mode)", False), ("html:root.night-mode", True)):
+        b = _banner(cfg, night)
+        if not b:
+            return ""
+        rules.append(f"{sel} .ct-band:not(.ct-bottom) {{ background: linear-gradient(to bottom, transparent 35%, "
+                     f"var(--ct-canvas)), {b[0]} center {b[1]} / cover no-repeat !important; }}\n")
+    pad = BANNER_HEIGHTS.get(cfg.get("banner_height", "medium"), 16)
+    rules.append(f".ct-band:not(.ct-bottom) .header {{ padding: {pad}px 0 !important; }}\n")
+    return "".join(rules)
+
+
+SCOPES = ("main", "bar", "topbar", "card", "colors", "pages", "editor")
 
 COMPACT = """
 html body #outer, html body .overview, html body #studiedToday { padding: 8px !important; }
@@ -524,7 +581,7 @@ def build_css_text(cfg, scope="main", base_px=None, bg_url=None):
     ]
     if effects:
         parts.append(BG_LAYER)
-    if scope == "bar":
+    if scope in ("bar", "topbar"):
         parts.append(BAR_CALM)
         if review != "note":
             parts.append(FLAT_TOOLBAR)
@@ -532,6 +589,13 @@ def build_css_text(cfg, scope="main", base_px=None, bg_url=None):
         parts.append(REVIEW_COUNTS % {"count": f"{px * .92:.1f}", "small": f"{px * .82:.1f}"})
         if cfg["count_badges"]:
             parts.append(REVIEW_COUNT_BADGES)
+    if scope == "topbar":
+        banners = [(sel, _banner(cfg, night)) for sel, night in
+                   (("html:root:not(.night-mode)", False), ("html:root.night-mode", True))]
+        if all(b for _sel, b in banners):
+            for sel, (url, y) in banners:
+                parts.append(f"{sel} {{ --ct-banner: {url}; --ct-banner-y: {y}; }}\n")
+            parts.append(BANNER_CSS % {"pad": BANNER_HEIGHTS.get(cfg.get("banner_height", "medium"), 16)})
     if scope == "main" and cfg.get("highlight_today", True):
         parts.append(TODAY_HIGHLIGHT)
     # Heatmap: "theme" = Karte + runde Zellen + Farben, "colors" = nur Farben, "original" = nichts

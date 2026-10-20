@@ -9,7 +9,10 @@
 
 ## Features
 
-- **8 theme packs** for a complete look in one click, six of them with calm wallpapers (sea, dunes, misty forest, afterglow, starry night, mountain lake)
+- **16 theme packs** for a complete look in one click: illustrated (Fuji, lofi city, sakura, mountains, planet, flow lines, topography, Bauhaus) and photo wallpapers
+- **Illustrated wallpapers** drawn for Deckorator: they take on your accent color and have light and dark versions
+- **Banner in the top bar** behind Decks, Add, Browse …
+- **Every area adjustable**: bold, subtle or Anki's original look, per window
 - **8 color presets** or your own accent color. The accent can also come from your **system accent color** or your **desktop wallpaper**.
 - **Backgrounds:** spotlight, dot grid, line grid, grain, waves, your own image, or your **desktop wallpaper**. The wallpaper is re-synced on every start, and live/video wallpapers become a still image.
 - **Calm study mode:** while you review, the background stays quiet so the card comes first.

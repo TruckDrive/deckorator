@@ -173,6 +173,8 @@ class ThemePreview(QWidget):
         # gleiche Ableitungen (z.B. Sparmodus) wie im Hauptfenster, damit die Vorschau stimmt
         cfg = self.api.effective(self.cfg)
         css = theme.build_css_text(cfg, scope, self.px, self.api.bg_url(cfg))
+        if scope == "main":
+            css += theme.banner_preview_css(cfg)
         web.eval(APPLY_JS % (json.dumps(css), json.dumps(self.night)))
 
     def _apply_all(self):

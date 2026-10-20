@@ -131,8 +131,18 @@ def _colors(cfg):
     return c
 
 
-def _bold(cfg):
-    return cfg.get("window_style", "bold") == "bold"
+WINDOW_KINDS = ("browser", "editor", "stats", "deck_options", "preferences", "addons")
+
+
+def window_mode(cfg, kind):
+    """"bold", "subtle" oder "original" (= Anki unverändert) für ein Fenster."""
+    if not cfg["areas"].get(kind, True):
+        return "original"
+    return cfg.get("window_styles", {}).get(kind) or cfg.get("window_style", "bold")
+
+
+def _bold(cfg, kind):
+    return window_mode(cfg, kind) == "bold"
 
 
 def _style_browser(browser, cfg):
@@ -140,7 +150,7 @@ def _style_browser(browser, cfg):
     root = "QMainWindow#ctWindow"
     browser.setObjectName("ctWindow")
     # Schriftgröße nicht anfassen: die Kartenverwaltung hat eine eigene Schrifteinstellung
-    bold = _bold(cfg)
+    bold = _bold(cfg, "browser")
     browser.setStyleSheet(ui.stylesheet(c, root, font_size=None) + TABLE.format(root=root, **c)
                           + (BOLD.format(root=root, **c) if bold else ""))
     browser.sidebar.setStyleSheet((SIDEBAR_BOLD if bold else SIDEBAR).format(**c))
@@ -172,7 +182,7 @@ def _style_addcards(window, cfg):
     if add_button is not None:
         # Hauptaktion in Akzentfarbe; Name vor dem Stylesheet setzen, sonst greift die Regel nicht
         add_button.setObjectName("ctPrimary")
-    window.setStyleSheet(ui.stylesheet(c, root, font_size=None) + (BOLD.format(root=root, **c) if _bold(cfg) else ""))
+    window.setStyleSheet(ui.stylesheet(c, root, font_size=None) + (BOLD.format(root=root, **c) if _bold(cfg, "editor") else ""))
 
 
 def _style_preferences(dialog, cfg):
@@ -180,7 +190,7 @@ def _style_preferences(dialog, cfg):
     root = "QDialog#ctPrefs"
     dialog.setObjectName("ctPrefs")
     dialog.setStyleSheet(ui.stylesheet(c, root, font_size=None) + CONTROLS.format(root=root, **c)
-                         + (BOLD.format(root=root, **c) if _bold(cfg) else ""))
+                         + (BOLD.format(root=root, **c) if _bold(cfg, "preferences") else ""))
 
 
 def _style_addons(dialog, cfg):
@@ -188,12 +198,12 @@ def _style_addons(dialog, cfg):
     root = "QDialog#ctAddons"
     dialog.setObjectName("ctAddons")
     dialog.setStyleSheet(ui.stylesheet(c, root) + ADDON_LIST.format(root=root, **c)
-                         + (BOLD.format(root=root, **c) if _bold(cfg) else ""))
+                         + (BOLD.format(root=root, **c) if _bold(cfg, "addons") else ""))
 
 
 def _apply(window, kind, cfg):
     try:
-        enabled = cfg["areas"].get("editor" if kind == "addcards" else kind, True)
+        enabled = window_mode(cfg, "editor" if kind == "addcards" else kind) != "original"
         if kind == "addcards":
             _style_addcards(window, cfg) if enabled else window.setStyleSheet("")
         elif kind == "preferences":

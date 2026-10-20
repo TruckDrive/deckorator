@@ -21,7 +21,7 @@ VERSION = "1.1.0"
 MODULE = __name__
 ADDON_FOLDER = MODULE.split(".")[0]
 USER_DIR = os.path.join(os.path.dirname(__file__), "user_files")
-mw.addonManager.setWebExports(MODULE, r"user_files/.*\.(png|jpe?g|webp|gif)")
+mw.addonManager.setWebExports(MODULE, r"(user_files|wallpapers)/.*\.(png|jpe?g|webp|gif)")
 
 MAIN_CONTEXTS = (DeckBrowser, Overview)
 BAR_CONTEXTS = (TopToolbar, BottomToolbar, DeckBrowserBottomBar, OverviewBottomBar)
@@ -70,7 +70,22 @@ def hardware():
 def effective(cfg):
     """Konfiguration plus abgeleitete Werte, mit denen das CSS gebaut wird."""
     mode = cfg.get("performance", "auto")
-    return {**cfg, "_light": mode == "light" or (mode == "auto" and hardware()["weak"])}
+    return {**cfg, "_light": mode == "light" or (mode == "auto" and hardware()["weak"]),
+            "_banner_url": banner_url(cfg)}
+
+
+def banner_url(cfg):
+    """URL für Banner aus Foto-Wallpaper ("photo:<id>") oder eigenem Bild ("image")."""
+    banner = cfg.get("banner", "")
+    if banner.startswith("photo:"):
+        return f"/_addons/{ADDON_FOLDER}/wallpapers/{banner[6:]}.jpg"
+    if banner == "image" and cfg.get("banner_image"):
+        try:
+            version = int(os.path.getmtime(os.path.join(USER_DIR, cfg["banner_image"])))
+        except OSError:
+            return None
+        return f"/_addons/{ADDON_FOLDER}/user_files/{cfg['banner_image']}?v={version}"
+    return None
 
 
 _cache = None  # (cfg, {scope: css}), wird bei jeder Speicherung verworfen
@@ -89,6 +104,8 @@ def _area(context):
     """(Schalter in areas, CSS-Bereich) für eine Webansicht; Schalter None = immer an"""
     if isinstance(context, MAIN_CONTEXTS):
         return "main", "main"
+    if isinstance(context, TopToolbar):
+        return "main", "topbar"
     if isinstance(context, BAR_CONTEXTS):
         return "main", "bar"
     if isinstance(context, ReviewerBottomBar):
@@ -126,12 +143,14 @@ def _style_page(web):
     try:
         cfg, _css = _cached()
         area = PAGE_AREAS.get(web.kind.value, "other")
-        enabled = cfg["areas"].get(area, False)
+        mode = windows.window_mode(cfg, area) if area != "other" else (
+            "subtle" if cfg["areas"].get("other") else "original")
+        enabled = mode != "original"
         editor = area == "editor"
-        text = _page_css("editor" if editor else "pages") if enabled else ""
+        text = _page_css("editor" if editor else "pages", mode) if enabled else ""
         if editor:
             # durchsichtig, damit der Fensterhintergrund (Spotlight) hinter den Feldern sichtbar ist
-            transparent = enabled and cfg.get("window_style", "bold") == "bold"
+            transparent = mode == "bold"
             web.page().setBackgroundColor(QColor(0, 0, 0, 0) if transparent else theme_manager.qcolor(colors.CANVAS))
         web.eval(PAGE_JS % json.dumps(text))
     except Exception as e:
@@ -141,10 +160,10 @@ def _style_page(web):
 _page_css_cache = {}
 
 
-def _page_css(scope):
-    if scope not in _page_css_cache:
-        _page_css_cache[scope] = theme.build_css_text(_cached()[0], scope)
-    return _page_css_cache[scope]
+def _page_css(scope, mode):
+    if (scope, mode) not in _page_css_cache:
+        _page_css_cache[(scope, mode)] = theme.build_css_text({**_cached()[0], "window_style": mode}, scope)
+    return _page_css_cache[(scope, mode)]
 
 
 def _on_page_styled(web):
